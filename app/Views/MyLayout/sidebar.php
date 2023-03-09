@@ -4,111 +4,83 @@
             <div class="nav">
                 <br>
 
-                <?php if (has_permission('Dashboard') || has_permission('Data Master')) : ?>
-                    <small class="my-0 ms-3 text-secondary">Core</small>
+                <?php if (has_permission('Dashboard') || has_permission('Keuangan')) : ?>
+                    <small class="mt-0 ms-3 text-secondary"></small>
                 <?php endif; ?>
 
                 <?php if (has_permission('Dashboard')) : ?>
-                    <a class="nav-link" href="<?= base_url() ?>/dashboard">
+                    <a class="nav-link py-2" href="<?= base_url() ?>/dashboard">
                         <div class="sb-nav-link-icon">
                             <i class="fa-fw fa-solid fa-gauge"></i>
                         </div>
                         Dashboard
                     </a>
                 <?php endif; ?>
-                <?php if (has_permission('Data Master')) : ?>
-                    <a class="nav-link" href="<?= base_url() ?>/master">
+
+
+
+                <?php if (has_permission('Keuangan')) : ?>
+                    <small class="mt-4 ms-3 text-secondary">Jurnal Umum</small>
+                <?php endif; ?>
+
+                <?php if (has_permission('Keuangan')) : ?>
+                    <a class="nav-link py-2" href="<?= base_url() ?>/tagihan">
+                        <div class="sb-nav-link-icon">
+                            <i class="fa-fw fa-regular fa-calendar-check"></i>
+                        </div>
+                        Tagihan
+                    </a>
+                <?php endif; ?>
+
+                <?php if (has_permission('Keuangan')) : ?>
+                    <a class="nav-link py-2" href="<?= base_url() ?>/transaksi">
+                        <div class="sb-nav-link-icon">
+                            <i class="fa-fw fa-solid fa-money-check"></i>
+                        </div>
+                        Transaksi
+                    </a>
+                <?php endif; ?>
+
+
+
+                <?php if (has_permission('Keuangan')) : ?>
+                    <small class="mt-4 ms-3 text-secondary">Akun</small>
+                <?php endif; ?>
+
+                <?php if (has_permission('Keuangan')) : ?>
+                    <a class="nav-link py-2" href="<?= base_url() ?>/akun">
+                        <div class="sb-nav-link-icon">
+                            <i class="fa-fw fa-solid fa-list-ol"></i>
+                        </div>
+                        Akun
+                    </a>
+                <?php endif; ?>
+
+                <?php if (has_permission('Keuangan')) : ?>
+                    <a class="nav-link py-2" href="<?= base_url() ?>/kas_bank">
                         <div class="sb-nav-link-icon">
                             <i class="fa-fw fa-regular fa-folder-open"></i>
                         </div>
-                        Data Master
+                        Kas & Bank
                     </a>
                 <?php endif; ?>
 
-                <br>
 
-                <?php if (has_permission('Pembelian') || has_permission('Penjualan') || has_permission('Produksi')) : ?>
-                    <small class="my-0 ms-3 text-secondary">Transaction</small>
-                <?php endif; ?>
 
-                <?php if (has_permission('Pembelian')) : ?>
-                    <a class="nav-link" href="<?= base_url() ?>/pembelian">
-                        <div class="sb-nav-link-icon">
-                            <i class="fa-fw fa-solid fa-circle-down"></i>
-                        </div>
-                        Pembelian
-                    </a>
-                <?php endif; ?>
-                <?php if (has_permission('Penjualan')) : ?>
-                    <a class="nav-link" href="<?= base_url() ?>/penjualan">
-                        <div class="sb-nav-link-icon">
-                            <i class="fa-fw fa-solid fa-circle-up"></i>
-                        </div>
-                        Penjualan
-                    </a>
-                <?php endif; ?>
-                <?php if (has_permission('Produksi')) : ?>
-                    <a class="nav-link" href="<?= base_url() ?>/produksi">
-                        <div class="sb-nav-link-icon">
-                            <i class="fa-fw fa-solid fa-list-check"></i>
-                        </div>
-                        Produksi
-                    </a>
+                <?php if (has_permission('Keuangan')) : ?>
+                    <small class="mt-4 ms-3 text-secondary">Laporan</small>
                 <?php endif; ?>
 
-                <br>
-
-                <?php if (has_permission('Gudang') || has_permission('Inventaris')) : ?>
-                    <small class="my-0 ms-3 text-secondary">Assets</small>
-                <?php endif; ?>
-
-                <?php if (has_permission('Gudang')) : ?>
-                    <a class="nav-link" href="<?= base_url() ?>/menu_gudang">
-                        <div class="sb-nav-link-icon">
-                            <i class="fa-fw fa-solid fa-warehouse"></i>
-                        </div>
-                        Gudang
-                    </a>
-                <?php endif; ?>
-                <?php if (has_permission('Inventaris')) : ?>
-                    <a class="nav-link" href="<?= base_url() ?>/inventaris">
-                        <div class="sb-nav-link-icon">
-                            <i class="fa-fw fa-solid fa-table-list"></i>
-                        </div>
-                        Inventaris
-                    </a>
-                <?php endif; ?>
-
-                <br>
-
-                <?php if (has_permission('Akuntansi') || has_permission('SDM') || has_permission('Laporan')) : ?>
-                    <small class="my-0 ms-3 text-secondary">Management</small>
-                <?php endif; ?>
-
-                <?php if (has_permission('Akuntansi')) : ?>
-                    <a class="nav-link" href="<?= base_url() ?>/akuntansi">
-                        <div class="sb-nav-link-icon">
-                            <i class="fa-fw fa-solid fa-calculator"></i>
-                        </div>
-                        Akuntansi
-                    </a>
-                <?php endif; ?>
-                <?php if (has_permission('SDM')) : ?>
-                    <a class="nav-link" href="<?= base_url() ?>/sdm">
-                        <div class="sb-nav-link-icon">
-                            <i class="fa-fw fa-solid fa-user-group"></i>
-                        </div>
-                        SDM
-                    </a>
-                <?php endif; ?>
-                <?php if (has_permission('Laporan')) : ?>
-                    <a class="nav-link" href="<?= base_url() ?>/laporan">
+                <?php if (has_permission('Keuangan')) : ?>
+                    <a class="nav-link py-2" href="<?= base_url() ?>/laporan">
                         <div class="sb-nav-link-icon">
                             <i class="fa-fw fa-solid fa-chart-simple"></i>
                         </div>
                         Laporan
                     </a>
                 <?php endif; ?>
+
+
             </div>
         </div>
         <div class="sb-sidenav-footer py-1">
