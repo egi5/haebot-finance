@@ -35,6 +35,9 @@ $routes->get('/', 'AuthController::login');
 $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
 
     $routes->get('/dashboard', 'Dashboard::index', ['filter' => 'permission:Dashboard']);
+    $routes->get('akun', 'Menu::Akun');
+    $routes->get('kategori', 'KategoriAkun::index');
+    $routes->get('listakun', 'Akun::index');
 
     // GetData
     $routes->get('/wilayah/kota_by_provinsi', 'GetWilayah::KotaByProvinsi');
@@ -49,6 +52,17 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
     // Divisi
     $routes->get('divisi/redirect/(:any)', 'Divisi::redirect/$1', ['filter' => 'permission:SDM']);
     $routes->resource('divisi', ['filter' => 'permission:SDM']);
+
+
+    //Kategori Akun
+    $routes->get('getdatakategori', 'KategoriAkun::getDataKategori');
+    $routes->resource('kategoriakun');
+
+
+    //Akun
+    $routes->get('getdataakun', 'Akun::getDataAkun');
+    $routes->resource('akun');
+    
 });
 
 /*
