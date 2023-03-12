@@ -8,7 +8,7 @@
         <label for="nama" class="col-sm-3 col-form-label">Kode Akun</label>
         <div class="col-sm-9">
             <input type="text" class="form-control" id="kode" name="kode" value="<?= $akun['kode'] ?>">
-            <div class="invalid-feedback error_nama"></div>
+            <div class="invalid-feedback error_kode"></div>
         </div>
     </div>
 
@@ -28,7 +28,7 @@
                     <option <?= (old('id_kategori', $akun['id_kategori']) == $kt['id']) ? 'selected' : ''; ?> value="<?= $kt['id'] ?>-krisna-<?= $kt['nama'] ?>"><?= $kt['nama'] ?></option>
                 <?php endforeach ?>
             </select>
-
+            <div class="invalid-feedback error_debit"></div>
         </div>
     </div>
 
@@ -43,33 +43,14 @@
 <?= $this->include('MyLayout/js') ?>
 
 <script>
-    $(document).ready(function() 
-    {
-        // Alert
-        var op = <?= (!empty(session()->getFlashdata('pesan')) ? json_encode(session()->getFlashdata('pesan')) : '""'); ?>;
-        if (op != '') {
-            Toast.fire({
-                icon: 'success',
-                title: op
-            })
-        }
+    $(document).ready(function() {
+        $("#id_kategori").select2({
+            theme: "bootstrap-5",
+            tags: true,
+            dropdownParent: $('#my-modal')
+        });
+     })
 
-        // Bahan Alert
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            background: '#63ec88',
-            color: '#fff',
-            iconColor: '#fff',
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-    })
 
     $('#form').submit(function(e) {
         e.preventDefault();
@@ -91,6 +72,14 @@
                 if (response.error) {
                     let err = response.error;
 
+                    if (err.error_kode) {
+                        $('.error_kode').html(err.error_kode);
+                        $('#kode').addClass('is-invalid');
+                    } else {
+                        $('.error_kode').html('');
+                        $('#kode').removeClass('is-invalid');
+                        $('#kode').addClass('is-valid');
+                    }
                     if (err.error_nama) {
                         $('.error_nama').html(err.error_nama);
                         $('#nama').addClass('is-invalid');
@@ -99,24 +88,22 @@
                         $('#nama').removeClass('is-invalid');
                         $('#nama').addClass('is-valid');
                     }
-                    if (err.error_deskripsi) {
-                        $('.error_deskripsi').html(err.error_deskripsi);
-                        $('#deskripsi').addClass('is-invalid');
+                    if (err.error_debit) {
+                        $('.error_debit').html(err.error_debit);
+                        $('#id_kategori').addClass('is-invalid');
                     } else {
-                        $('.error_deskripsi').html('');
-                        $('#deskripsi').removeClass('is-invalid');
-                        $('#deskripsi').addClass('is-valid');
-                    }
-                    
+                        $('.error_debit').html('');
+                        $('#id_kategori').removeClass('is-invalid');
+                        $('#id_kategori').addClass('is-valid');
+                    }  
                 }
                 if (response.success) {
                     $('#my-modal').modal('hide')
-                    $('#tabel').DataTable().ajax.reload();
+                    // $('#tabel').DataTable().ajax.reload();
                     Toast.fire({
                         icon: 'success',
                         title: response.success
                     })
-                    return redirect()->to('/divisi');
                 }
             },
             error: function(e) {

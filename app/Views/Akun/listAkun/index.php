@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-
+                 
             </tbody>
         </table>
     </div>
@@ -187,7 +187,7 @@
                 if (res.data) {
                     $('#isiForm').html(res.data)
                     $('#my-modal').modal('toggle')
-                    $('#judulModal').html('Edit Kategori Akun')
+                    $('#judulModal').html('Edit Akun')
                 } else {
                     console.log(res)
                 }

@@ -42,6 +42,7 @@
         });
      })
      
+     
     $('#form').submit(function(e) {
         e.preventDefault();
 
@@ -64,7 +65,7 @@
 
                     if (err.error_kode) {
                         $('.error_kode').html(err.error_kode);
-                        $('#deskripsi').addClass('is-invalid');
+                        $('#kode').addClass('is-invalid');
                     } else {
                         $('.error_kode').html('');
                         $('#kode').removeClass('is-invalid');
@@ -78,6 +79,14 @@
                         $('#nama').removeClass('is-invalid');
                         $('#nama').addClass('is-valid');
                     }
+                    if (err.error_debit) {
+                        $('.error_debit').html(err.error_nama);
+                        $('#id_kategori').addClass('is-invalid');
+                    } else {
+                        $('.error_debit').html('');
+                        $('#id_kategori').removeClass('is-invalid');
+                        $('#id_kategori').addClass('is-valid');
+                    }
                 }
                 if (response.success) {
                     $('#my-modal').modal('hide')
@@ -86,7 +95,7 @@
                         title: 'Berhasil',
                         text: response.success,
                     }).then((value) => {
-                        $('#tabel').DataTable().ajax.reload();
+                        // $('#tabel').DataTable().ajax.reload();
                         Toast.fire({
                             icon: 'success',
                             title: response.success

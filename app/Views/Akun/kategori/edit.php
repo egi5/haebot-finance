@@ -81,17 +81,11 @@
                     }    
                 }
                 if (response.success) {
-                    $('#my-modal').modal('hide')
-                    Swal.fire({
+                    $('#my-modal').modal('hide');
+                    $('#tabel').DataTable().ajax.reload();
+                    Toast.fire({
                         icon: 'success',
-                        title: 'Berhasil',
-                        text: response.success,
-                    }).then((value) => {
-                        //$('#tabel').DataTable().ajax.reload();
-                        Toast.fire({
-                            icon: 'success',
-                            title: response.success
-                        })
+                        title: response.success
                     })
                 }
             },

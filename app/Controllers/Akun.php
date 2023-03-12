@@ -11,6 +11,15 @@ class Akun extends ResourcePresenter
 {
     public function index()
     {
+        // $modelAkun = new AkunModel();
+        // $modelKategori = new KategoriAkunModel();
+        // $akun = $modelAkun
+        //         ->select('akun.kode, akun.nama, akun_kategori.nama')
+        //         ->join('akun_kategori','akun_kategori.id=akun.id_kategori')
+        //         ->findAll();
+        // $data = [
+        //     'akun' =>$akun
+        // ];
         return view('akun/listAkun/index');
     }
 
@@ -20,8 +29,13 @@ class Akun extends ResourcePresenter
         if ($this->request->isAJAX()) {
 
             $modelAkun = new AkunModel();
+            $modelKategori = new KategoriAkunModel();
+            // $akun = $modelAkun
+            //     ->select('akun.kode, akun.nama, akun_kategori.nama')
+            //     ->join('akun_kategori','akun_kategori.id=akun.id_kategori')
+            //     ->findAll();
             $data = $modelAkun->where(['deleted_at' => null])->select('id, kode, nama');
-
+                                                          
             return DataTable::of($data)
                 ->addNumbering('no')
                 ->add('aksi', function ($row) {
@@ -30,7 +44,7 @@ class Akun extends ResourcePresenter
                         <i class="fa-fw fa-solid fa-magnifying-glass"></i>
                     </a>
 
-                    <a title="Edit" class="px-2 py-0 btn btn-sm btn-outline-primary" onclick="showModalEdit(' . $row->id . ')/edit">
+                    <a title="Edit" class="px-2 py-0 btn btn-sm btn-outline-primary" onclick="showModalEdit(' . $row->id . ')">
                         <i class="fa-fw fa-solid fa-pen"></i>
                     </a>
 
@@ -88,7 +102,7 @@ class Akun extends ResourcePresenter
             ];
 
             $json = [
-                'data'          => view('Akun/listAkun/add', $data),
+                'data'       => view('Akun/listAkun/add', $data),
             ];
 
             echo json_encode($json);
@@ -117,7 +131,7 @@ class Akun extends ResourcePresenter
                         'is_unique' => 'Nama akun sudah ada dalam database.'
                     ]
                 ],
-                'kategori'  => [
+                'id_kategori'  => [
                     'rules'  => 'required',
                     'errors' => [
                         'required'  => '{field} deskripsi harus diisi.',
@@ -131,7 +145,7 @@ class Akun extends ResourcePresenter
                 $error = [
                     'error_kode'       => $validation->getError('kode'),
                     'error_nama'       => $validation->getError('nama'),
-                    'error_deskripsi'  => $validation->getError('deskripsi')
+                    'error_debit'  => $validation->getError('id_kategori')
                 ];
 
                 $json = [
@@ -154,7 +168,7 @@ class Akun extends ResourcePresenter
                 $data = [
                     'kode'         => $this->request->getPost('kode'),    
                     'nama'         => $this->request->getPost('nama'),
-                    'id_kategori'  => $the_id_kategori  
+                    'id_kategori'  => $the_id_kategori
                 ];
                 $modelAkun->insert($data);
 
@@ -174,22 +188,91 @@ class Akun extends ResourcePresenter
     {
         if ($this->request->isAJAX()) {
             
-            $modelAkun = new AkunModel();
-            $akun      = $modelAkun->find($id);
-            $kategori  = $modelAkun->getAkun($id);
-
-            $db = \Config\Database::connect();
-            $builderAkunKategori = $db->table('akun_kategori');
+            $modelAkun      = new AkunModel();
+            $modelKategori  = new KategoriAkunModel();
+            $akun           = $modelAkun->find($id);
+            $kategori       = $modelKategori->findAll();
 
             $data = [
                 'validation'    => \Config\Services::validation(),
                 'akun'          => $akun,
-                'id_kategori'   => $kategori//$builderAkunKategori->get()->getResultArray()
+                'kategori'      => $kategori
             ];
 
             $json = [
                 'data'   => view('akun/listAkun/edit', $data),
             ];
+
+            echo json_encode($json);
+        } else {
+            return 'Tidak bisa load data';
+        }
+    }
+
+
+    public function update($id = null)
+    {
+        if ($this->request->isAJAX()) {
+            $validasi = [
+                'kode'       => [
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'  => '{field} akun harus diisi.',
+                    ]
+                ],
+                'nama'       => [
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'  => '{field} akun harus diisi.',
+                    ]
+                ],
+                'id_kategori'  => [
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'  => '{field} deskripsi harus diisi.',
+                    ]
+                ],
+            ];
+
+            if (!$this->validate($validasi)) {
+                $validation = \Config\Services::validation();
+
+                $error = [
+                    'error_kode'       => $validation->getError('kode'),
+                    'error_nama'       => $validation->getError('nama'),
+                    'error_debit'      => $validation->getError('id_kategori')
+                ];
+
+                $json = [
+                    'error' => $error
+                ];
+            } else {
+                $modelAkun = new AkunModel();
+
+                $db = \Config\Database::connect();
+                $builderAkunKategori = $db->table('akun_kategori');
+
+                if (strpos($this->request->getPost('id_kategori'), '-krisna-') !== false) {
+                    $post_kategori = explode('-', $this->request->getPost('id_kategori'));
+                    $the_id_kategori = $post_kategori[0];
+                } else {
+                    $builderAkunKategori->insert(['nama' => $this->request->getPost('id_kategori')]);
+                    $the_id_kategori = $db->insertID();
+                }
+
+                $data = [
+                    'id'           => $id,
+                    'kode'         => $this->request->getPost('kode'),    
+                    'nama'         => $this->request->getPost('nama'),
+                    'id_kategori'  => $the_id_kategori
+                ];
+                
+                $modelAkun->save($data);
+
+                $json = [
+                    'success' => 'Berhasil update data produk'
+                ];
+            }
 
             echo json_encode($json);
         } else {
