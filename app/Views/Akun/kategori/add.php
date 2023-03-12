@@ -37,8 +37,7 @@
 <script>
     $('#form').submit(function(e) {
         e.preventDefault();
-        // var selectOptionValueKategoriAdd = document.getElementById('debit');
-        // var valueKategoriAdd = selectOptionValueKategoriAdd.value;
+        
         $.ajax({
             type: "post",
             url: $(this).attr('action'),

@@ -140,10 +140,21 @@ class Akun extends ResourcePresenter
             } else {
                 $modelAkun = new AkunModel();
 
+                $db = \Config\Database::connect();
+                $builderAkunKategori = $db->table('akun_kategori');
+
+                if (strpos($this->request->getPost('id_kategori'), '-krisna-') !== false) {
+                    $post_kategori = explode('-', $this->request->getPost('id_kategori'));
+                    $the_id_kategori = $post_kategori[0];
+                } else {
+                    $builderAkunKategori->insert(['nama' => $this->request->getPost('id_kategori')]);
+                    $the_id_kategori = $db->insertID();
+                }
+
                 $data = [
                     'kode'         => $this->request->getPost('kode'),    
                     'nama'         => $this->request->getPost('nama'),
-                    'id_kategori'  => $this->request->getPost('id_kategori')
+                    'id_kategori'  => $the_id_kategori  
                 ];
                 $modelAkun->insert($data);
 
@@ -167,10 +178,13 @@ class Akun extends ResourcePresenter
             $akun      = $modelAkun->find($id);
             $kategori  = $modelAkun->getAkun($id);
 
+            $db = \Config\Database::connect();
+            $builderAkunKategori = $db->table('akun_kategori');
+
             $data = [
                 'validation'    => \Config\Services::validation(),
                 'akun'          => $akun,
-                'kategori'      => $kategori
+                'id_kategori'   => $kategori//$builderAkunKategori->get()->getResultArray()
             ];
 
             $json = [
@@ -194,3 +208,4 @@ class Akun extends ResourcePresenter
         return redirect()->to('/listakun');
     }
 }
+?>

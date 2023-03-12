@@ -25,8 +25,8 @@
         <div class="col-sm-9">
             <select class="form-control" name="debit_kredit" id="debit">
                 <option value=""></option>
-                    <option <?= (old('debit_kredit', $kategori['debit_kredit']) == "Plus") ? 'selected' : ''; ?> value="Unit">Plus</option>
-                    <option <?= (old('debit_kredit', $kategori['debit_kredit']) == "Minus") ? 'selected' : ''; ?> value="Pcs">Minus</option>
+                    <option <?= (old('debit_kredit', $kategori['debit_kredit']) == "Plus") ? 'selected' : ''; ?> value="Plus">Plus</option>
+                    <option <?= (old('debit_kredit', $kategori['debit_kredit']) == "Minus") ? 'selected' : ''; ?> value="Minus">Minus</option>
             </select>
             <div class="invalid-feedback"></div>
         </div>
@@ -43,34 +43,6 @@
 <?= $this->include('MyLayout/js') ?>
 
 <script>
-    $(document).ready(function() 
-    {
-        // Alert
-        var op = <?= (!empty(session()->getFlashdata('pesan')) ? json_encode(session()->getFlashdata('pesan')) : '""'); ?>;
-        if (op != '') {
-            Toast.fire({
-                icon: 'success',
-                title: op
-            })
-        }
-
-        // Bahan Alert
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            background: '#63ec88',
-            color: '#fff',
-            iconColor: '#fff',
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-    })
-
     $('#form').submit(function(e) {
         e.preventDefault();
 
@@ -110,12 +82,17 @@
                 }
                 if (response.success) {
                     $('#my-modal').modal('hide')
-                    $('#tabel').DataTable().ajax.reload();
-                    Toast.fire({
+                    Swal.fire({
                         icon: 'success',
-                        title: response.success
+                        title: 'Berhasil',
+                        text: response.success,
+                    }).then((value) => {
+                        //$('#tabel').DataTable().ajax.reload();
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.success
+                        })
                     })
-                    return redirect()->to('/divisi');
                 }
             },
             error: function(e) {

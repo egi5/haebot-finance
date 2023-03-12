@@ -27,7 +27,7 @@ class KategoriAkun extends ResourcePresenter
                         <i class="fa-fw fa-solid fa-magnifying-glass"></i>
                     </a>
 
-                    <a title="Edit" class="px-2 py-0 btn btn-sm btn-outline-primary" onclick="showModalEdit(' . $row->id . ')/edit">
+                    <a title="Edit" class="px-2 py-0 btn btn-sm btn-outline-primary" onclick="showModalEdit(' . $row->id . ')">
                         <i class="fa-fw fa-solid fa-pen"></i>
                     </a>
 
@@ -104,7 +104,7 @@ class KategoriAkun extends ResourcePresenter
                         'required'  => '{field} harus diisi.'
                     ]
                 ],
-                'debit'  => [
+                'debit_kredit'  => [
                     'rules'  => 'required',
                     'errors' => [
                         'required'  => '{field}/kredit harus diisi.',
@@ -118,7 +118,7 @@ class KategoriAkun extends ResourcePresenter
                 $error = [
                     'error_nama'       => $validation->getError('nama'),
                     'error_deskripsi'  => $validation->getError('deskripsi'),
-                    'error_debit'      => $validation->getError('debit')
+                    'error_debit'      => $validation->getError('debit_kredit')
                 ];
 
                 $json = [
@@ -176,7 +176,7 @@ class KategoriAkun extends ResourcePresenter
                 'nama'       => [
                     'rules'  => 'required',
                     'errors' => [
-                        'required'  => '{field} nama divisi harus diisi.',
+                        'required'  => '{field} nama divisighhjh harus diisi.',
                     ]
                 ],
                 'deskripsi'  => [
@@ -185,7 +185,7 @@ class KategoriAkun extends ResourcePresenter
                         'required'  => '{field} harus diisi.',
                     ]
                 ],
-                'debit'  => [
+                'debit_kredit'  => [
                     'rules'  => 'required',
                     'errors' => [
                         'required'  => '{field}/kredit harus diisi.',
@@ -199,30 +199,30 @@ class KategoriAkun extends ResourcePresenter
                 $error = [
                     'error_nama'       => $validation->getError('nama'),
                     'error_deskripsi'  => $validation->getError('deskripsi'),
-                    'error_debit'      => $validation->getError('debit')
+                    'error_debit'      => $validation->getError('debit_kredit')
                 ];
 
                 $json = [
                     'error' => $error
                 ];
 
-                echo json_encode($json);
+                
             } else {
                 $modelKategori = new KategoriAkunModel();
-                $kategori      = $modelKategori->find($id);
 
                 $data = [
-                    'id'           => $kategori,
+                    'id'           => $id,
                     'nama'         => $this->request->getPost('nama'),
                     'deskripsi'    => $this->request->getPost('deskripsi'),
                     'debit_kredit' => $this->request->getPost('debit_kredit')
                 ];
-                $modelDivisi->save($data);
+                $modelKategori->save($data);
 
-                session()->setFlashdata('pesan', 'Data Kategori berhasil diedit.');
-
-                return redirect()->to('/divisi')->withInput();    
+                $json = [
+                    'success' => 'Data Berhasil di update'
+                ];   
             }
+            echo json_encode($json);
         // } else {
         //     return 'Tidak bisa load';
         // }    
@@ -240,3 +240,4 @@ class KategoriAkun extends ResourcePresenter
     }
 
 }
+?>
