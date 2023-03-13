@@ -30,6 +30,8 @@
                     <th class="text-center" width="5%">No</th>
                     <th class="text-center" width="15%">Kode</th>
                     <th class="text-center" width="25%">Nama</th>
+                    <th class="text-center" width="20%">Kategori</th>
+                    <th class="text-center" width="15%">Debit/Kredit</th>
                     <th class="text-center" width="10%">Aksi</th>
                 </tr>
             </thead>
@@ -96,6 +98,12 @@
                 },
                 {
                     data: 'nama'
+                },
+                {
+                    data: 'kategori'
+                },
+                {
+                    data: 'debit'
                 },
                 {
                     data: 'aksi',
