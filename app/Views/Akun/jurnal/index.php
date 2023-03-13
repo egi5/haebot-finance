@@ -7,7 +7,7 @@
 
     <div class="d-flex mb-0">
         <div class="me-auto mb-1">
-            <h3 style="color: #566573;">Data Akun</h3>
+            <h3 style="color: #566573;">Data Jurnal Umum</h3>
         </div>
         <div class="me-2 mb-1">
             <a class="btn btn-sm btn-outline-dark" href="<?= site_url() ?>akun">
@@ -16,7 +16,7 @@
         </div>
         <div class="mb-1">
             <a class="btn btn-sm btn-outline-secondary mb-3" id="tombolTambah">
-                <i class="fa-fw fa-solid fa-plus"></i> Tambah Akun
+                <i class="fa-fw fa-solid fa-plus"></i> Tambah Jurnal Umum
             </a>
         </div>
     </div>
@@ -28,14 +28,14 @@
             <thead>
                 <tr>
                     <th class="text-center" width="5%">No</th>
-                    <th class="text-center" width="15%">Kode</th>
-                    <th class="text-center" width="25%">Nama</th>
-                    <th class="text-center" width="20%">Kategori</th>
+                    <th class="text-center" width="25%">Nomer</th>
+                    <th class="text-center" width="15%">Referensi</th>
+                    <th class="text-center" width="15%">Tanggal</th>
                     <th class="text-center" width="10%">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                 
+
             </tbody>
         </table>
     </div>
@@ -85,27 +85,26 @@
         $('#tabel').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '<?= site_url() ?>getdataakun',
+            ajax: '<?= site_url() ?>getdatakategori',
             order: [],
-            columns: [
-                {
+            columns: [{
                     data: 'no',
                     orderable: false
-                },
-                {
-                    data: 'kode'
                 },
                 {
                     data: 'nama'
                 },
                 {
-                    data: 'kategori'
+                    data: 'deskripsi'
+                },
+                {
+                    data: 'debit_kredit'
                 },
                 {
                     data: 'aksi',
                     orderable: false,
                     className: 'text-center'
-                }
+                },
             ]
         });
 
@@ -125,16 +124,17 @@
         showModalTambah();
     })
 
+
     function showModalTambah() {
         $.ajax({
             type: 'GET',
-            url: '<?= site_url() ?>akun/new',
+            url: '<?= site_url() ?>kategoriakun/new',
             dataType: 'json',
             success: function(res) {
                 if (res.data) {
                     $('#isiForm').html(res.data)
                     $('#my-modal').modal('toggle')
-                    $('#judulModal').html('Tambah Akun')
+                    $('#judulModal').html('Tambah Kategori')
                 }
             },
             error: function(e) {
@@ -147,7 +147,7 @@
     function showModalDetail(id) {
         $.ajax({
             type: 'GET',
-            url: '<?= site_url() ?>akun/' + id,
+            url: '<?= site_url() ?>kategoriakun/' + id,
             dataType: 'json',
             success: function(res) {
                 if (res.data) {
@@ -177,22 +177,23 @@
             confirmButtonText: 'Ya, hapus!'
         }).then((result) => {
             if (result.isConfirmed) {
-                $('#form_delete').attr('action', '<?= site_url() ?>akun/' + id);
+                $('#form_delete').attr('action', '<?= site_url() ?>kategoriakun/' + id);
                 $('#form_delete').submit();
             }
         })
     }
+    
 
     function showModalEdit(id) {
         $.ajax({
             type: 'GET',
-            url: '<?= site_url() ?>akun/' + id +'/edit',
+            url: '<?= site_url() ?>kategoriakun/' + id +'/edit',
             dataType: 'json',
             success: function(res) {
                 if (res.data) {
                     $('#isiForm').html(res.data)
                     $('#my-modal').modal('toggle')
-                    $('#judulModal').html('Edit Akun')
+                    $('#judulModal').html('Edit Kategori Akun')
                 } else {
                     console.log(res)
                 }
