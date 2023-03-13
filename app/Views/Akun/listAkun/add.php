@@ -95,12 +95,9 @@
                         title: 'Berhasil',
                         text: response.success,
                     }).then((value) => {
-                        // $('#tabel').DataTable().ajax.reload();
-                        Toast.fire({
-                            icon: 'success',
-                            title: response.success
-                        })
+                        location.href = "<?= base_url() ?>/listakun";
                     })
+                    
                 }
             },
             error: function(e) {

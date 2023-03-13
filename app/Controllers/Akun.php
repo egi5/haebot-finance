@@ -11,15 +11,6 @@ class Akun extends ResourcePresenter
 {
     public function index()
     {
-        // $modelAkun = new AkunModel();
-        // $modelKategori = new KategoriAkunModel();
-        // $akun = $modelAkun
-        //         ->select('akun.kode, akun.nama, akun_kategori.nama')
-        //         ->join('akun_kategori','akun_kategori.id=akun.id_kategori')
-        //         ->findAll();
-        // $data = [
-        //     'akun' =>$akun
-        // ];
         return view('akun/listAkun/index');
     }
 
@@ -30,12 +21,12 @@ class Akun extends ResourcePresenter
 
             $modelAkun = new AkunModel();
             $modelKategori = new KategoriAkunModel();
-            // $akun = $modelAkun
-            //     ->select('akun.kode, akun.nama, akun_kategori.nama')
-            //     ->join('akun_kategori','akun_kategori.id=akun.id_kategori')
-            //     ->findAll();
+            
+            // $data = $modelAkun->where(['deleted_at' => null])->select('id, kode, nama, akun_kategori.debit_kredit')
+            //                                                  ->join('akun_kategori','akun_kategori.id = akun.id_kategori');
+                          
             $data = $modelAkun->where(['deleted_at' => null])->select('id, kode, nama');
-                                                          
+            
             return DataTable::of($data)
                 ->addNumbering('no')
                 ->add('aksi', function ($row) {
@@ -270,7 +261,7 @@ class Akun extends ResourcePresenter
                 $modelAkun->save($data);
 
                 $json = [
-                    'success' => 'Berhasil update data produk'
+                    'success' => 'Berhasil menambah data produk'
                 ];
             }
 

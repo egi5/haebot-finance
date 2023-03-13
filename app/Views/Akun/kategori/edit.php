@@ -1,13 +1,13 @@
 <form autocomplete="off" class="row g-3 mt-3" action="<?= site_url() ?>kategoriakun/<?= $kategori['id'] ?>" method="POST" id="form">
 
-    <?= csrf_field() ?>
+    
 
     <input type="hidden" name="_method" value="PUT">
 
     <div class="row mb-3">
         <label for="nama" class="col-sm-3 col-form-label">Nama Kategori Akun</label>
         <div class="col-sm-9">
-            <input type="text" class="form-control" id="nama" name="nama" value="<?= old('nama',$kategori['nama']); ?>">
+            <input type="text" class="form-control" id="nama" name="nama" value="<?= $kategori['nama']; ?>">
             <div class="invalid-feedback error_nama"></div>
         </div>
     </div>
@@ -15,7 +15,7 @@
     <div class="row mb-3">
         <label for="deskripsi" class="col-sm-3 col-form-label">Deskripsi</label>
         <div class="col-sm-9">
-            <input type="text" class="form-control" id="deskripsi" name="deskripsi" value="<?= old('deskripsi', $kategori['deskripsi']); ?>">
+            <input type="text" class="form-control" id="deskripsi" name="deskripsi" value="<?= $kategori['deskripsi']; ?>">
             <div class="invalid-feedback error_deskripsi"></div>
         </div>
     </div>
@@ -25,8 +25,8 @@
         <div class="col-sm-9">
             <select class="form-control" name="debit_kredit" id="debit">
                 <option value=""></option>
-                    <option <?= (old('debit_kredit', $kategori['debit_kredit']) == "Plus") ? 'selected' : ''; ?> value="Plus">Plus</option>
-                    <option <?= (old('debit_kredit', $kategori['debit_kredit']) == "Minus") ? 'selected' : ''; ?> value="Minus">Minus</option>
+                    <option <?= $kategori['debit_kredit'] == "Plus" ? 'selected' : ''; ?> value="Plus">Plus</option>
+                    <option <?= $kategori['debit_kredit'] == "Minus" ? 'selected' : ''; ?> value="Minus">Minus</option>
             </select>
             <div class="invalid-feedback"></div>
         </div>
@@ -45,7 +45,7 @@
 <script>
     $('#form').submit(function(e) {
         e.preventDefault();
-
+        
         $.ajax({
             type: "post",
             url: $(this).attr('action'),
@@ -78,15 +78,24 @@
                         $('.error_deskripsi').html('');
                         $('#deskripsi').removeClass('is-invalid');
                         $('#deskripsi').addClass('is-valid');
-                    }    
+                    }
+                    if (err.error_debit) {
+                        $('.error_debit').html(err.error_debit);
+                        $('#debit').addClass('is-invalid');
+                    } else {
+                        $('.error_debit').html('');
+                        $('#debit').removeClass('is-invalid');
+                        $('#debit').addClass('is-valid');
+                    }
+                    
                 }
                 if (response.success) {
                     $('#my-modal').modal('hide');
-                    $('#tabel').DataTable().ajax.reload();
                     Toast.fire({
                         icon: 'success',
                         title: response.success
-                    })
+                    });
+                    location.href = "<?= base_url() ?>/kategori";
                 }
             },
             error: function(e) {
@@ -95,5 +104,4 @@
         });
         return false
     })
-    
 </script>

@@ -171,7 +171,7 @@ class KategoriAkun extends ResourcePresenter
 
     public function update($id = null)
     {
-        // if ($this->request->isAJAX()) {
+        if ($this->request->isAJAX()) {
             $validasi = [
                 'nama'       => [
                     'rules'  => 'required',
@@ -206,7 +206,7 @@ class KategoriAkun extends ResourcePresenter
                     'error' => $error
                 ];
 
-                
+                echo json_encode($json);
             } else {
                 $modelKategori = new KategoriAkunModel();
 
@@ -218,14 +218,18 @@ class KategoriAkun extends ResourcePresenter
                 ];
                 $modelKategori->save($data);
 
+                // session()->setFlashdata('pesan', 'Data berhasil dihapus.');
+                // return redirect()->to('/kategoriakun');
+
                 $json = [
                     'success' => 'Data Berhasil di update'
                 ];   
             }
             echo json_encode($json);
-        // } else {
-        //     return 'Tidak bisa load';
-        // }    
+            // return redirect()->to('/kategoriakun');
+        } else {
+            return 'Tidak bisa load';
+        }    
     }
 
 

@@ -99,11 +99,11 @@
                 }
                 if (response.success) {
                     $('#my-modal').modal('hide')
-                    // $('#tabel').DataTable().ajax.reload();
                     Toast.fire({
                         icon: 'success',
                         title: response.success
                     })
+                    location.href = "<?= base_url() ?>/listakun";
                 }
             },
             error: function(e) {

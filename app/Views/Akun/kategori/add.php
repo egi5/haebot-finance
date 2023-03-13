@@ -82,7 +82,7 @@
                     
                 }
                 if (response.success) {
-                    $('#my-modal').modal('hide')
+                    $('#my-modal').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil',

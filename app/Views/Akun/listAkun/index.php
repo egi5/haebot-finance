@@ -86,7 +86,8 @@
             serverSide: true,
             ajax: '<?= site_url() ?>getdataakun',
             order: [],
-            columns: [{
+            columns: [
+                {
                     data: 'no',
                     orderable: false
                 },
@@ -100,7 +101,7 @@
                     data: 'aksi',
                     orderable: false,
                     className: 'text-center'
-                },
+                }
             ]
         });
 
