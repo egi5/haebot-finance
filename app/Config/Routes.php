@@ -38,6 +38,7 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
     $routes->get('akun', 'Menu::Akun');
     $routes->get('kategori', 'KategoriAkun::index');
     $routes->get('listakun', 'Akun::index');
+    $routes->get('jurnalumum', 'Jurnal::index');
 
     // GetData
     $routes->get('/wilayah/kota_by_provinsi', 'GetWilayah::KotaByProvinsi');
@@ -62,6 +63,19 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
     //Akun
     $routes->get('getdataakun', 'Akun::getDataAkun');
     $routes->resource('akun');
+
+
+    //Jurnal Umum
+    $routes->get('getdatajurnal', 'Jurnal::getDataJurnal');
+    $routes->resource('jurnal');
+    $routes->resource('jurnaldetail');
+    $routes->post('create_list_akun', 'JurnalDetail::create');
+    $routes->post('simpan_transaksi', 'JurnalDetail::simpanTransaksi');
+    $routes->post('akun_transaksi', 'Jurnal::getListAkunTransaksi');
+    $routes->post('check_list_akun', 'JurnalDetail::check_list_akun');
+    $routes->get('list_transaksi/(:any)', 'JurnalDetail::ListTransaksi/$1');
+
+
     
 });
 

@@ -7,7 +7,7 @@
 
     <div class="d-flex mb-0">
         <div class="me-auto mb-1">
-            <h3 style="color: #566573;">Data Jurnal Umum</h3>
+            <h3 style="color: #566573;">Jurnal Umum</h3>
         </div>
         <div class="me-2 mb-1">
             <a class="btn btn-sm btn-outline-dark" href="<?= site_url() ?>akun">
@@ -15,8 +15,8 @@
             </a>
         </div>
         <div class="mb-1">
-            <a class="btn btn-sm btn-outline-secondary mb-3" id="tombolTambah">
-                <i class="fa-fw fa-solid fa-plus"></i> Tambah Jurnal Umum
+            <a class="btn btn-sm btn-outline-secondary" href="<?= site_url() ?>jurnal/new">
+                <i class="fa-fw fa-solid fa-plus"></i> Tambah Jurnal
             </a>
         </div>
     </div>
@@ -28,10 +28,11 @@
             <thead>
                 <tr>
                     <th class="text-center" width="5%">No</th>
-                    <th class="text-center" width="25%">Nomer</th>
-                    <th class="text-center" width="15%">Referensi</th>
+                    <th class="text-center" width="13%">Nomor</th>
+                    <th class="text-center" width="21%">Referensi</th>
                     <th class="text-center" width="15%">Tanggal</th>
-                    <th class="text-center" width="10%">Aksi</th>
+                    <th class="text-center" width="15%">Jumlah</th>
+                    <th class="text-center" width="15%">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,7 +52,7 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="judulModal"></h1>
+                <h1 class="modal-title fs-5" id="judulModal">Tambah Pemesanan</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="isiForm">
@@ -61,7 +62,6 @@
     </div>
 </div>
 <!-- Modal -->
-
 
 
 <script>
@@ -85,20 +85,26 @@
         $('#tabel').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '<?= site_url() ?>getdatakategori',
+            ajax: '<?= site_url() ?>getdatajurnal',
             order: [],
             columns: [{
                     data: 'no',
                     orderable: false
                 },
                 {
-                    data: 'nama'
+                    data: 'nomor_transaksi'
                 },
                 {
-                    data: 'deskripsi'
+                    data: 'referensi'
                 },
                 {
-                    data: 'debit_kredit'
+                    data: 'tanggal'
+                },
+                {
+                    data: 'total_transaksi',
+                    render: function(data, type, row) {
+                        return 'Rp ' + data.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    }
                 },
                 {
                     data: 'aksi',
@@ -121,39 +127,24 @@
 
     $('#tombolTambah').click(function(e) {
         e.preventDefault();
-        showModalTambah();
+        // showModalTambah();
     })
 
 
-    function showModalTambah() {
-        $.ajax({
-            type: 'GET',
-            url: '<?= site_url() ?>kategoriakun/new',
-            dataType: 'json',
-            success: function(res) {
-                if (res.data) {
-                    $('#isiForm').html(res.data)
-                    $('#my-modal').modal('toggle')
-                    $('#judulModal').html('Tambah Kategori')
-                }
-            },
-            error: function(e) {
-                alert('Error \n' + e.responseText);
-            }
-        })
-    }
+
+    
 
 
     function showModalDetail(id) {
         $.ajax({
             type: 'GET',
-            url: '<?= site_url() ?>kategoriakun/' + id,
+            url: '<?= site_url() ?>jurnal/' + id,
             dataType: 'json',
             success: function(res) {
                 if (res.data) {
                     $('#isiForm').html(res.data)
                     $('#my-modal').modal('toggle')
-                    $('#judulModal').html('Detail Kategori Akun')
+                    $('#judulModal').html('Detail Jurnal Umum')
                 } else {
                     console.log(res)
                 }
@@ -165,35 +156,16 @@
     }
 
 
-    function confirm_delete(id) {
-        Swal.fire({
-            backdrop: false,
-            title: 'Konfirmasi?',
-            text: "Apakah yakin menghapus!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, hapus!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#form_delete').attr('action', '<?= site_url() ?>kategoriakun/' + id);
-                $('#form_delete').submit();
-            }
-        })
-    }
-    
-
     function showModalEdit(id) {
         $.ajax({
             type: 'GET',
-            url: '<?= site_url() ?>kategoriakun/' + id +'/edit',
+            url: '<?= site_url() ?>jurnal/' + id +'/edit',
             dataType: 'json',
             success: function(res) {
                 if (res.data) {
                     $('#isiForm').html(res.data)
                     $('#my-modal').modal('toggle')
-                    $('#judulModal').html('Edit Kategori Akun')
+                    $('#judulModal').html('Edit Jurnal Umum')
                 } else {
                     console.log(res)
                 }

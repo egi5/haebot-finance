@@ -30,7 +30,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a class="text-decoration-none" href="<?= base_url() ?>/listakun">
+            <a class="text-decoration-none" href="<?= base_url() ?>/jurnalumum">
                 <div class="card mb-3 shadow" style="border: 1px solid #1762A5;">
                     <h5 class="card-header" style="background-color: #1762A5; color: #fff;">Jurnal Umum</h5>
                     <div class="card-body text-dark">
