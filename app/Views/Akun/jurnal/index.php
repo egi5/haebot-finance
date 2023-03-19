@@ -127,12 +127,7 @@
 
     $('#tombolTambah').click(function(e) {
         e.preventDefault();
-        // showModalTambah();
     })
-
-
-
-    
 
 
     function showModalDetail(id) {
@@ -172,6 +167,25 @@
             },
             error: function(e) {
                 alert('Error \n' + e.responseText);
+            }
+        })
+    }
+
+
+    function confirm_delete(id) {
+        Swal.fire({
+            backdrop: false,
+            title: 'Konfirmasi?',
+            text: "Apakah yakin menghapus!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#form_delete').attr('action', '<?= site_url() ?>jurnal/' + id);
+                $('#form_delete').submit();
             }
         })
     }

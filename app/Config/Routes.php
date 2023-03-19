@@ -69,7 +69,8 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
     $routes->get('getdatajurnal', 'Jurnal::getDataJurnal');
     $routes->resource('jurnal');
     $routes->resource('jurnaldetail');
-    $routes->post('create_list_akun', 'JurnalDetail::create');
+    $routes->post('create_list_akun', 'Jurnal::createListAkun');
+    $routes->get('/Jurnal/akun', 'Jurnal::akun');
     $routes->post('simpan_transaksi', 'JurnalDetail::simpanTransaksi');
     $routes->post('akun_transaksi', 'Jurnal::getListAkunTransaksi');
     $routes->post('check_list_akun', 'JurnalDetail::check_list_akun');

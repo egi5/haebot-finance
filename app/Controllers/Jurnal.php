@@ -11,6 +11,13 @@ class Jurnal extends ResourcePresenter
 {
     protected $helpers = ['form', 'nomor_auto_helper'];
 
+    function __construct()
+    {
+        $this->db                = \Config\Database::connect();
+        $this->modelJurnal       = new JurnalModel();
+        $this->modelJurnalDetail = new JurnalDetailModel();
+    }
+
     public function index()
     {
         return view('akun/jurnal/index');
@@ -51,111 +58,182 @@ class Jurnal extends ResourcePresenter
 
     public function show($id = null)
     {
-        if ($this->request->isAJAX()) {
+        // if ($this->request->isAJAX()) {
 
-            $modelJurnal        = new JurnalModel();
-            $modelJurnalDetail  = new JurnalDetailModel();
-            $jurnal             = $modelJurnal->getJurnal($id);
-            $jurnalDetail       = $modelJurnalDetail->getDetailJurnal($jurnal['id']);
+            $modelAkun         = new AkunModel();
+            $modelJurnal       = new JurnalModel();
+            $modelJurnalDetail = new JurnalDetailModel();
+            $akun              = $modelAkun->findAll();
+            $detail            = $modelJurnalDetail->findAll();
+            $transaksi         = $modelJurnal->find($id);
 
             $data = [
-                'jurnal'        => $jurnal,
-                'jurnalDetail'  => $jurnalDetail
+                'akun'          => $akun,
+                'detail'        => $detail,
+                'transaksi'     => $transaksi,
             ];
+
 
             $json = [
                 'data'   => view('akun/jurnal/show', $data),
             ];
 
             echo json_encode($json);
-        } else {
-            return 'Tidak bisa load data';
-        }
+        // } else {
+        //     return 'Tidak bisa load data';
+        // }
     }
 
 
     public function new()
     {
-        // if ($this->request->isAJAX()) {
-            date_default_timezone_set('Asia/Jakarta');
-            $modelAkun         = new AkunModel();
-            $modelJurnal       = new JurnalModel();
-            $modelJurnalDetail = new JurnalDetailModel();
+        date_default_timezone_set('Asia/Jakarta');
+        $modelAkun         = new AkunModel();
+        $modelJurnal       = new JurnalModel();
+        $modelJurnalDetail = new JurnalDetailModel();
 
-            $akun = $modelAkun->findAll();
+        $akun = $modelAkun->findAll();
 
-            $data = [
-                'akun'                  => $akun,
-                'nomor_transaksi_auto'  => date('Y-m-d')
-            ];
+        $data = [
+            'akun'                  => $akun,
+            'nomor_transaksi_auto'  => date('Y-m-d')
+        ];
 
-            return view('akun/jurnal/add', $data);
-        // } else {
-        //     return 'Tidak bisa load';
-        // }
+        return view('akun/jurnal/add', $data);
     }
 
 
     public function create()
     {
-        if ($this->request->isAJAX()) {
-            $validasi = [
-                'nomor_transaksi' => [
-                    'rules' => 'required',
-                    'errors' => [
-                        'required' => 'Nomor jurnal harus diisi.',
-                        // 'is_unique' => 'Nomor jurnal sudah ada dalam database.'
-                    ]
-                ],
-                'tanggal' => [
-                    'rules' => 'required',
-                    'errors' => [
-                        'required' => 'tanggal pemesanan harus diisi.',
-                    ]
-                ],
-                'referensi' => [
-                    'rules' => 'required',
-                    'errors' => [
-                        'required' => 'harap isi referensi',
-                    ]
-                ],
+       
+        $modelAkun         = new AkunModel();
+        $modelJurnal       = new JurnalModel();
+        $modelJurnalDetail = new JurnalDetailModel();
+
+        $data = [
+            'nomor_transaksi'   => $this->request->getPost('nomor_transaksi'),    
+            'tanggal'           => $this->request->getPost('tanggal'),
+            'referensi'         => $this->request->getPost('referensi')
+        ];
+        $modelJurnal->insert($data);
+
+        $id_transaksi = $this->modelJurnal->insertID();
+        $id_akun      = $this->request->getPost('id_akun');
+        $deskripsi    = $this->request->getPost('deskripsi');
+        $debit        = $this->request->getPost('debit');
+        $kredit       = $this->request->getPost('kredit');
+
+        for ($i=0; $i < count($id_akun) ; $i++) { 
+            $dataAkun = [
+                'id_transaksi'  => $id_transaksi,
+                'id_akun'       => $id_akun[$i],
+                'deskripsi'     => $deskripsi[$i],
+                'debit'         => $debit[$i],
+                'kredit'        => $kredit[$i]
             ];
-
-            if (!$this->validate($validasi)) {
-                $validation = \Config\Services::validation();
-
-                $error = [
-                    'error_nomor'       => $validation->getError('nomor_transaksi'),
-                    'error_tanggal'     => $validation->getError('tanggal'),
-                    'error_referensi'   => $validation->getError('referensi'),
-                ];
-
-                $json = [
-                    'error' => $error
-                ];
-            } else {
-                $modelJurnal = new JurnalModel();
-
-                $data = [
-                    'nomor_transaksi'   => $this->request->getPost('nomor_transaksi'),
-                    'tanggal'           => $this->request->getPost('tanggal'),
-                    'referensi'         => $this->request->getPost('referensi'),
-                    'total'             => $this->request->getPost('total_transaksi'),
-                ];
-
-                $modelJurnal->save($data);
-
-                $json = [
-                    'success'           => 'Berhasil menambah jurnal transaksi',
-                    'nomor_transaksi'   => $this->request->getPost('nomor_transaksi')
-                ];
-            }
-
-            echo json_encode($json);
-        } else {
-            return 'Tidak bisa load';
+            $modelJurnalDetail->insert($dataAkun);
         }
     }
+
+
+    public function akun()
+    {
+        $modelAkun  = new AkunModel();
+        $akun       = $modelAkun->findAll();
+
+        return $this->response->setJSON($akun);
+    }
+
+
+    public function edit($id = null)
+    {
+        // if ($this->request->isAJAX()) {
+            
+            $modelAkun         = new AkunModel();
+            $modelJurnal       = new JurnalModel();
+            $modelJurnalDetail = new JurnalDetailModel();
+            $akun              = $modelAkun->findAll();
+            $detail            = $modelJurnalDetail->findAll();
+            $transaksi         = $modelJurnal->find($id);
+
+            $data = [
+                'validation'    => \Config\Services::validation(),
+                'akun'          => $akun,
+                'detail'        => $detail,
+                'transaksi'     => $transaksi,
+            ];
+
+            $json = [
+                'data'   => view('akun/jurnal/edit', $data),
+            ];
+
+            echo json_encode($json);
+        // } else {
+        //     return 'Tidak bisa load data';
+        // }
+    }
+
+
+    // public function create()
+    // {
+    //     if ($this->request->isAJAX()) {
+    //         $validasi = [
+    //             'nomor_transaksi' => [
+    //                 'rules' => 'required',
+    //                 'errors' => [
+    //                     'required' => 'Nomor jurnal harus diisi.',
+    //                     // 'is_unique' => 'Nomor jurnal sudah ada dalam database.'
+    //                 ]
+    //             ],
+    //             'tanggal' => [
+    //                 'rules' => 'required',
+    //                 'errors' => [
+    //                     'required' => 'tanggal pemesanan harus diisi.',
+    //                 ]
+    //             ],
+    //             'referensi' => [
+    //                 'rules' => 'required',
+    //                 'errors' => [
+    //                     'required' => 'harap isi referensi',
+    //                 ]
+    //             ],
+    //         ];
+
+    //         if (!$this->validate($validasi)) {
+    //             $validation = \Config\Services::validation();
+
+    //             $error = [
+    //                 'error_nomor'       => $validation->getError('nomor_transaksi'),
+    //                 'error_tanggal'     => $validation->getError('tanggal'),
+    //                 'error_referensi'   => $validation->getError('referensi'),
+    //             ];
+
+    //             $json = [
+    //                 'error' => $error
+    //             ];
+    //         } else {
+    //             $modelJurnal = new JurnalModel();
+
+    //             $data = [
+    //                 'nomor_transaksi'   => $this->request->getPost('nomor_transaksi'),
+    //                 'tanggal'           => $this->request->getPost('tanggal'),
+    //                 'referensi'         => $this->request->getPost('referensi'),
+    //                 'total'             => $this->request->getPost('total_transaksi'),
+    //             ];
+
+    //             $modelJurnal->save($data);
+
+    //             $json = [
+    //                 'success'           => 'Berhasil menambah jurnal transaksi',
+    //                 'nomor_transaksi'   => $this->request->getPost('nomor_transaksi')
+    //             ];
+    //         }
+
+    //         echo json_encode($json);
+    //     } else {
+    //         return 'Tidak bisa load';
+    //     }
+    // }
 
 
     public function getListAkunTransaksi()
@@ -185,6 +263,17 @@ class Jurnal extends ResourcePresenter
         } else {
             return 'Tidak bisa load';
         }
+    }
+
+
+    public function delete($id = null)
+    {
+        $modelJurnal = new JurnalModel();
+
+        $modelJurnal->delete($id);
+
+        session()->setFlashdata('pesan', 'Data berhasil dihapus.');
+        return redirect()->to('/jurnal');
     }
 }
 
