@@ -6,14 +6,14 @@ use CodeIgniter\Model;
 
 class JurnalModel extends Model
 {
-    // protected $DBGroup          = 'default';
+    protected $DBGroup          = 'default';
     protected $table            = 'transaksi_jurnal';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
-    // protected $useSoftDeletes   = true;
-    // protected $protectFields    = true;
+    protected $useSoftDeletes   = true;
+    protected $protectFields    = true;
     protected $allowedFields    = [
         'nomor_transaksi','referensi','tanggal','total_transaksi','created_at', 'updated_at', 'deleted_at'
     ];

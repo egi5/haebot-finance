@@ -46,7 +46,7 @@
                 </tr>
             <?php endforeach; ?>
             <tr class="fs-5">
-                <td colspan="5" class="text-end fw-bold pe-4 py-2">Total</td>
+                <td colspan="5" class="text-end fw-bold pe-4 py-2">Total Rp. <?= number_format($transaksi['total_transaksi'], 0, ',', '.') ?></td>
             </tr>
         </tbody>
     </table>

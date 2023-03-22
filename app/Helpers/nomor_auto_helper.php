@@ -19,3 +19,22 @@ function nomor_pemesanan_auto($tgl)
 
     return $nomor_auto;
 }
+
+function jurnal_nomor_auto($tgl)
+{
+    $db    = db_connect();
+
+    $quer  = "SELECT max(right(nomor_transaksi, 2)) AS nomor FROM transaksi_jurnal WHERE tanggal = '$tgl'";
+    $query = $db->query($quer)->getRowArray();
+
+    if($query) {
+        $nomor = ((int)$query['nomor']) + 1;
+        $kode  = sprintf("%02s", $nomor);
+    } else {
+        $kode = "01";
+    }
+    date_default_timezone_set('Asia/Jakarta');
+    $nomorAuto = 'MNL' . date('dmy', strtotime($tgl)) . $kode;
+
+    return $nomorAuto;
+}

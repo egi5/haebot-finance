@@ -140,8 +140,8 @@ class Akun extends ResourcePresenter
                 $validation = \Config\Services::validation();
 
                 $error = [
-                    'error_kode'       => $validation->getError('kode'),
-                    'error_nama'       => $validation->getError('nama'),
+                    'error_kode'   => $validation->getError('kode'),
+                    'error_nama'   => $validation->getError('nama'),
                     'error_debit'  => $validation->getError('id_kategori')
                 ];
 
@@ -170,7 +170,7 @@ class Akun extends ResourcePresenter
                 $modelAkun->insert($data);
 
                 $json = [
-                    'success' => 'Berhasil menambah data produk'
+                    'success' => 'Berhasil menambah data Akun'
                 ];
             }
 
@@ -250,7 +250,7 @@ class Akun extends ResourcePresenter
                 $builderAkunKategori = $db->table('akun_kategori');
 
                 if (strpos($this->request->getPost('id_kategori'), '-krisna-') !== false) {
-                    $post_kategori = explode('-', $this->request->getPost('id_kategori'));
+                    $post_kategori   = explode('-', $this->request->getPost('id_kategori'));
                     $the_id_kategori = $post_kategori[0];
                 } else {
                     $builderAkunKategori->insert(['nama' => $this->request->getPost('id_kategori')]);
