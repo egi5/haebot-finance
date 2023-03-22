@@ -25,7 +25,7 @@ class Jurnal extends ResourcePresenter
 
     public function getDataJurnal()
     {
-        // if ($this->request->isAJAX()) {
+        if ($this->request->isAJAX()) {
 
             $modelJurnal = new JurnalModel();
             $data = $modelJurnal->select('id, nomor_transaksi, referensi, tanggal, total_transaksi');
@@ -50,9 +50,9 @@ class Jurnal extends ResourcePresenter
                     ';
                 }, 'last')
                 ->toJson(true);
-        // } else {
-        //     return "Tidak bisa load data.";
-        // }
+        } else {
+            return "Tidak bisa load data.";
+        }
     }
 
 
@@ -66,14 +66,12 @@ class Jurnal extends ResourcePresenter
             $transaksi         = $modelJurnal->find($id);
             $akun              = $modelAkun->findAll();
             $detail            = $modelJurnalDetail->where(['id_transaksi'=> $transaksi['id']])->findAll();
-            // $detailnama        = $modelJurnalDetail->getDetailJurnal($transaksi['id'])->findAll();
             
 
             $data = [
                 'akun'          => $akun,
                 'detail'        => $detail,
                 'transaksi'     => $transaksi,
-                // 'detailNama'    => $detailnama
             ];
 
 
@@ -163,9 +161,6 @@ class Jurnal extends ResourcePresenter
                 'success' => 'Berhasil menambah data produk'
             ];
 
-            // session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
-
-            // return redirect()->to('/jurnalumum');
         }
         echo json_encode($json);
         
@@ -204,7 +199,6 @@ class Jurnal extends ResourcePresenter
     
     public function update($id = null)
     {
-        
         $modelAkun         = new AkunModel();
         $modelJurnal       = new JurnalModel();
         $modelJurnalDetail = new JurnalDetailModel();

@@ -151,27 +151,6 @@
     }
 
 
-    // function showModalEdit(id) {
-    //     $.ajax({
-    //         type: 'GET',
-    //         url: '<?= site_url() ?>jurnal/' + id +'/edit',
-    //         dataType: 'json',
-    //         success: function(res) {
-    //             if (res.data) {
-    //                 $('#isiForm').html(res.data)
-    //                 $('#my-modal').modal('toggle')
-    //                 $('#judulModal').html('Edit Jurnal Umum')
-    //             } else {
-    //                 console.log(res)
-    //             }
-    //         },
-    //         error: function(e) {
-    //             alert('Error \n' + e.responseText);
-    //         }
-    //     })
-    // }
-
-
     function confirm_delete(id) {
         Swal.fire({
             backdrop: false,

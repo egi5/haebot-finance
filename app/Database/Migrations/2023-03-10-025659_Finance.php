@@ -13,7 +13,8 @@ class Finance extends Migration
             'id'               => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'nama'             => ['type' => 'varchar', 'constraint' => 80],
             'deskripsi'        => ['type' => 'varchar', 'constraint' => 255],
-            'debit_kredit'     => ['type' => 'ENUM', 'constraint' => ['Plus', 'Minus'], 'default' => 'Plus'],
+            'debit'            => ['type' => 'ENUM', 'constraint' => ['Plus', 'Minus'], 'default' => 'Plus'],
+            'kredit'           => ['type' => 'ENUM', 'constraint' => ['Plus', 'Minus'], 'default' => 'Minus'],
             'created_at'       => ['type' => 'datetime', 'null' => true],
             'updated_at'       => ['type' => 'datetime', 'null' => true],
             'deleted_at'       => ['type' => 'datetime', 'null' => true],
@@ -39,43 +40,44 @@ class Finance extends Migration
         $this->forge->createTable('akun', true);
 
 
-        // Transaksi Jurnal
-        $fields = [
-            'id'                => ['type' => 'int', 'constraint' => 11, 'auto_increment' => true],
-            'nomor_transaksi'   => ['type' => 'varchar', 'constraint' => 30],
-            'referensi'         => ['type' => 'varchar', 'constraint' => 30],
-            'tanggal'           => ['type' => 'date'],
-            'total_transaksi'   => ['type' => 'int', 'constraint' => 11],
-            'created_at'        => ['type' => 'datetime'],
-            'updated_at'        => ['type' => 'datetime'],
-            'deleted_at'        => ['type' => 'datetime'],
-        ];
-        $this->forge->addField($fields);
-        $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('id_akun', 'akun','id', '', 'CASCADE');
-        $this->forge->createTable('transaksi_jurnal', true);
+        // // Transaksi Jurnal
+        // $fields = [
+        //     'id'                => ['type' => 'int', 'constraint' => 11, 'auto_increment' => true],
+        //     'nomor_transaksi'   => ['type' => 'varchar', 'constraint' => 30],
+        //     'referensi'         => ['type' => 'varchar', 'constraint' => 30],
+        //     'tanggal'           => ['type' => 'date'],
+        //     'total_transaksi'   => ['type' => 'int', 'constraint' => 11],
+        //     'created_at'        => ['type' => 'datetime'],
+        //     'updated_at'        => ['type' => 'datetime'],
+        //     'deleted_at'        => ['type' => 'datetime'],
+        // ];
+        // $this->forge->addField($fields);
+        // $this->forge->addKey('id', true);
+        // $this->forge->addForeignKey('id_akun', 'akun','id', '', 'CASCADE');
+        // $this->forge->createTable('transaksi_jurnal', true);
 
 
-        //Transaksi Jurnal Detail
-        $fields = [
-            'id'                => ['type' => 'int', 'constraint' => 11,'auto_increment' => true],
-            'id_transaksi'      => ['type' => 'int', 'constraint' => 11],
-            'id_akun'           => ['type' => 'int', 'constraint' => 11],
-            'debit'             => ['type' => 'int', 'constraint' => 20],
-            'kredit'            => ['type' => 'int', 'constraint' => 20],
-        ];
-        $this->forge->addField($fields);
-        $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('id_transaksi', 'transaksi_jurnal', 'id', '', 'CASCADE');
-        $this->forge->addForeignKey('id_akun', 'akun', 'id', '', 'CASCADE');
-        $this->forge->createTable('transaksi_jurnal_detail', true);
+        // //Transaksi Jurnal Detail
+        // $fields = [
+        //     'id'                => ['type' => 'int', 'constraint' => 11,'auto_increment' => true],
+        //     'id_transaksi'      => ['type' => 'int', 'constraint' => 11],
+        //     'id_akun'           => ['type' => 'int', 'constraint' => 11],
+        //     'deskripsi'         => ['type' => 'varchar', 'constraint' => 20],
+        //     'debit'             => ['type' => 'int', 'constraint' => 20],
+        //     'kredit'            => ['type' => 'int', 'constraint' => 20],
+        // ];
+        // $this->forge->addField($fields);
+        // $this->forge->addKey('id', true);
+        // $this->forge->addForeignKey('id_transaksi', 'transaksi_jurnal', 'id', '', 'CASCADE');
+        // $this->forge->addForeignKey('id_akun', 'akun', 'id', '', 'CASCADE');
+        // $this->forge->createTable('transaksi_jurnal_detail', true);
     }
 
     public function down()
     {
         $this->forge->dropTable('akun_kategori');
         $this->forge->dropTable('akun');
-        $this->forge->dropTable('transaksi_jurnal');
-        $this->forge->dropTable('transaksi_jurnal_detail');
+        // $this->forge->dropTable('transaksi_jurnal');
+        // $this->forge->dropTable('transaksi_jurnal_detail');
     }
 }
