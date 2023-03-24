@@ -21,12 +21,24 @@
     </div>
 
     <div class="row mb-3">
-        <label for="satuan" class="col-sm-3 col-form-label">Debit/Kredit</label>
+        <label for="satuan" class="col-sm-3 col-form-label">Debit</label>
         <div class="col-sm-9">
-            <select class="form-control" name="debit_kredit" id="debit">
+            <select class="form-control" name="debit" id="debit">
                 <option value=""></option>
-                    <option <?= $kategori['debit_kredit'] == "Plus" ? 'selected' : ''; ?> value="Plus">Plus</option>
-                    <option <?= $kategori['debit_kredit'] == "Minus" ? 'selected' : ''; ?> value="Minus">Minus</option>
+                    <option <?= $kategori['debit'] == "Plus" ? 'selected' : ''; ?> value="Plus">Plus</option>
+                    <option <?= $kategori['debit'] == "Minus" ? 'selected' : ''; ?> value="Minus">Minus</option>
+            </select>
+            <div class="invalid-feedback"></div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="satuan" class="col-sm-3 col-form-label">Kredit</label>
+        <div class="col-sm-9">
+            <select class="form-control" name="kredit" id="kredit">
+                <option value=""></option>
+                    <option <?= $kategori['kredit'] == "Plus" ? 'selected' : ''; ?> value="Plus">Plus</option>
+                    <option <?= $kategori['kredit'] == "Minus" ? 'selected' : ''; ?> value="Minus">Minus</option>
             </select>
             <div class="invalid-feedback"></div>
         </div>

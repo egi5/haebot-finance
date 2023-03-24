@@ -15,7 +15,7 @@ class KategoriAkunModel extends Model
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'nama', 'deskripsi', 'debit_kredit', 'created_at', 'updated_at', 'deleted_at'
+        'nama', 'deskripsi', 'debit, kredit', 'created_at', 'updated_at', 'deleted_at'
     ];
 
     // Dates

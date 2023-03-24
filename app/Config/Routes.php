@@ -36,9 +36,11 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
 
     $routes->get('/dashboard', 'Dashboard::index', ['filter' => 'permission:Dashboard']);
     $routes->get('akun', 'Menu::Akun');
+    $routes->get('laporan', 'Menu::Laporan');
     $routes->get('kategori', 'KategoriAkun::index');
     $routes->get('listakun', 'Akun::index');
     $routes->get('jurnalumum', 'Jurnal::index');
+    $routes->get('neraca', 'Neraca::index');
 
     // GetData
     $routes->get('/wilayah/kota_by_provinsi', 'GetWilayah::KotaByProvinsi');
@@ -68,13 +70,7 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
     //Jurnal Umum
     $routes->get('getdatajurnal', 'Jurnal::getDataJurnal');
     $routes->resource('jurnal');
-    $routes->resource('jurnaldetail');
-    $routes->post('create_list_akun', 'Jurnal::createListAkun');
     $routes->get('/Jurnal/akun', 'Jurnal::akun');
-    $routes->post('simpan_transaksi', 'JurnalDetail::simpanTransaksi');
-    $routes->post('akun_transaksi', 'Jurnal::getListAkunTransaksi');
-    $routes->post('check_list_akun', 'JurnalDetail::check_list_akun');
-    $routes->get('list_transaksi/(:any)', 'JurnalDetail::ListTransaksi/$1');
 
 
     

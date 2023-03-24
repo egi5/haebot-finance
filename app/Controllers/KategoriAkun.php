@@ -17,7 +17,7 @@ class KategoriAkun extends ResourcePresenter
         if ($this->request->isAJAX()) {
 
             $modelKategori = new KategoriAkunModel();
-            $data = $modelKategori->where(['deleted_at' => null])->select('id, nama, deskripsi, debit_kredit');
+            $data = $modelKategori->where(['deleted_at' => null])->select('id, nama, deskripsi, debit, kredit');
 
             return DataTable::of($data)
                 ->addNumbering('no')
@@ -104,12 +104,18 @@ class KategoriAkun extends ResourcePresenter
                         'required'  => '{field} harus diisi.'
                     ]
                 ],
-                'debit_kredit'  => [
+                'debit'  => [
                     'rules'  => 'required',
                     'errors' => [
-                        'required'  => '{field}/kredit harus diisi.',
+                        'required'  => '{field} harus diisi.',
                     ]
-                ]
+                ],
+                'kredit'  => [
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'  => '{field} harus diisi.',
+                    ]
+                ],
             ];
 
             if (!$this->validate($validasi)) {
@@ -118,7 +124,8 @@ class KategoriAkun extends ResourcePresenter
                 $error = [
                     'error_nama'       => $validation->getError('nama'),
                     'error_deskripsi'  => $validation->getError('deskripsi'),
-                    'error_debit'      => $validation->getError('debit_kredit')
+                    'error_debit'      => $validation->getError('debit'),
+                    'error_kredit'     => $validation->getError('kredit')
                 ];
 
                 $json = [
@@ -130,7 +137,8 @@ class KategoriAkun extends ResourcePresenter
                 $data = [
                     'nama'         => $this->request->getPost('nama'),
                     'deskripsi'    => $this->request->getPost('deskripsi'),
-                    'debit_kredit' => $this->request->getPost('debit_kredit')
+                    'debit'        => $this->request->getPost('debit'),
+                    'kredit'       => $this->request->getPost('kredit')
                 ];
                 
                 $modelKategori->insert($data);
@@ -214,19 +222,17 @@ class KategoriAkun extends ResourcePresenter
                     'id'           => $id,
                     'nama'         => $this->request->getPost('nama'),
                     'deskripsi'    => $this->request->getPost('deskripsi'),
-                    'debit_kredit' => $this->request->getPost('debit_kredit')
+                    'debit'        => $this->request->getPost('debit'),
+                    'kredit'       => $this->request->getPost('kredit')
                 ];
                 $modelKategori->save($data);
-
-                // session()->setFlashdata('pesan', 'Data berhasil dihapus.');
-                // return redirect()->to('/kategoriakun');
 
                 $json = [
                     'success' => 'Data Berhasil di update'
                 ];   
             }
             echo json_encode($json);
-            // return redirect()->to('/kategoriakun');
+            
         } else {
             return 'Tidak bisa load';
         }    

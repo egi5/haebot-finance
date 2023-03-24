@@ -17,15 +17,25 @@
     </div>
 
     <div class="row mb-3">
-        <label for="satuan" class="col-sm-3 col-form-label">Debit/Kredit</label>
+        <label for="satuan" class="col-sm-3 col-form-label">Debit</label>
         <div class="col-sm-9">
-            <!-- <input type="text" class="form-control" id="debit_kredit" name="debit_kredit"> -->
-            <select class="form-control" name="debit_kredit" id="debit">
+            <select class="form-control" name="debit" id="debit">
                 <option value=""></option>
                 <option value="Plus">Plus</option>
                 <option value="Minus">Minus</option>
             </select>
             <div class="invalid-feedback error_debit"></div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="satuan" class="col-sm-3 col-form-label">Kredit</label>
+        <div class="col-sm-9">
+            <select class="form-control" name="kredit" id="kredit">
+                <option value=""></option>
+                <option value="Plus">Plus</option>
+                <option value="Minus">Minus</option>
+            </select>
+            <div class="invalid-feedback error_kredit"></div>
         </div>
     </div>
 
@@ -78,6 +88,14 @@
                         $('.error_debit').html('');
                         $('#debit').removeClass('is-invalid');
                         $('#debit').addClass('is-valid');
+                    }
+                    if (err.error_kredit) {
+                        $('.error_kredit').html(err.error_kredit);
+                        $('#debit').addClass('is-invalid');
+                    } else {
+                        $('.error_kredit').html('');
+                        $('#kredit').removeClass('is-invalid');
+                        $('#kredit').addClass('is-valid');
                     }
                     
                 }

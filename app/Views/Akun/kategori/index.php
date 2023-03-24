@@ -30,7 +30,8 @@
                     <th class="text-center" width="5%">No</th>
                     <th class="text-center" width="25%">Nama</th>
                     <th class="text-center" width="15%">Deskripsi</th>
-                    <th class="text-center" width="15%">Debit/Kredit</th>
+                    <th class="text-center" width="15%">Debit</th>
+                    <th class="text-center" width="15%">Kredit</th>
                     <th class="text-center" width="10%">Aksi</th>
                 </tr>
             </thead>
@@ -98,7 +99,10 @@
                     data: 'deskripsi'
                 },
                 {
-                    data: 'debit_kredit'
+                    data: 'debit'
+                },
+                {
+                    data: 'kredit'
                 },
                 {
                     data: 'aksi',

@@ -80,12 +80,12 @@
                                         <td><input type="text" class="form-control" id="deskripsi" name="deskripsi[]" value="<?= $dt['deskripsi'] ?>"></td>
                                         <td><input type="text" class="form-control debit" id="debit" name="debit[]" value="<?= $dt['debit'] ?>"></td>
                                         <td><input type="text" class="form-control kredit" id="kredit" name="kredit[]" value="<?= $dt['kredit'] ?>"></td>
-                                        <td><button class='btn px-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-trash'></i></button></td>
+                                        <!-- <td><button class='btn px-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-trash'></i></button></td> -->
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
-                        <button class="btn btn-secondary px-2" type="button" id="baris">Tambah Akun</i></button>
+                        <!-- <button class="btn btn-secondary px-2" type="button" id="baris">Tambah Akun</i></button> -->
                         <div>                
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                             </div>
                             <div class="col col-md-4" style="text-align: right;">
                                 <span class="title-total" name="totalKredit" id="totalKredit">0</span>
-                                <input type="hidden" name="total_transaksi" id="total_kredit">
+                                <input type="hidden" name="total_kredit" id="total_kredit">
                             </div>
                         </div>
                         <div class="invalid-feedback error_total"></div>
@@ -135,8 +135,8 @@
             Baris += "<td>";
             Baris += "<input type='text' name='kredit[]' class='form-control kredit' placeholder='Kredit'>";
             Baris += "</td>";
-            Baris += "<td><button class='btn px-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-trash'></i></button>";
-            Baris += "</td>";
+            // Baris += "<td><button class='btn px-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-trash'></i></button>";
+            // Baris += "</td>";
             Baris += "</tr>";
 
             $('#tabel tbody').append(Baris);
@@ -154,53 +154,27 @@
             format: "yyyy-mm-dd"
         });
 
-        $(this).parent().parent().remove();
+        hitungDebit();
+        hitungKredit();
         
         $('#tabel').on('input','.debit', function(){
-            var totalDebit = 0;
-            $('#tabel .debit').each(function(){
-                var getValueDebit = $(this).val();
-                if ($.isNumeric(getValueDebit)) {
-                    totalDebit += parseFloat(getValueDebit);
-                }                  
-            });
-            $("#totalDebit").html(totalDebit);
-            $("#total_transaksi").val(totalDebit);
+            hitungDebit();
         });
 
         $('#tabel').on('input','.kredit', function(){
-            var totalKredit = 0;
-            $('#tabel .kredit').each(function(){
-                var getValueKredit = $(this).val();
-                if ($.isNumeric(getValueKredit)) {
-                    totalKredit += parseFloat(getValueKredit);
-                }                  
-            });
-            $("#totalKredit").html(totalKredit);
-            $("#total_kredit").val(totalKredit);
-        });
+            hitungKredit();
+        });   
     })
 
 
     $('#baris').click(function(e){
         e.preventDefault();
+
         var A;
         for(A = 1; A <= 1; A++){
             Barisbaru();
         };   
     });
-
-
-    function FormSelectAkun(Nomor){
-        var output = [];
-        output.push('<option value ="">Pilih Akun</option>');
-            $.getJSON('/Jurnal/akun', function(data){
-                $.each(data, function(key, value){
-                    output.push('<option value="'+ value.id+'">'+ value.kode +'-'+ value.nama +'</option>');
-                });
-                $('#id_akun'+ Nomor).html(output.join(''));
-            });
-    }
 
 
     $(document).on('click','#HapusBaris', function(e){
@@ -210,7 +184,48 @@
         $('#table tbody tr').each(function(){
             $(this).find('td:nth-child(1)').html(Nomor);
         })
+
+        hitungDebit();
+        hitungKredit();
     })
+
+
+    function hitungDebit(){
+        var totalDebit = 0;
+        $('#tabel .debit').each(function(){
+            var getValueDebit = $(this).val();
+            if ($.isNumeric(getValueDebit)) {
+                totalDebit += parseFloat(getValueDebit);
+            }                  
+        });
+        $("#totalDebit").html(totalDebit);
+        $("#total_transaksi").val(totalDebit);
+    }
+
+
+    function hitungKredit(){
+        var totalKredit = 0;
+        $('#tabel .kredit').each(function(){
+            var getValueKredit = $(this).val();
+            if ($.isNumeric(getValueKredit)) {
+                totalKredit += parseFloat(getValueKredit);
+            }                  
+        });
+        $("#totalKredit").html(totalKredit);
+        $("#total_kredit").val(totalKredit);
+    }
+
+
+    function FormSelectAkun(Nomor){
+        var output = [];
+        output.push('<option value ="">Pilih Akun</option>');
+        $.getJSON('/Jurnal/akun', function(data){
+            $.each(data, function(key, value){
+                output.push('<option value="'+ value.id+'">'+ value.kode +'-'+ value.nama +'</option>');
+            });
+            $('#id_akun'+ Nomor).html(output.join(''));
+        });
+    }
 
     // $('#form').submit(function(e) {
     //     e.preventDefault();

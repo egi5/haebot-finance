@@ -21,17 +21,9 @@ class Akun extends ResourcePresenter
 
             $db = \Config\Database::connect();
             $data =  $db->table('akun')
-            ->select('akun.id, akun.kode, akun.nama, akun_kategori.nama as kategori')
+            ->select('akun.id, akun.kode, akun.nama, akun_kategori.nama as kategori, akun.saldo')
             ->join('akun_kategori', 'akun.id_kategori = akun_kategori.id', 'left')
             ->where('akun.deleted_at', null);
-
-            // $modelAkun = new AkunModel();
-            // $modelKategori = new KategoriAkunModel();
-            
-            // // $data = $modelAkun->where(['deleted_at' => null])->select('id, kode, nama, akun_kategori.debit_kredit')
-            // //                                                  ->join('akun_kategori','akun_kategori.id = akun.id_kategori');
-                          
-            // $data = $modelAkun->where(['deleted_at' => null])->select('id, kode, nama');
             
             return DataTable::of($data)
                 ->addNumbering('no')

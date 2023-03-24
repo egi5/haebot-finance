@@ -8,5 +8,11 @@ class Menu extends BaseController
     {
         return view('menu/menuAkun');
     }
+    
+
+    public function Laporan()
+    {
+        return view('menu/menuLaporan');
+    }
 
 }

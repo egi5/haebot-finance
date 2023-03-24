@@ -22,7 +22,7 @@
             <div class="row mb-3">
                 <label for="nama" class="col-sm-3 col-form-label">Nomor Transaksi</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="nomor_transaksi" name="nomor_transaksi" value="<?= $nomor_jurnal_auto?>" readonly="">
+                    <input type="text" class="form-control" id="nomor_transaksi" name="nomor_transaksi" value="<?= $nomor_jurnal_auto?>" >
                     <div class="invalid-feedback error_nomor"></div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                 <label for="nama" class="col-sm-3 col-form-label">Tanggal</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" id="tanggal" name="tanggal" value="<?= date('Y-m-d') ?>">
-                    <div class="invalid-feedback error_tanggal"></div>
+                    <!-- <div class="invalid-feedback error_tanggal"></div> -->
                 </div>
             </div>
 
@@ -39,7 +39,7 @@
                 <label for="satuan" class="col-sm-3 col-form-label">Referensi</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" id="referensi" name="referensi">
-                    <div class="invalid-feedback error_referensi"></div>
+                    <!-- <div class="invalid-feedback error_referensi"></div> -->
                 </div>
             </div>
 
@@ -77,13 +77,13 @@
                                     <div class="col col-md-4" style="text-align: right;">
                                         <span class="title-total" name="totalDebit" id="totalDebit">0</span>
                                         <input type="hidden" name="total_transaksi" id="total_transaksi">
+                                        <div class="invalid-feedback error_total"></div>
                                     </div>
                                     <div class="col col-md-4" style="text-align: right;">
                                         <span class="title-total" name="totalKredit" id="totalKredit">0</span>
-                                        <input type="hidden" name="total_transaksi" id="total_kredit">
+                                        <input type="hidden" name="total_kredit" id="total_kredit">
                                     </div>
                                 </div>
-                                <div class="invalid-feedback error_total"></div>
                             </div>
                         </div>
                     </div>
@@ -112,10 +112,10 @@
             Baris += "<input type='text' name='deskripsi[]' class='form-control' placeholder='Deskripsi'>";
             Baris += "</td>";
             Baris += "<td>";
-            Baris += "<input type='text' name='debit[]' class='form-control debit' placeholder='Debit'>";
+            Baris += "<input type='text' name='debit[]' class='form-control debit' id='debit' placeholder='Debit'>";
             Baris += "</td>";
             Baris += "<td>";
-            Baris += "<input type='text' name='kredit[]' class='form-control kredit' placeholder='Kredit'>";
+            Baris += "<input type='text' name='kredit[]' class='form-control kredit' id='kredit' placeholder='Kredit'>";
             Baris += "</td>";
             Baris += "<td><button class='btn px-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-trash'></i></button>";
             Baris += "</td>";
@@ -142,28 +142,16 @@
             Barisbaru();
         };
 
-        $('#tabel').on('input','.debit', function(){
-            var totalDebit = 0;
-            $('#tabel .debit').each(function(){
-                var getValueDebit = $(this).val();
-                if ($.isNumeric(getValueDebit)) {
-                    totalDebit += parseFloat(getValueDebit);
-                }                  
-            });
-            $("#totalDebit").html(totalDebit);
-            $("#total_transaksi").val(totalDebit);
+        $('#tabel').on('input','#debit', function(){
+            hitungDebit();
+            // var isi = 0;
+            // $('#kredit').val(isi);
         });
 
-        $('#tabel').on('input','.kredit', function(){
-            var totalKredit = 0;
-            $('#tabel .kredit').each(function(){
-                var getValueKredit = $(this).val();
-                if ($.isNumeric(getValueKredit)) {
-                    totalKredit += parseFloat(getValueKredit);
-                }                  
-            });
-            $("#totalKredit").html(totalKredit);
-            $("#total_kredit").val(totalKredit);
+        $('#tabel').on('input','#kredit', function(){
+            hitungKredit();
+            // var isiDebit = 0;
+            // $('#debit').val(isiDebit);
         });
     })
 
@@ -181,63 +169,98 @@
         $('#table tbody tr').each(function(){
             $(this).find('td:nth-child(1)').html(Nomor);
         })
+
+        hitungDebit();
+        hitungKredit();
     })
+
+
+    function hitungDebit(){
+        var totalDebit = 0;
+        $('#tabel .debit').each(function(){
+            var getValueDebit = $(this).val();
+            if ($.isNumeric(getValueDebit)) {
+                totalDebit += parseFloat(getValueDebit);
+            }                  
+        });
+        $("#totalDebit").html(totalDebit);
+        $("#total_transaksi").val(totalDebit);
+    }
+
+
+    function hitungKredit(){
+        var totalKredit = 0;
+        $('#tabel .kredit').each(function(){
+            var getValueKredit = $(this).val();
+            if ($.isNumeric(getValueKredit)) {
+                totalKredit += parseFloat(getValueKredit);
+            }                  
+        });
+        $("#totalKredit").html(totalKredit);
+        $("#total_kredit").val(totalKredit);
+    }
 
 
     function FormSelectAkun(Nomor){
         var output = [];
         output.push('<option value ="">Pilih Akun</option>');
-            $.getJSON('/Jurnal/akun', function(data){
-                $.each(data, function(key, value){
-                    output.push('<option value="'+ value.id+'">'+ value.kode +'-'+ value.nama +'</option>');
-                });
-                $('#id_akun'+ Nomor).html(output.join(''));
+        $.getJSON('/Jurnal/akun', function(data){
+            $.each(data, function(key, value){
+                output.push('<option value="'+ value.id+'">'+ value.kode +'-'+ value.nama +'</option>');
             });
+            $('#id_akun'+ Nomor).html(output.join(''));
+        });
     }
 
 
     $('#form').submit(function(e) {
         e.preventDefault();
-        
-        $.ajax({
-            type: "post",
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            dataType: "json",
-            beforeSend: function() {
-                $('#tombolSimpan').html('Tunggu <i class="fa-solid fa-spin fa-spinner"></i>');
-                $('#tombolSimpan').prop('disabled', true);
-            },
-            complete: function() {
-                $('#tombolSimpan').html('Simpan <i class="fa-fw fa-solid fa-check"></i>');
-                $('#tombolSimpan').prop('disabled', false);
-            },
-            success: function(response) {
-                if (response.error) {
-                    let err = response.error;
+        var valueDebit  = $('#total_transaksi').val();
+        var valueKredit = $('#total_kredit').val();
+        if(valueDebit != valueKredit){
+            $('.error_total').html('Jumlah nilai debit dan kredit harus sama'); 
+            $('#total_transaksi').addClass('is-invalid');
+        } else {
+            $.ajax({
+                type: "post",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                dataType: "json",
+                beforeSend: function() {
+                    $('#tombolSimpan').html('Tunggu <i class="fa-solid fa-spin fa-spinner"></i>');
+                    $('#tombolSimpan').prop('disabled', true);
+                },
+                complete: function() {
+                    $('#tombolSimpan').html('Simpan <i class="fa-fw fa-solid fa-check"></i>');
+                    $('#tombolSimpan').prop('disabled', false);
+                },
+                success: function(response) {
+                    if (response.error) {
+                        let err = response.error;
 
-                    if (err.error_nomor) {
-                        $('.error_nomor').html(err.error_nomor);
-                        $('#nomor_transaksi').addClass('is-invalid');
-                    } else {
-                        $('.error_nomor').html('');
-                        $('#nomor_transaksi').removeClass('is-invalid');
-                        $('#nomor_transaksi').addClass('is-valid');
+                        if (err.error_nomor) {
+                            $('.error_nomor').html(err.error_nomor);
+                            $('#nomor_transaksi').addClass('is-invalid');
+                        } else {
+                            $('.error_nomor').html('');
+                            $('#nomor_transaksi').removeClass('is-invalid');
+                            $('#nomor_transaksi').addClass('is-valid');
+                        }
                     }
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.success,
+                        });
+                        location.href = "<?= base_url() ?>/jurnal";
+                    }
+                },  
+                error: function(e) {
+                    alert('Error \n' + e.responseText);
                 }
-                if (response.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil',
-                        text: response.success,
-                    });
-                    location.href = "<?= base_url() ?>/jurnal";
-                }
-            },  
-            error: function(e) {
-                alert('Error \n' + e.responseText);
-            }
-        });
+            });
+        }
     })
 </script>
 

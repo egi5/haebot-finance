@@ -15,7 +15,7 @@ class AkunModel extends Model
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'kode','nama','id_kategori', 'created_at', 'updated_at', 'deleted_at'
+        'kode','nama','id_kategori', 'saldo', 'created_at', 'updated_at', 'deleted_at'
     ];
 
     // Dates

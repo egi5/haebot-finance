@@ -30,6 +30,7 @@ class Finance extends Migration
             'kode'             => ['type' => 'varchar', 'constraint' => 10],
             'nama'             => ['type' => 'varchar', 'constraint' => 80],
             'id_kategori'      => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'default' => 0],
+            'saldo'            => ['type' => 'float', 'constraint' => 15, 'unsigned' => true, 'default' => 0],
             'created_at'       => ['type' => 'datetime', 'null' => true],
             'updated_at'       => ['type' => 'datetime', 'null' => true],
             'deleted_at'       => ['type' => 'datetime', 'null' => true],
