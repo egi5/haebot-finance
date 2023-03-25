@@ -14,7 +14,7 @@
                 <div class="card mb-3 shadow" style="border: 1px solid #1762A5;">
                     <h5 class="card-header" style="background-color: #1762A5; color: #fff;">Kategori Akun</h5>
                     <div class="card-body text-dark">
-                        <i class="fa-3x fa-solid fa-folder-open"></i>
+                        <i class="fa-3x fa-solid fa-money-check-dollar"></i>
                     </div>
                 </div>
             </a>
@@ -24,7 +24,7 @@
                 <div class="card mb-3 shadow" style="border: 1px solid #1762A5;">
                     <h5 class="card-header" style="background-color: #1762A5; color: #fff;">Akun</h5>
                     <div class="card-body text-dark">
-                        <i class="fa-3x fa-regular fa-rectangle-list"></i>
+                        <i class="fa-3x fa-regular fa-credit-card"></i>
                     </div>
                 </div>
             </a>

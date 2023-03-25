@@ -28,7 +28,7 @@ class Jurnal extends ResourcePresenter
         if ($this->request->isAJAX()) {
 
             $modelJurnal = new JurnalModel();
-            $data = $modelJurnal->select('id, nomor_transaksi, referensi, tanggal, total_transaksi');
+            $data = $modelJurnal->select('id, nomor_transaksi, referensi, tanggal, total_transaksi')->where('deleted_at', null);
 
             return DataTable::of($data)
                 ->addNumbering('no')

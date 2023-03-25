@@ -10,7 +10,7 @@
             <h3 style="color: #566573;">Neraca</h3>
         </div>
         <div class="me-2 mb-1">
-            <a class="btn btn-sm btn-outline-dark" href="<?= site_url() ?>akun">
+            <a class="btn btn-sm btn-outline-dark" href="<?= site_url() ?>laporan">
                 <i class="fa-fw fa-solid fa-arrow-left"></i> Kembali
             </a>
         </div>
@@ -19,11 +19,7 @@
     <hr class="mt-0 mb-4">
 
     <div class="table-responsive">
-        <table class="table table-hover table-striped table-bordered" width="100%" id="tabelkas">
-            <thead>
-                <tr>
-                </tr>
-            </thead>
+        <table class="table table-hover" width="100%" id="tabelNeraca">
             <tbody>
                 <tr style="background-color: #e6e8fa;">
                     <td>
@@ -46,7 +42,7 @@
                 <?php foreach ($akunKas as $ak) : ?>
                     <tr>
                         <td><?= $ak['kode'] ?>-<?= $ak['nama']?></td>
-                        <td></td>
+                        <td class="text-end"><?= $ak['saldo'] ?></td>
                     </tr>
                 <?php endforeach; ?>
 
@@ -57,6 +53,10 @@
                 </tr>
 
                 <tr>
+                    <td colspan="2"></td>
+                </tr>
+
+                <tr>
                     <th width="21%">Aset Lancar</th>
                     <th width="15%"></th>
                 </tr>
@@ -64,13 +64,17 @@
                 <?php foreach ($akunAktivaLancar as $al) : ?>
                     <tr>
                         <td><?= $al['kode'] ?>-<?= $al['nama']?></td>
-                        <td></td>
+                        <td class="text-end"><?= $al['saldo'] ?></td>
                     </tr>
                 <?php endforeach; ?>
 
                 <tr>
                     <td class="fw-bold">Total Aset Lancar</td>
                     <td class="text-end">0</td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
                 </tr>
 
                 <tr>
@@ -81,13 +85,17 @@
                 <?php foreach ($akunAktivaTetap as $at) : ?>
                     <tr>
                         <td><?= $at['kode'] ?>-<?= $at['nama']?></td>
-                        <td></td>
+                        <td class="text-end"><?= $at['saldo'] ?></td>
                     </tr>
                 <?php endforeach; ?>
 
                 <tr>
                     <td class="fw-bold">Total Aset Tetap</td>
                     <td class="text-end">0</td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
                 </tr>
 
                 <tr>
@@ -103,6 +111,10 @@
                 </tr>
 
                 <tr>
+                    <td colspan="2"></td>
+                </tr>
+
+                <tr>
                     <th width="21%">Lainnya</th>
                     <th width="15%"></th>
                 </tr>
@@ -115,10 +127,17 @@
                 </tr>
 
                 <tr>
+                    <td colspan="2"></td>
+                </tr>
+
+                <tr>
                     <td class="fw-bold"><h4>Total Aset</h4></td>
                     <td class="text-end">0</td>
                 </tr>
 
+                <tr>
+                    <td colspan="2"></td>
+                </tr>
 
                 <tr style="background-color: #e6e8fa;">
                     <td>
@@ -146,6 +165,10 @@
                 </tr>
 
                 <tr>
+                    <td colspan="2"></td>
+                </tr>
+
+                <tr>
                     <th width="21%">Liabilitas Jangka Panjang</th>
                     <th width="15%"></th>
                 </tr>
@@ -158,6 +181,10 @@
                 </tr>
 
                 <tr>
+                    <td colspan="2"></td>
+                </tr>
+
+                <tr>
                     <th width="21%">Perubahan Modal</th>
                     <th width="15%"></th>
                 </tr>
@@ -167,6 +194,10 @@
                 <tr>
                     <td class="fw-bold">Total Perubahan Modal</td>
                     <td class="text-end">0</td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
                 </tr>
 
                 <tr>

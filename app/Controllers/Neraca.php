@@ -2,33 +2,24 @@
 
 namespace App\Controllers;
 use CodeIgniter\RESTful\ResourcePresenter;
-use App\Models\JurnalModel;
-use App\Models\JurnalDetailModel;
 use App\Models\AkunModel;
 use \Hermawan\DataTables\DataTable;
 
 class Neraca extends ResourcePresenter
 {
-    protected $helpers = ['form', 'nomor_auto_helper'];
-
-    function __construct()
-    {
-        $this->db                = \Config\Database::connect();
-        $this->modelJurnal       = new JurnalModel();
-        $this->modelJurnalDetail = new JurnalDetailModel();
-    }
-
     public function index()
     {
         $modelAkun    = new AkunModel();
         $akunKas      = $modelAkun->where(['id_kategori'=> 1])->findAll();
-        $aktivaTetap  = $modelAkun->where(['id_kategori'=> 2])->findAll();
-        $aktivaLancar = $modelAkun->where(['id_kategori'=> 5])->findAll();
+        $akunPiutang  = $modelAkun->where(['id_kategori'=> 2])->findAll();
+        $persediaan   = $modelAkun->where(['id_kategori'=> 3])->findAll();
+        $aktivaLancar = $modelAkun->where(['id_kategori'=> 4])->findAll();
+        $aktivaTetap  = $modelAkun->where(['id_kategori'=> 5])->findAll();
 
         $data = [
             'akunKas'           => $akunKas,
-            'akunAktivaTetap'  => $aktivaTetap,
             'akunAktivaLancar'  => $aktivaLancar,
+            'akunAktivaTetap'   => $aktivaTetap,
         ];
         return view('laporan/neraca/index', $data);
     }

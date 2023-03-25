@@ -41,6 +41,7 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
     $routes->get('listakun', 'Akun::index');
     $routes->get('jurnalumum', 'Jurnal::index');
     $routes->get('neraca', 'Neraca::index');
+    $routes->get('labarugi', 'LabaRugi::index');
 
     // GetData
     $routes->get('/wilayah/kota_by_provinsi', 'GetWilayah::KotaByProvinsi');
