@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\AkunModel;
 use App\Models\KategoriAkunModel;
+use App\Models\JurnalModel;
+use App\Models\JurnalDetailModel;
 use CodeIgniter\RESTful\ResourcePresenter;
 use \Hermawan\DataTables\DataTable;
 
@@ -21,7 +23,7 @@ class Akun extends ResourcePresenter
 
             $db = \Config\Database::connect();
             $data =  $db->table('akun')
-            ->select('akun.id, akun.kode, akun.nama, akun_kategori.nama as kategori, akun.saldo')
+            ->select('akun.id, akun.kode, akun.nama, akun_kategori.nama as kategori')
             ->join('akun_kategori', 'akun.id_kategori = akun_kategori.id', 'left')
             ->where('akun.deleted_at', null);
             
@@ -29,6 +31,7 @@ class Akun extends ResourcePresenter
                 ->addNumbering('no')
                 ->add('aksi', function ($row) {
                     return '
+                    <button title="Saldo" onclick="showModalBukuBesar(' . $row->id . ')" title="bukuBesar" type="button" class="px-2 py-0 btn btn-sm btn-outline-success"><i class="fa-fw fa-solid fa-bars"></i></button>
                     <a title="Detail" class="px-2 py-0 btn btn-sm btn-outline-dark" onclick="showModalDetail(' . $row->id . ')">
                         <i class="fa-fw fa-solid fa-magnifying-glass"></i>
                     </a>
@@ -40,9 +43,9 @@ class Akun extends ResourcePresenter
                     <form id="form_delete" method="POST" class="d-inline">
                         ' . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
-                    </form>
-                    <button onclick="confirm_delete(' . $row->id . ')" title="Hapus" type="button" class="px-2 py-0 btn btn-sm btn-outline-danger"><i class="fa-fw fa-solid fa-trash"></i></button>
-                    ';
+                    </form>';
+                    
+                    // <button onclick="confirm_delete(' . $row->id . ')" title="Hapus" type="button" class="px-2 py-0 btn btn-sm btn-outline-danger"><i class="fa-fw fa-solid fa-trash"></i></button>';
                 }, 'last')
                 ->toJson(true);
         } else {
@@ -77,7 +80,7 @@ class Akun extends ResourcePresenter
 
     public function new()
     {
-        if ($this->request->isAJAX()) {
+        // if ($this->request->isAJAX()) {
 
             $modelAkun = new AkunModel();
             $akun = $modelAkun->findAll();
@@ -95,9 +98,9 @@ class Akun extends ResourcePresenter
             ];
 
             echo json_encode($json);
-        } else {
-            return 'Tidak bisa load';
-        }
+        // } else {
+        //     return 'Tidak bisa load';
+        // }
     }
 
 
@@ -267,6 +270,54 @@ class Akun extends ResourcePresenter
         } else {
             return 'Tidak bisa load data';
         }
+    }
+
+
+    public function buku($id = null)
+    {
+        // if ($this->request->isAJAX()) 
+        // {
+            $modelAkun         = new AkunModel();
+            $modelJurnal       = new JurnalModel();
+            $akun              = $modelAkun->find($id);
+
+            $data = [
+                'akun'      => $akun,
+                'tglAwal'   => date('Y-01-01'),
+                'tglAkhir'  => date('Y-m-d'),
+            ];
+
+            $json = [
+                'data'   => view('akun/listAkun/buku', $data),
+            ];
+
+            echo json_encode($json);
+        // } else {
+        //     return 'Tidak bisa load data';
+        // }
+    } 
+
+
+    public function getListBukuBesar()
+    {
+        $idAkun            = $this->request->getGet('idAkun');
+        $tglAwal           = $this->request->getGet('tglAwal');
+        $tglAkhir          = $this->request->getGet('tglAkhir');
+
+        $modelJurnal       = new JurnalModel();
+        $bukuAkun          = $modelJurnal->getAkunBuku($idAkun, $tglAwal, $tglAkhir);
+        // dd($bukuAkun);
+        $data = [
+            'bukuAkun'  => $bukuAkun,
+            'tglAwal'   => $tglAwal,
+            'tglAkhir'  => $tglAkhir
+        ];
+
+        $json = [
+            'data'   => view('akun/listAkun/listBukuBesar', $data),
+        ];
+
+        echo json_encode($json);
     }
 
 

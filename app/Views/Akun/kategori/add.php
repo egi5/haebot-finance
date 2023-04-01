@@ -106,7 +106,7 @@
                         title: 'Berhasil',
                         text: response.success,
                     }).then((value) => {
-                        $('#tabel').DataTable().ajax.reload();
+                        location.href = "<?= base_url() ?>/kategori";
                         Toast.fire({
                             icon: 'success',
                             title: response.success

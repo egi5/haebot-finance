@@ -53,6 +53,20 @@ class AkunModel extends Model
 
         return $data;
     }
+
+
+    public function getAkunKategori($kategori)
+    {
+        $data =  $this->db->table($this->table)
+            ->select('akun.kode as kode, akun.nama as nama, akun_kategori.nama as ktnama')
+            ->join('akun_kategori', 'akun.id_kategori = akun_kategori.id', 'left')
+            ->where('akun_kategori.nama', $kategori)
+            ->get()
+            ->getResultArray();
+
+        return $data;
+    }
+
 }
 
 ?>

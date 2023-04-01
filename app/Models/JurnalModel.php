@@ -53,6 +53,39 @@ class JurnalModel extends Model
 
         return $data;
     }
+
+
+    public function getAkunBuku($idAkun, $tglAwal, $tglAkhir)
+    {
+        $data = $this->db->table($this->table)
+            ->select('transaksi_jurnal.tanggal as tanggal , transaksi_jurnal.nomor_transaksi as nomor,transaksi_jurnal.referensi as referensi, transaksi_jurnal_detail.debit as debit, transaksi_jurnal_detail.kredit as kredit, akun_kategori.debit as ktdebit, akun_kategori.kredit as ktkredit')
+            ->join('transaksi_jurnal_detail', 'transaksi_jurnal.id = transaksi_jurnal_detail.id_transaksi', 'left')
+            ->join('akun', 'transaksi_jurnal_detail.id_akun = akun.id', 'left')
+            ->join('akun_kategori','akun.id_kategori = akun_kategori.id')
+            ->where('transaksi_jurnal.deleted_at', null)
+            ->where('transaksi_jurnal_detail.id_akun', $idAkun)
+            ->where('transaksi_jurnal.tanggal>=', $tglAwal)
+            ->where('transaksi_jurnal.tanggal <=', $tglAkhir)
+            ->get()->getResultArray();
+        
+        return $data;
+    }
+
+
+    public function getNeraca($kategori)
+    {
+        $data = $this->db->table($this->table)
+            ->select('transaksi_jurnal.tanggal as tanggal , transaksi_jurnal.nomor_transaksi as nomor, transaksi_jurnal_detail.debit as debit, transaksi_jurnal_detail.kredit as kredit, akun_kategori.debit as ktdebit, akun_kategori.kredit as ktkredit, akun_kategori.nama as ktnama, akun.nama, akun.kode')
+            ->join('transaksi_jurnal_detail', 'transaksi_jurnal.id = transaksi_jurnal_detail.id_transaksi', 'left')
+            ->join('akun', 'transaksi_jurnal_detail.id_akun = akun.id', 'left')
+            ->join('akun_kategori','akun.id_kategori = akun_kategori.id')
+            ->where('transaksi_jurnal.deleted_at', null)
+            ->where('akun_kategori.nama', $kategori)
+            ->get()->getResultArray();
+        
+        return $data;
+    }
+
 }
 
 ?>

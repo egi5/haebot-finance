@@ -21,7 +21,7 @@
         <div class="col-sm-9">
             <select class="form-control" name="id_kategori" id="id_kategori">
                 <?php foreach ($kategori as $kt) : ?>
-                    <option value="<?= $kt['id'] ?>-krisna-<?= $kt['nama'] ?>"><?= $kt['nama'] ?> - <?= $kt['debit_kredit'] ?></option>
+                    <option value="<?= $kt['id'] ?>-krisna-<?= $kt['nama'] ?>"><?= $kt['nama'] ?></option>
                 <?php endforeach ?>
             </select>
             <div class="invalid-feedback error_debit"></div>

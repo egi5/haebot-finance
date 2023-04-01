@@ -115,22 +115,17 @@ class Jurnal extends ResourcePresenter
             ],
         ];
 
-        $totaldebit        = $this->request->getPost('total_transaksi');
-        $totalkredit       = $this->request->getPost('total_kredit');
-
         if (!$this->validate($validasi) ) {
             $validation = \Config\Services::validation();
 
             $error = [
                 'error_nomor'   => $validation->getError('nomor_transaksi'),
-                // 'error_total'   => 'Debit dan Kredit harus bernilai sama'
             ];
 
             $json = [
                 'error' => $error
             ];
 
-            
         } else {
             $modelAkun         = new AkunModel();
             $modelJurnal       = new JurnalModel();

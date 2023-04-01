@@ -193,12 +193,18 @@ class KategoriAkun extends ResourcePresenter
                         'required'  => '{field} harus diisi.',
                     ]
                 ],
-                'debit_kredit'  => [
+                'debit'  => [
                     'rules'  => 'required',
                     'errors' => [
-                        'required'  => '{field}/kredit harus diisi.',
+                        'required'  => '{field} harus diisi.',
                     ]
-                ]
+                ],
+                'kredit'  => [
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required'  => '{field} harus diisi.',
+                    ]
+                ],
             ];
 
             if (!$this->validate($validasi)) {
@@ -207,7 +213,8 @@ class KategoriAkun extends ResourcePresenter
                 $error = [
                     'error_nama'       => $validation->getError('nama'),
                     'error_deskripsi'  => $validation->getError('deskripsi'),
-                    'error_debit'      => $validation->getError('debit_kredit')
+                    'debit'            => $this->request->getPost('debit'),
+                    'kredit'           => $this->request->getPost('kredit')
                 ];
 
                 $json = [
