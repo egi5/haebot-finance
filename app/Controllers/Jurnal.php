@@ -58,15 +58,14 @@ class Jurnal extends ResourcePresenter
 
     public function show($id = null)
     {
-        // if ($this->request->isAJAX()) {
+        if ($this->request->isAJAX()) {
 
             $modelAkun         = new AkunModel();
             $modelJurnal       = new JurnalModel();
             $modelJurnalDetail = new JurnalDetailModel();
             $transaksi         = $modelJurnal->find($id);
             $akun              = $modelAkun->findAll();
-            $detail            = $modelJurnalDetail->where(['id_transaksi'=> $transaksi['id']])->findAll();
-            
+            $detail            = $modelJurnalDetail->getDetailJurnal(['id_transaksi'=> $transaksi['id']]);
 
             $data = [
                 'akun'          => $akun,
@@ -80,9 +79,9 @@ class Jurnal extends ResourcePresenter
             ];
 
             echo json_encode($json);
-        // } else {
-        //     return 'Tidak bisa load data';
-        // }
+        } else {
+            return 'Tidak bisa load data';
+        }
     }
 
 
@@ -113,6 +112,12 @@ class Jurnal extends ResourcePresenter
                     'is_unique' => 'Nomor sudah ada dalam database. Refresh dan ulangi'
                 ]
             ],
+            'tanggal'  => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required'  => '{field} harus diisi.',
+                ]
+            ],
         ];
 
         if (!$this->validate($validasi) ) {
@@ -120,6 +125,7 @@ class Jurnal extends ResourcePresenter
 
             $error = [
                 'error_nomor'   => $validation->getError('nomor_transaksi'),
+                'error_tanggal' => $validation->getError('tanggal'),
             ];
 
             $json = [
@@ -157,7 +163,7 @@ class Jurnal extends ResourcePresenter
             }
 
             $json = [
-                'success' => 'Berhasil menambah data produk'
+                'success' => 'Berhasil menambah data jurnal'
             ];
 
         }
@@ -198,47 +204,93 @@ class Jurnal extends ResourcePresenter
     
     public function update($id = null)
     {
-        $modelAkun         = new AkunModel();
-        $modelJurnal       = new JurnalModel();
-        $modelJurnalDetail = new JurnalDetailModel();
-
-        $data = [
-            'id'                => $id,
-            'nomor_transaksi'   => $this->request->getPost('nomor_transaksi'),    
-            'tanggal'           => $this->request->getPost('tanggal'),
-            'referensi'         => $this->request->getPost('referensi'),
-            'total_transaksi'   => $this->request->getPost('total_transaksi')
+        $validasi = [
+            'nomor_transaksi' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required'  => '{field} harus diisi.',
+                ]
+            ],
+            'tanggal'  => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required'  => '{field} harus diisi.',
+                ]
+            ],
         ];
-        $modelJurnal->save($data);
 
-        $id_detail    = $this->request->getPost('id_detail');
-        $id_akun      = $this->request->getPost('id_akun');
-        $deskripsi    = $this->request->getPost('deskripsi');
-        $debit        = $this->request->getPost('debit');
-        $kredit       = $this->request->getPost('kredit');
+        if (!$this->validate($validasi) ) {
+            $validation = \Config\Services::validation();
 
-        for($i=0; $i < count($id_akun) ; $i++) { 
-            $dataAkun = [
-                'id'            => $id_detail[$i],
-                'id_akun'       => $id_akun[$i],
-                'deskripsi'     => $deskripsi[$i],
-                'debit'         => $debit[$i],
-                'kredit'        => $kredit[$i]
+            $error = [
+                'error_nomor'   => $validation->getError('nomor_transaksi'),
+                'error_tanggal' => $validation->getError('tanggal'),
             ];
-            $modelJurnalDetail->save($dataAkun);
+
+            $json = [
+                'error' => $error
+            ];
+
+        } else {
+            $modelAkun         = new AkunModel();
+            $modelJurnal       = new JurnalModel();
+            $modelJurnalDetail = new JurnalDetailModel();
+
+            $data = [
+                'id'                => $id,
+                'nomor_transaksi'   => $this->request->getPost('nomor_transaksi'),    
+                'tanggal'           => $this->request->getPost('tanggal'),
+                'referensi'         => $this->request->getPost('referensi'),
+                'total_transaksi'   => $this->request->getPost('total_transaksi')
+            ];
+            $modelJurnal->save($data);
+
+            $id_detail    = $this->request->getPost('id_detail');
+            $modelJurnalDetail->where(['id_transaksi'=> $id])->delete($id_detail);
+
+            $id_akun      = $this->request->getPost('id_akun');
+            $deskripsi    = $this->request->getPost('deskripsi');
+            $debit        = $this->request->getPost('debit');
+            $kredit       = $this->request->getPost('kredit');
+
+            for ($i=0; $i < count($id_akun) ; $i++) { 
+                $dataAkun = [
+                    'id_transaksi'  => $id,
+                    'id_akun'       => $id_akun[$i],
+                    'deskripsi'     => $deskripsi[$i],
+                    'debit'         => $debit[$i],
+                    'kredit'        => $kredit[$i]
+                ];
+                $modelJurnalDetail->insert($dataAkun);
+            }
+
+            $json = [
+                'success' => 'Berhasil update data Jurnal'
+            ];
+
+            session()->setFlashdata('pesan', 'Data berhasil diupdate.');
+
+            // return redirect()->to('/jurnal');
         }
+        echo json_encode($json);
+        
+    }
+    
 
-        session()->setFlashdata('pesan', 'Data berhasil diupdate.');
+    public function hapusBaris($id = null, $idJurnal = null){
+        
+        $modelJurnalDetail  = new JurnalDetailModel();
 
-        return redirect()->to('/jurnal');
+        $modelJurnalDetail->delete($id);
+        
+        return redirect()->back();
     }
 
-
+    
     public function delete($id = null)
     {
         $modelJurnal        = new JurnalModel();
-        // $modelJurnalDetail  = New JurnalDetailModel();
-        // $modelJurnalDetail->where(['id_transaksi' =>$id])->delete();
+        
         $modelJurnal->delete($id);
 
         session()->setFlashdata('pesan', 'Data berhasil dihapus.');

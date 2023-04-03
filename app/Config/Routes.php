@@ -73,6 +73,7 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
     //Jurnal Umum
     $routes->get('getdatajurnal', 'Jurnal::getDataJurnal');
     $routes->resource('jurnal');
+    $routes->get('hapusBaris/(:num)/(:num)', 'Jurnal::hapusBaris/$1/$2');
     $routes->get('/Jurnal/akun', 'Jurnal::akun');
 
 

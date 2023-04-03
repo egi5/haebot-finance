@@ -1,5 +1,5 @@
 <tr>
-    <td colspan="3" class="text-center fw-bold pe-4 py-2">Saldo Awal</td>
+    <td colspan="3"><h5>Saldo Awal</h5></td>
     <td class="text-end pe-4 py-2"></td>
     <td class="text-end pe-4 py-2"></td>
     <td class="text-end pe-4 py-2"></td>
@@ -13,36 +13,32 @@
 <?= 
     $totalDebit  += $ba['debit'];
     $totalKredit += $ba['kredit'];
-    if($ba['ktdebit'] == 'Plus'){
-        $saldo  += (float)$ba['debit']*1;
-    } else {
-        $saldo  += (float)$ba['debit']*-1;
-    }
     
-    if($ba['ktkredit'] == 'Plus'){
-        $saldo  += (float)$ba['kredit']*1;
-    } else {
-        $saldo  += (float)$ba['kredit']*-1;
-    }
+    $saldo  += (float)$ba['debit']*(float)$ba['ktdebit'];
+    $saldo  += (float)$ba['kredit']*(float)$ba['ktkredit'];
 ?>
 <tr>
     <td><?= $ba['tanggal'] ?></td>
     <td><?= $ba['nomor'] ?></td>
     <td><?= $ba['referensi'] ?></td>
-    <td class="text-end">Rp. <?= number_format($ba['debit'], 0, ',', '.') ?></td>
-    <td class="text-end">Rp. <?= number_format($ba['kredit'], 0, ',', '.') ?></td>
-    <td class="text-end">Rp. <?= number_format($saldo, 0, ',', '.') ?></td>
+    <td class="text-end pe-4 py-2">Rp. <?= number_format($ba['debit'], 0, ',', '.') ?></td>
+    <td class="text-end pe-4 py-2">Rp. <?= number_format($ba['kredit'], 0, ',', '.') ?></td>
+    <td class="text-end pe-4 py-2">Rp. <?= number_format($saldo, 0, ',', '.') ?></td>
 </tr>
 <?php endforeach; ?>    
             
 <tr>
-    <td colspan="3" class="text-center fw-bold">Saldo Akhir</td>
+    <td colspan="3"><h5>Saldo Akhir</h5></td>
     <td class="text-end fw-bold pe-4 py-2">Rp. <?= number_format($totalDebit, 0, ',', '.') ?></td>
     <td class="text-end fw-bold pe-4 py-2">Rp. <?= number_format($totalKredit, 0, ',', '.') ?></td>
     <td class="text-end fw-bold pe-4 py-2">Rp. <?= number_format($saldo, 0, ',', '.') ?></td>
 </tr>
 <tr>
-    <td colspan="3" class="text-end fw-bold pe-4 py-2">Total</td>
+    <td colspan="6"></td>
+</tr>
+<tr>
+    <td colspan="3"><h5>Total</h5></td>
     <td class="text-end fw-bold pe-4 py-2">Rp. <?= number_format($totalDebit, 0, ',', '.') ?></td>
     <td class="text-end fw-bold pe-4 py-2">Rp. <?= number_format($totalKredit, 0, ',', '.') ?></td>
+    <td class="text-end fw-bold pe-4 py-2"></td>
 </tr>

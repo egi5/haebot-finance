@@ -62,6 +62,7 @@ class JurnalModel extends Model
             ->join('transaksi_jurnal_detail', 'transaksi_jurnal.id = transaksi_jurnal_detail.id_transaksi', 'left')
             ->join('akun', 'transaksi_jurnal_detail.id_akun = akun.id', 'left')
             ->join('akun_kategori','akun.id_kategori = akun_kategori.id')
+            ->orderby('transaksi_jurnal.tanggal','ASN')
             ->where('transaksi_jurnal.deleted_at', null)
             ->where('transaksi_jurnal_detail.id_akun', $idAkun)
             ->where('transaksi_jurnal.tanggal>=', $tglAwal)
@@ -75,10 +76,13 @@ class JurnalModel extends Model
     public function getNeraca($kategori)
     {
         $data = $this->db->table($this->table)
-            ->select('transaksi_jurnal.tanggal as tanggal , transaksi_jurnal.nomor_transaksi as nomor, transaksi_jurnal_detail.debit as debit, transaksi_jurnal_detail.kredit as kredit, akun_kategori.debit as ktdebit, akun_kategori.kredit as ktkredit, akun_kategori.nama as ktnama, akun.nama, akun.kode')
+            ->select('transaksi_jurnal.tanggal as tanggal , transaksi_jurnal.nomor_transaksi as nomor, transaksi_jurnal_detail.debit as debit, 
+            transaksi_jurnal_detail.kredit as kredit, akun_kategori.debit as ktdebit, akun_kategori.kredit as ktkredit, akun_kategori.nama as ktnama, 
+            akun.nama as nama, akun.kode as kode')
             ->join('transaksi_jurnal_detail', 'transaksi_jurnal.id = transaksi_jurnal_detail.id_transaksi', 'left')
             ->join('akun', 'transaksi_jurnal_detail.id_akun = akun.id', 'left')
             ->join('akun_kategori','akun.id_kategori = akun_kategori.id')
+            ->orderBy('akun.nama', 'ASC')
             ->where('transaksi_jurnal.deleted_at', null)
             ->where('akun_kategori.nama', $kategori)
             ->get()->getResultArray();

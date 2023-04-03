@@ -12,31 +12,26 @@
 
 <hr>
 
-<form autocomplete="off" class="row g-3 mt-3" method="POST" id="form">
-<input type="hidden" class="form-control" id="idAkun" value="<?= $akun['id'] ?>">
 <div class="row justify-content-end">
-    <div class="col-sm-2">
-        <input type="text" class="form-control" id="tglAwal" name="tglAwal" value="<?= $tglAwal ?>">
-    </div>
-    <!-- <div>
-        <i class="fa-solid fa-repeat" style="color: #bfd6fd;"></i>
-    </div> -->
-    <div class="col-sm-2">
-        <input type="text" class="form-control" id="tglAkhir" name="tglAkhir" value="<?= $tglAkhir ?>">
+    <div class="col-md-3">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control text-center" id="tglAwal" name="tglAwal" onchange="loadTable()" value="<?= $tglAwal ?>">
+            <span class="input-group-text"><i class="fa-solid fa-repeat"></i></span>
+            <input type="text" class="form-control text-center" id="tglAkhir" name="tglAkhir" onchange="loadTable()" value="<?= $tglAkhir ?>">
+        </div>
     </div>
 </div>
-</from>
 
 <div class="table-responsive">
-    <table class="table table-sm table-bordered" width="100%" id="tabelBuku">
-        <thead>
+    <table class="table table-hover" width="100%" id="tabelBuku">
+        <thead style="background-color: #ebebeb;">
             <tr>
-                <th class="text-center" width="15%">Tanggal</th>
-                <th class="text-center" width="15%">Nomor</th>
-                <th class="text-center" width="15%">Reference</th>
-                <th class="text-center" width="15%">Debit</th>
-                <th class="text-center" width="15%">Kredit</th>
-                <th class="text-center" width="15%">Saldo Berjalan</th>
+                <th width="15%">Tanggal</th>
+                <th width="15%">Nomor</th>
+                <th width="15%">Reference</th>
+                <th class="text-end pe-4 py-2" width="15%">Debit</th>
+                <th class="text-end pe-4 py-2" width="15%">Kredit</th>
+                <th class="text-end pe-4 py-2" width="15%">Saldo Berjalan</th>
             </tr>
         </thead>
         <tbody id="tabelBukuBesar">
@@ -54,7 +49,12 @@
             format: "yyyy-mm-dd"
         });
 
-        var idAkun   = $('#idAkun').val();
+        
+        loadTable();
+     })
+
+     function loadTable(){
+        var idAkun   = <?= $akun['id'] ?>;
         var tglAwal  = $('#tglAwal').val();
         var tglAkhir = $('#tglAkhir').val();
         $.ajax({
@@ -73,5 +73,5 @@
                 alert('Error \n' + e.responseText);
             }
         });
-     })
+     }
 </script>

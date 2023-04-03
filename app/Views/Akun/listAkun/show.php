@@ -31,4 +31,26 @@
             <?= $kategori['nama'] ?>
         </div>
     </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <div class="fw-bold">
+                &nbsp;&nbsp; Debit
+            </div>
+        </div>
+        <div class="col-md-9">
+            <?= $kategori['debit'] ?>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <div class="fw-bold">
+                &nbsp;&nbsp; Kredit
+            </div>
+        </div>
+        <div class="col-md-9">
+            <?= $kategori['kredit'] ?>
+        </div>
+    </div>
 </div>

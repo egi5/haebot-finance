@@ -42,6 +42,11 @@
             format: "yyyy-mm-dd"
         });
 
+        loadNeraca();
+    })
+
+
+    function loadNeraca(){
         var tglNeraca  = $('#tglNeraca').val();
         $.ajax({
             type: 'GET',
@@ -57,6 +62,6 @@
                 alert('Error \n' + e.responseText);
             }
         });
-    })
+    }
 </script>
 <?= $this->endSection() ?>

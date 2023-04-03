@@ -80,7 +80,7 @@ class Akun extends ResourcePresenter
 
     public function new()
     {
-        // if ($this->request->isAJAX()) {
+        if ($this->request->isAJAX()) {
 
             $modelAkun = new AkunModel();
             $akun = $modelAkun->findAll();
@@ -98,9 +98,9 @@ class Akun extends ResourcePresenter
             ];
 
             echo json_encode($json);
-        // } else {
-        //     return 'Tidak bisa load';
-        // }
+        } else {
+            return 'Tidak bisa load';
+        }
     }
 
 
@@ -207,9 +207,10 @@ class Akun extends ResourcePresenter
         if ($this->request->isAJAX()) {
             $validasi = [
                 'kode'       => [
-                    'rules'  => 'required',
+                    'rules'  => 'required|is_unique[akun.kode]',
                     'errors' => [
                         'required'  => '{field} akun harus diisi.',
+                        'is_unique' => 'Kode akun sudah ada dalam database.',
                     ]
                 ],
                 'nama'       => [
@@ -275,8 +276,8 @@ class Akun extends ResourcePresenter
 
     public function buku($id = null)
     {
-        // if ($this->request->isAJAX()) 
-        // {
+        if ($this->request->isAJAX()) 
+        {
             $modelAkun         = new AkunModel();
             $modelJurnal       = new JurnalModel();
             $akun              = $modelAkun->find($id);
@@ -292,9 +293,9 @@ class Akun extends ResourcePresenter
             ];
 
             echo json_encode($json);
-        // } else {
-        //     return 'Tidak bisa load data';
-        // }
+        } else {
+            return 'Tidak bisa load data';
+        }
     } 
 
 
@@ -306,7 +307,7 @@ class Akun extends ResourcePresenter
 
         $modelJurnal       = new JurnalModel();
         $bukuAkun          = $modelJurnal->getAkunBuku($idAkun, $tglAwal, $tglAkhir);
-        // dd($bukuAkun);
+        
         $data = [
             'bukuAkun'  => $bukuAkun,
             'tglAwal'   => $tglAwal,

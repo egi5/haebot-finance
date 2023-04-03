@@ -25,16 +25,16 @@ class Neraca extends ResourcePresenter
         $aktivaTetap    = $modelAkun->getAkunKategori(['nama'=> 'Aktiva Tetap']);
         // dd($akunKas);
         $modelJurnal        = new JurnalModel();
-        $saldoAkunKas        = $modelJurnal->getNeraca(['nama'=> 'Kas & Bank']);
+        $saldoAkunKas       = $modelJurnal->getNeraca(['nama'=> 'Kas & Bank']);
         $saldoAkunPiutang   = $modelJurnal->getNeraca(['nama'=> 'Akun Piutang']);
         $saldoPersediaan    = $modelJurnal->getNeraca(['nama'=> 'Persediaan']);
         $saldoAktivaLancar  = $modelJurnal->getNeraca(['nama'=> 'Aktiva Lancar']);
         $saldoAktivaTetap   = $modelJurnal->getNeraca(['nama'=> 'Aktiva Tetap']);
         
-        dd($saldoAkunKas);
+        //  dd($saldoAkunKas);
         
         $data = [
-            'akunKas'           => $akunKas,
+            'akunKas'           => $saldoAkunKas,
             'akunAktivaLancar'  => $aktivaLancar,
             'akunAktivaTetap'   => $aktivaTetap,
             // 'depersiasi'        => $depersiasi,

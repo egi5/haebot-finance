@@ -17,36 +17,43 @@ class AkunSeeder extends Seeder
         $kategori->insert([    //1
             'nama'             => 'Kas & Bank',
             'deskripsi'        => '-',
-            'debit'            => 'Plus',
-            'kredit'           => 'Minus',
+            'debit'            => 1,
+            'kredit'           => '-1',
         ]);
 
         $kategori->insert([    //2
             'nama'             => 'Akun Piutang',
             'deskripsi'        => '-',
-            'debit'            => 'Minus',
-            'kredit'           => 'Plus',
+            'debit'            => '-1',
+            'kredit'           => '1',
         ]);
 
         $kategori->insert([    //3
             'nama'             => 'Persediaan',
             'deskripsi'        => '-',
-            'debit'            => 'Plus',
-            'kredit'           => 'Minus',
+            'debit'            => '1',
+            'kredit'           => '-1',
         ]);
         
         $kategori->insert([    //4
             'nama'             => 'Aktiva Lancar Lainnya',
             'deskripsi'        => '-',
-            'debit'            => 'Plus',
-            'kredit'           => 'Minus',
+            'debit'            => '1',
+            'kredit'           => '-1',
         ]);
 
         $kategori->insert([    //5
             'nama'             => 'Aktiva Tetap',
             'deskripsi'        => '-',
-            'debit'            => 'Plus',
-            'kredit'           => 'Minus',
+            'debit'            => '1',
+            'kredit'           => '-1',
+        ]);
+        
+        $kategori->insert([    //6
+            'nama'             => 'Hutang',
+            'deskripsi'        => '-',
+            'debit'            => '-1',
+            'kredit'           => '1',
         ]);
 
 

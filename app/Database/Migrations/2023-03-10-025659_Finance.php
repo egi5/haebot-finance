@@ -13,8 +13,8 @@ class Finance extends Migration
             'id'               => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'nama'             => ['type' => 'varchar', 'constraint' => 80],
             'deskripsi'        => ['type' => 'varchar', 'constraint' => 255],
-            'debit'            => ['type' => 'ENUM', 'constraint' => ['Plus', 'Minus'], 'default' => 'Plus'],
-            'kredit'           => ['type' => 'ENUM', 'constraint' => ['Plus', 'Minus'], 'default' => 'Minus'],
+            'debit'            => ['type' => 'ENUM', 'constraint' => ['1', '-1'], 'default' => '1'],
+            'kredit'           => ['type' => 'ENUM', 'constraint' => ['1', '-1'], 'default' => '-1'],
             'created_at'       => ['type' => 'datetime', 'null' => true],
             'updated_at'       => ['type' => 'datetime', 'null' => true],
             'deleted_at'       => ['type' => 'datetime', 'null' => true],
@@ -30,7 +30,6 @@ class Finance extends Migration
             'kode'             => ['type' => 'varchar', 'constraint' => 10],
             'nama'             => ['type' => 'varchar', 'constraint' => 80],
             'id_kategori'      => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'default' => 0],
-            'saldo'            => ['type' => 'float', 'constraint' => 15, 'unsigned' => true, 'default' => 0],
             'created_at'       => ['type' => 'datetime', 'null' => true],
             'updated_at'       => ['type' => 'datetime', 'null' => true],
             'deleted_at'       => ['type' => 'datetime', 'null' => true],
@@ -43,14 +42,14 @@ class Finance extends Migration
 
         // Transaksi Jurnal
         $fields = [
-            'id'                => ['type' => 'int', 'constraint' => 11, 'auto_increment' => true],
+            'id'                => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'nomor_transaksi'   => ['type' => 'varchar', 'constraint' => 30],
             'referensi'         => ['type' => 'varchar', 'constraint' => 30],
             'tanggal'           => ['type' => 'date'],
             'total_transaksi'   => ['type' => 'int', 'constraint' => 11],
-            'created_at'        => ['type' => 'datetime'],
-            'updated_at'        => ['type' => 'datetime'],
-            'deleted_at'        => ['type' => 'datetime'],
+            'created_at'        => ['type' => 'datetime', 'null' => true],
+            'updated_at'        => ['type' => 'datetime', 'null' => true],
+            'deleted_at'        => ['type' => 'datetime', 'null' => true],
         ];
         $this->forge->addField($fields);
         $this->forge->addKey('id', true);
@@ -59,7 +58,7 @@ class Finance extends Migration
 
         //Transaksi Jurnal Detail
         $fields = [
-            'id'                => ['type' => 'int', 'constraint' => 11,'auto_increment' => true],
+            'id'                => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'id_transaksi'      => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
             'id_akun'           => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
             'deskripsi'         => ['type' => 'varchar', 'constraint' => 20],
