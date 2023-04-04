@@ -17,15 +17,15 @@ class AkunSeeder extends Seeder
         $kategori->insert([    //1
             'nama'             => 'Kas & Bank',
             'deskripsi'        => '-',
-            'debit'            => 1,
+            'debit'            => '1',
             'kredit'           => '-1',
         ]);
 
         $kategori->insert([    //2
-            'nama'             => 'Akun Piutang',
+            'nama'             => 'Piutang',
             'deskripsi'        => '-',
-            'debit'            => '-1',
-            'kredit'           => '1',
+            'debit'            => '1',
+            'kredit'           => '-1',
         ]);
 
         $kategori->insert([    //3
@@ -48,12 +48,82 @@ class AkunSeeder extends Seeder
             'debit'            => '1',
             'kredit'           => '-1',
         ]);
-        
+
         $kategori->insert([    //6
-            'nama'             => 'Hutang',
+            'nama'             => 'Depresiasi dan Amortisasi',
+            'deskripsi'        => '-',
+            'debit'            => '1',
+            'kredit'           => '-1',
+        ]);
+
+        $kategori->insert([    //7
+            'nama'             => 'Aktiva Lainnya',
+            'deskripsi'        => '-',
+            'debit'            => '1',
+            'kredit'           => '-1',
+        ]);
+        
+        $kategori->insert([    //8
+            'nama'             => 'Akun Hutang',
             'deskripsi'        => '-',
             'debit'            => '-1',
             'kredit'           => '1',
+        ]);
+
+        $kategori->insert([    //9
+            'nama'             => 'Kewajiban Lancar Lainnya',
+            'deskripsi'        => '-',
+            'debit'            => '-1',
+            'kredit'           => '1',
+        ]);
+
+        $kategori->insert([    //10
+            'nama'             => 'Kewajiban Jangka Panjang',
+            'deskripsi'        => '-',
+            'debit'            => '-1',
+            'kredit'           => '1',
+        ]);
+
+        $kategori->insert([    //11
+            'nama'             => 'Ekuitas',
+            'deskripsi'        => '-',
+            'debit'            => '-1',
+            'kredit'           => '1',
+        ]);
+
+        $kategori->insert([    //12
+            'nama'             => 'Pendapatan',
+            'deskripsi'        => '-',
+            'debit'            => '-1',
+            'kredit'           => '1',
+        ]);
+
+        $kategori->insert([    //13
+            'nama'             => 'Harga Pokok Penjualan',
+            'deskripsi'        => '-',
+            'debit'            => '1',
+            'kredit'           => '-1',
+        ]);
+        
+        $kategori->insert([    //14
+            'nama'             => 'Beban',
+            'deskripsi'        => '-',
+            'debit'            => '1',
+            'kredit'           => '-1',
+        ]);
+        
+        $kategori->insert([    //15
+            'nama'             => 'Pendapatan Lainnya',
+            'deskripsi'        => '-',
+            'debit'            => '-1',
+            'kredit'           => '1',
+        ]);
+        
+        $kategori->insert([    //16
+            'nama'             => 'Beban Lainnya',
+            'deskripsi'        => '-',
+            'debit'            => '1',
+            'kredit'           => '-1',
         ]);
 
 
