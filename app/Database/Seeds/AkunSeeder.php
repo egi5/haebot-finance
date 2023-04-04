@@ -129,33 +129,165 @@ class AkunSeeder extends Seeder
 
         //Akun
         $akun->insert([
-            'kode'         => '10001',
+            'kode'         => '11',
             'nama'         => 'Kas',
             'id_kategori'  => '1',
         ]);
 
         $akun->insert([
-            'kode'         => '10002',
-            'nama'         => 'Rekening BCA',
+            'kode'         => '12',
+            'nama'         => 'Rekening Bank',
             'id_kategori'  => '1',
         ]);
 
         $akun->insert([
-            'kode'         => '10003',
-            'nama'         => 'Rekening Mandiri',
-            'id_kategori'  => '1',
-        ]);
-
-        $akun->insert([
-            'kode'         => '10100',
-            'nama'         => 'Piutang Usaha',
+            'kode'         => '13',
+            'nama'         => 'Piutang Dagang',
             'id_kategori'  => '2',
         ]);
 
         $akun->insert([
-            'kode'         => '10200',
-            'nama'         => 'Persediaan Barang',
+            'kode'         => '14',
+            'nama'         => 'Inventory',
             'id_kategori'  => '3',
+        ]);
+
+        $akun->insert([
+            'kode'         => '142',
+            'nama'         => 'Inventory in Shipping',
+            'id_kategori'  => '3',
+        ]);
+
+        $akun->insert([
+            'kode'         => '18',
+            'nama'         => 'PPN Masukan',
+            'id_kategori'  => '4',
+        ]);
+
+        $akun->insert([
+            'kode'         => '21',
+            'nama'         => 'Hutang Dagang',
+            'id_kategori'  => '8',
+        ]);
+
+        $akun->insert([
+            'kode'         => '22',
+            'nama'         => 'Hutang Pinjaman',
+            'id_kategori'  => '10',
+        ]);
+
+        $akun->insert([
+            'kode'         => '31',
+            'nama'         => 'Modal Ekutias Awal',
+            'id_kategori'  => '11',
+        ]);
+
+        $akun->insert([
+            'kode'         => '32',
+            'nama'         => 'Laba Ditahan',
+            'id_kategori'  => '11',
+        ]);
+
+        $akun->insert([
+            'kode'         => '41',
+            'nama'         => 'Penjualan Online',
+            'id_kategori'  => '12',
+        ]);
+
+        $akun->insert([
+            'kode'         => '42',
+            'nama'         => 'Penjualan Offline',
+            'id_kategori'  => '12',
+        ]);
+
+        $akun->insert([
+            'kode'         => '43',
+            'nama'         => 'Return Penjualan',
+            'id_kategori'  => '12',
+        ]);
+
+        $akun->insert([
+            'kode'         => '51',
+            'nama'         => 'Beban Pokok Pendapatan',
+            'id_kategori'  => '13',
+        ]);
+
+        $akun->insert([
+            'kode'         => '52',
+            'nama'         => 'Beban Pengangkutan dan Pengiriman',
+            'id_kategori'  => '13',
+        ]);
+
+        $akun->insert([
+            'kode'         => '53',
+            'nama'         => 'Return Pembelian',
+            'id_kategori'  => '13',
+        ]);
+
+        $akun->insert([
+            'kode'         => '61',
+            'nama'         => 'Biaya Gaji dan Upah',
+            'id_kategori'  => '14',
+        ]);
+
+        $akun->insert([
+            'kode'         => '62',
+            'nama'         => 'Biaya Konsumsi',
+            'id_kategori'  => '14',
+        ]);
+
+        $akun->insert([
+            'kode'         => '63',
+            'nama'         => 'Biaya Komplain dan Keluhan',
+            'id_kategori'  => '14',
+        ]);
+
+        $akun->insert([
+            'kode'         => '64',
+            'nama'         => 'Biaya Sales Pengiriman',
+            'id_kategori'  => '14',
+        ]);
+
+        $akun->insert([
+            'kode'         => '65',
+            'nama'         => 'Biaya Iklan dan Promosi',
+            'id_kategori'  => '14',
+        ]);
+
+        $akun->insert([
+            'kode'         => '66',
+            'nama'         => 'Biaya Pengadaan Kebutuhan dan Alat',
+            'id_kategori'  => '14',
+        ]);
+
+        $akun->insert([
+            'kode'         => '67',
+            'nama'         => 'Biaya Manajemen : Consolidasi',
+            'id_kategori'  => '14',
+        ]);
+
+        $akun->insert([
+            'kode'         => '68',
+            'nama'         => 'Biaya Sewa Operasional',
+            'id_kategori'  => '14',
+        ]);
+
+        $akun->insert([
+            'kode'         => '69',
+            'nama'         => 'Biaya Utilitas',
+            'id_kategori'  => '14',
+        ]);
+
+        $akun->insert([
+            'kode'         => '610',
+            'nama'         => 'Biaya Pajak impor',
+            'id_kategori'  => '14',
+        ]);
+
+        $akun->insert([
+            'kode'         => '611',
+            'nama'         => 'Biaya Importir Forwarder',
+            'id_kategori'  => '14',
         ]);
     }
 }
