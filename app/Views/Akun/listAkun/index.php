@@ -9,9 +9,14 @@
         <div class="me-auto mb-1">
             <h3 style="color: #566573;">Data Akun</h3>
         </div>
-        <div class="me-2 mb-1">
+        <!-- <div class="me-2 mb-1">
             <a class="btn btn-sm btn-outline-dark" href="<?= site_url() ?>akun">
                 <i class="fa-fw fa-solid fa-arrow-left"></i> Kembali
+            </a>
+        </div> -->
+        <div class="me-2 mb-1">
+            <a class="btn btn-sm btn-outline-danger" href="<?= site_url() ?>kategori">
+                <i class="fa-fw fa-solid fa-gear"></i> Kategori
             </a>
         </div>
         <div class="mb-1">
@@ -35,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-                 
+
             </tbody>
         </table>
     </div>
@@ -64,7 +69,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="my-modalBuku" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" style="max-width: 90%">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="judulModalBuku"></h1>
@@ -103,8 +108,7 @@
             serverSide: true,
             ajax: '<?= site_url() ?>getdataakun',
             order: [],
-            columns: [
-                {
+            columns: [{
                     data: 'no',
                     orderable: false
                 },
@@ -223,7 +227,7 @@
     function showModalEdit(id) {
         $.ajax({
             type: 'GET',
-            url: '<?= site_url() ?>akun/' + id +'/edit',
+            url: '<?= site_url() ?>akun/' + id + '/edit',
             dataType: 'json',
             success: function(res) {
                 if (res.data) {

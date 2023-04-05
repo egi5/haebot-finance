@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+
 use CodeIgniter\RESTful\ResourcePresenter;
 use App\Models\JurnalModel;
 use App\Models\JurnalDetailModel;
@@ -18,10 +19,12 @@ class Jurnal extends ResourcePresenter
         $this->modelJurnalDetail = new JurnalDetailModel();
     }
 
+
     public function index()
     {
         return view('akun/jurnal/index');
     }
+
 
     public function getDataJurnal()
     {
@@ -65,7 +68,7 @@ class Jurnal extends ResourcePresenter
             $modelJurnalDetail = new JurnalDetailModel();
             $transaksi         = $modelJurnal->find($id);
             $akun              = $modelAkun->findAll();
-            $detail            = $modelJurnalDetail->getDetailJurnal(['id_transaksi'=> $transaksi['id']]);
+            $detail            = $modelJurnalDetail->getDetailJurnal(['id_transaksi' => $transaksi['id']]);
 
             $data = [
                 'akun'          => $akun,
@@ -89,8 +92,6 @@ class Jurnal extends ResourcePresenter
     {
         date_default_timezone_set('Asia/Jakarta');
         $modelAkun         = new AkunModel();
-        $modelJurnal       = new JurnalModel();
-        $modelJurnalDetail = new JurnalDetailModel();
 
         $akun = $modelAkun->findAll();
 
@@ -98,7 +99,7 @@ class Jurnal extends ResourcePresenter
             'akun'               => $akun,
             'nomor_jurnal_auto'  => jurnal_nomor_auto(date('Y-m-d'))
         ];
-        
+
         return view('akun/jurnal/add', $data);
     }
 
@@ -120,7 +121,7 @@ class Jurnal extends ResourcePresenter
             ],
         ];
 
-        if (!$this->validate($validasi) ) {
+        if (!$this->validate($validasi)) {
             $validation = \Config\Services::validation();
 
             $error = [
@@ -131,14 +132,12 @@ class Jurnal extends ResourcePresenter
             $json = [
                 'error' => $error
             ];
-
         } else {
-            $modelAkun         = new AkunModel();
             $modelJurnal       = new JurnalModel();
             $modelJurnalDetail = new JurnalDetailModel();
 
             $data = [
-                'nomor_transaksi'   => $this->request->getPost('nomor_transaksi'),    
+                'nomor_transaksi'   => $this->request->getPost('nomor_transaksi'),
                 'tanggal'           => $this->request->getPost('tanggal'),
                 'referensi'         => $this->request->getPost('referensi'),
                 'total_transaksi'   => $this->request->getPost('total_transaksi')
@@ -151,7 +150,7 @@ class Jurnal extends ResourcePresenter
             $debit        = $this->request->getPost('debit');
             $kredit       = $this->request->getPost('kredit');
 
-            for ($i=0; $i < count($id_akun) ; $i++) { 
+            for ($i = 0; $i < count($id_akun); $i++) {
                 $dataAkun = [
                     'id_transaksi'  => $id_transaksi,
                     'id_akun'       => $id_akun[$i],
@@ -165,10 +164,8 @@ class Jurnal extends ResourcePresenter
             $json = [
                 'success' => 'Berhasil menambah data jurnal'
             ];
-
         }
         echo json_encode($json);
-        
     }
 
 
@@ -182,15 +179,15 @@ class Jurnal extends ResourcePresenter
 
 
     public function edit($id = null)
-    {       
+    {
         $modelAkun         = new AkunModel();
         $modelJurnal       = new JurnalModel();
         $modelJurnalDetail = new JurnalDetailModel();
         $transaksi         = $modelJurnal->find($id);
-        $detail            = $modelJurnalDetail->where(['id_transaksi'=> $transaksi['id']])->findAll();
+        $detail            = $modelJurnalDetail->where(['id_transaksi' => $transaksi['id']])->findAll();
         $akun              = $modelAkun->findAll();
-            
-            
+
+
         $data = [
             'validation'    => \Config\Services::validation(),
             'akun'          => $akun,
@@ -200,8 +197,8 @@ class Jurnal extends ResourcePresenter
 
         return view('akun/jurnal/edit', $data);
     }
-    
-    
+
+
     public function update($id = null)
     {
         $validasi = [
@@ -219,7 +216,7 @@ class Jurnal extends ResourcePresenter
             ],
         ];
 
-        if (!$this->validate($validasi) ) {
+        if (!$this->validate($validasi)) {
             $validation = \Config\Services::validation();
 
             $error = [
@@ -230,15 +227,13 @@ class Jurnal extends ResourcePresenter
             $json = [
                 'error' => $error
             ];
-
         } else {
-            $modelAkun         = new AkunModel();
             $modelJurnal       = new JurnalModel();
             $modelJurnalDetail = new JurnalDetailModel();
 
             $data = [
                 'id'                => $id,
-                'nomor_transaksi'   => $this->request->getPost('nomor_transaksi'),    
+                'nomor_transaksi'   => $this->request->getPost('nomor_transaksi'),
                 'tanggal'           => $this->request->getPost('tanggal'),
                 'referensi'         => $this->request->getPost('referensi'),
                 'total_transaksi'   => $this->request->getPost('total_transaksi')
@@ -246,14 +241,14 @@ class Jurnal extends ResourcePresenter
             $modelJurnal->save($data);
 
             $id_detail    = $this->request->getPost('id_detail');
-            $modelJurnalDetail->where(['id_transaksi'=> $id])->delete($id_detail);
+            $modelJurnalDetail->where(['id_transaksi' => $id])->delete($id_detail);
 
             $id_akun      = $this->request->getPost('id_akun');
             $deskripsi    = $this->request->getPost('deskripsi');
             $debit        = $this->request->getPost('debit');
             $kredit       = $this->request->getPost('kredit');
 
-            for ($i=0; $i < count($id_akun) ; $i++) { 
+            for ($i = 0; $i < count($id_akun); $i++) {
                 $dataAkun = [
                     'id_transaksi'  => $id,
                     'id_akun'       => $id_akun[$i],
@@ -267,35 +262,28 @@ class Jurnal extends ResourcePresenter
             $json = [
                 'success' => 'Berhasil update data Jurnal'
             ];
-
-            session()->setFlashdata('pesan', 'Data berhasil diupdate.');
-
-            // return redirect()->to('/jurnal');
         }
         echo json_encode($json);
-        
     }
-    
 
-    public function hapusBaris($id = null, $idJurnal = null){
-        
+
+    public function hapusBaris($id = null, $idJurnal = null)
+    {
         $modelJurnalDetail  = new JurnalDetailModel();
 
         $modelJurnalDetail->delete($id);
-        
+
         return redirect()->back();
     }
 
-    
+
     public function delete($id = null)
     {
         $modelJurnal        = new JurnalModel();
-        
+
         $modelJurnal->delete($id);
 
         session()->setFlashdata('pesan', 'Data berhasil dihapus.');
         return redirect()->to('/jurnal');
     }
 }
-
-?>

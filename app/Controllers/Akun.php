@@ -5,12 +5,12 @@ namespace App\Controllers;
 use App\Models\AkunModel;
 use App\Models\KategoriAkunModel;
 use App\Models\JurnalModel;
-use App\Models\JurnalDetailModel;
 use CodeIgniter\RESTful\ResourcePresenter;
 use \Hermawan\DataTables\DataTable;
 
 class Akun extends ResourcePresenter
 {
+
     public function index()
     {
         return view('akun/listAkun/index');
@@ -23,10 +23,10 @@ class Akun extends ResourcePresenter
 
             $db = \Config\Database::connect();
             $data =  $db->table('akun')
-            ->select('akun.id, akun.kode, akun.nama, akun_kategori.nama as kategori')
-            ->join('akun_kategori', 'akun.id_kategori = akun_kategori.id', 'left')
-            ->where('akun.deleted_at', null);
-            
+                ->select('akun.id, akun.kode, akun.nama, akun_kategori.nama as kategori')
+                ->join('akun_kategori', 'akun.id_kategori = akun_kategori.id', 'left')
+                ->where('akun.deleted_at', null);
+
             return DataTable::of($data)
                 ->addNumbering('no')
                 ->add('aksi', function ($row) {
@@ -44,8 +44,6 @@ class Akun extends ResourcePresenter
                         ' . csrf_field() . '
                         <input type="hidden" name="_method" value="DELETE">
                     </form>';
-                    
-                    // <button onclick="confirm_delete(' . $row->id . ')" title="Hapus" type="button" class="px-2 py-0 btn btn-sm btn-outline-danger"><i class="fa-fw fa-solid fa-trash"></i></button>';
                 }, 'last')
                 ->toJson(true);
         } else {
@@ -158,7 +156,7 @@ class Akun extends ResourcePresenter
                 }
 
                 $data = [
-                    'kode'         => $this->request->getPost('kode'),    
+                    'kode'         => $this->request->getPost('kode'),
                     'nama'         => $this->request->getPost('nama'),
                     'id_kategori'  => $the_id_kategori
                 ];
@@ -179,7 +177,6 @@ class Akun extends ResourcePresenter
     public function edit($id = null)
     {
         if ($this->request->isAJAX()) {
-            
             $modelAkun      = new AkunModel();
             $modelKategori  = new KategoriAkunModel();
             $akun           = $modelAkun->find($id);
@@ -255,11 +252,11 @@ class Akun extends ResourcePresenter
 
                 $data = [
                     'id'           => $id,
-                    'kode'         => $this->request->getPost('kode'),    
+                    'kode'         => $this->request->getPost('kode'),
                     'nama'         => $this->request->getPost('nama'),
                     'id_kategori'  => $the_id_kategori
                 ];
-                
+
                 $modelAkun->save($data);
 
                 $json = [
@@ -276,10 +273,8 @@ class Akun extends ResourcePresenter
 
     public function buku($id = null)
     {
-        if ($this->request->isAJAX()) 
-        {
+        if ($this->request->isAJAX()) {
             $modelAkun         = new AkunModel();
-            $modelJurnal       = new JurnalModel();
             $akun              = $modelAkun->find($id);
 
             $data = [
@@ -296,7 +291,7 @@ class Akun extends ResourcePresenter
         } else {
             return 'Tidak bisa load data';
         }
-    } 
+    }
 
 
     public function getListBukuBesar()
@@ -307,7 +302,7 @@ class Akun extends ResourcePresenter
 
         $modelJurnal       = new JurnalModel();
         $bukuAkun          = $modelJurnal->getAkunBuku($idAkun, $tglAwal, $tglAkhir);
-        
+
         $data = [
             'bukuAkun'  => $bukuAkun,
             'tglAwal'   => $tglAwal,
@@ -332,4 +327,3 @@ class Akun extends ResourcePresenter
         return redirect()->to('/listakun');
     }
 }
-?>

@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Models\KategoriAkunModel;
 use CodeIgniter\RESTful\ResourcePresenter;
 use \Hermawan\DataTables\DataTable;
 
 class KategoriAkun extends ResourcePresenter
 {
+
     public function index()
     {
         return view('akun/kategori/index');
@@ -75,7 +77,7 @@ class KategoriAkun extends ResourcePresenter
             $data = [
                 'kategori' => $kategori
             ];
- 
+
             $json = [
                 'data'   => view('akun/kategori/add', $data),
             ];
@@ -140,7 +142,7 @@ class KategoriAkun extends ResourcePresenter
                     'debit'        => $this->request->getPost('debit'),
                     'kredit'       => $this->request->getPost('kredit')
                 ];
-                
+
                 $modelKategori->insert($data);
 
                 $json = [
@@ -157,7 +159,7 @@ class KategoriAkun extends ResourcePresenter
 
     public function edit($id = null)
     {
-         if ($this->request->isAJAX()) {
+        if ($this->request->isAJAX()) {
             $modelKategori = new KategoriAkunModel();
             $kategori      = $modelKategori->find($id);
 
@@ -165,15 +167,15 @@ class KategoriAkun extends ResourcePresenter
                 'validation'    => \Config\Services::validation(),
                 'kategori'      => $kategori
             ];
- 
+
             $json = [
                 'data'   => view('akun/kategori/edit', $data),
             ];
 
             echo json_encode($json);
         } else {
-                return 'Tidak bisa load';
-        } 
+            return 'Tidak bisa load';
+        }
     }
 
 
@@ -235,13 +237,12 @@ class KategoriAkun extends ResourcePresenter
 
                 $json = [
                     'success' => 'Data Berhasil di update'
-                ];   
+                ];
             }
             echo json_encode($json);
-            
         } else {
             return 'Tidak bisa load';
-        }    
+        }
     }
 
 
@@ -254,6 +255,4 @@ class KategoriAkun extends ResourcePresenter
         session()->setFlashdata('pesan', 'Data berhasil dihapus.');
         return redirect()->to('/kategoriakun');
     }
-
 }
-?>

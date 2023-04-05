@@ -1,40 +1,25 @@
-<div>
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <div>
-                &nbsp;&nbsp; Nomor Transaksi
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div>
-                &nbsp;&nbsp; Tanggal
-            </div>
-        </div>
+<div class="mb-4 d-flex justify-content-between">
+    <div class="mt-1">
+        Transaksi <h5> <?= $transaksi['nomor_transaksi'] ?></h5>
     </div>
-
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <h5>&nbsp;&nbsp; <?= $transaksi['nomor_transaksi'] ?></h5>
-        </div>
-        <div class="col-md-3">
-            <h5>&nbsp;&nbsp; <?= $transaksi['tanggal'] ?></h5>
-        </div>
+    <div class="mt-1 text-right">
+        Tanggal <h5> <?= $transaksi['tanggal'] ?></h5>
     </div>
 </div>
 
 <hr>
 
 <div class="table-responsive">
-    <table class="table table-hover" width="100%" id="tabel">
-        <thead style="background-color: #ebebeb;">
+    <table class="table table-hover table-bordered" width="100%" id="tabel">
+        <thead style="background-color: #ebebeb;" class="text-center">
             <tr>
                 <th width="20%">Akun</th>
                 <th width="17%">Deskripsi</th>
-                <th class="text-end pe-4 py-2" width="20%">Debit</th>
-                <th class="text-end pe-4 py-2" width="20%">Kredit</th>
+                <th width="20%">Debit</th>
+                <th width="20%">Kredit</th>
             </tr>
         </thead>
-        <tbody id="tabel_list_produk">
+        <tbody>
             <?php
             $no = 1;
             foreach ($detail as $dt) : ?>

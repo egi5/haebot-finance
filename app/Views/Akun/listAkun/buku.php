@@ -1,18 +1,11 @@
 <?= $this->include('MyLayout/css') ?>
-<div>
-    <div class="row mb-3">
-        <div class="fw-bold">
-            <h3>Transaksi <?= $akun['nama'] ?></h3>
-        </div>
-        <div class="fw-bold">
-            <h4><?= $akun['kode'] ?></h4>
-        </div>
+
+
+<div class="mb-4 d-flex justify-content-between">
+    <div class="mt-2">
+        <h5>Transaksi <?= $akun['nama'] ?> (<?= $akun['kode'] ?>)</h5>
     </div>
-</div>
 
-<hr>
-
-<div class="row justify-content-end">
     <div class="col-md-3">
         <div class="input-group mb-3">
             <input type="text" class="form-control text-center" id="tglAwal" name="tglAwal" onchange="loadTable()" value="<?= $tglAwal ?>">
@@ -23,7 +16,7 @@
 </div>
 
 <div class="table-responsive">
-    <table class="table table-hover" width="100%" id="tabelBuku">
+    <table class="table table-hover table-bordered" width="100%" id="tabelBuku">
         <thead style="background-color: #ebebeb;">
             <tr>
                 <th width="15%">Tanggal</th>
@@ -35,7 +28,7 @@
             </tr>
         </thead>
         <tbody id="tabelBukuBesar">
-            
+
         </tbody>
     </table>
 </div>
@@ -49,23 +42,23 @@
             format: "yyyy-mm-dd"
         });
 
-        
-        loadTable();
-     })
 
-     function loadTable(){
-        var idAkun   = <?= $akun['id'] ?>;
-        var tglAwal  = $('#tglAwal').val();
+        loadTable();
+    })
+
+    function loadTable() {
+        var idAkun = <?= $akun['id'] ?>;
+        var tglAwal = $('#tglAwal').val();
         var tglAkhir = $('#tglAkhir').val();
         $.ajax({
             type: 'GET',
             url: '<?= site_url() ?>/listBuku',
             data: 'idAkun=' + idAkun +
-                  '&tglAwal=' + tglAwal +
-                  '&tglAkhir=' + tglAkhir,
+                '&tglAwal=' + tglAwal +
+                '&tglAkhir=' + tglAkhir,
             dataType: "json",
             success: function(response) {
-                if(response.data){
+                if (response.data) {
                     $('#tabelBukuBesar').html(response.data);
                 }
             },
@@ -73,5 +66,5 @@
                 alert('Error \n' + e.responseText);
             }
         });
-     }
+    }
 </script>

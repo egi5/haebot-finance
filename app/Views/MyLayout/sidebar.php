@@ -17,11 +17,11 @@
                     </a>
                 <?php endif; ?>
 
+                <br>
 
-
-                <?php if (has_permission('Keuangan')) : ?>
+                <!-- <?php if (has_permission('Keuangan')) : ?>
                     <small class="mt-4 ms-3 text-secondary">Jurnal Umum</small>
-                <?php endif; ?>
+                <?php endif; ?> -->
 
                 <?php if (has_permission('Keuangan')) : ?>
                     <a class="nav-link py-2" href="<?= base_url() ?>/tagihan">
@@ -33,22 +33,22 @@
                 <?php endif; ?>
 
                 <?php if (has_permission('Keuangan')) : ?>
-                    <a class="nav-link py-2" href="<?= base_url() ?>/transaksi">
+                    <a class="nav-link py-2" href="<?= base_url() ?>/jurnalumum">
                         <div class="sb-nav-link-icon">
-                            <i class="fa-fw fa-solid fa-money-check"></i>
+                            <i class="fa-fw fa-regular fa-regular fa-clipboard"></i>
                         </div>
-                        Transaksi
+                        Jurnal Umum
                     </a>
                 <?php endif; ?>
 
 
 
-                <?php if (has_permission('Keuangan')) : ?>
+                <!-- <?php if (has_permission('Keuangan')) : ?>
                     <small class="mt-4 ms-3 text-secondary">Akun</small>
-                <?php endif; ?>
+                <?php endif; ?> -->
 
                 <?php if (has_permission('Keuangan')) : ?>
-                    <a class="nav-link py-2" href="<?= base_url() ?>/akun">
+                    <a class="nav-link py-2" href="<?= base_url() ?>/listakun">
                         <div class="sb-nav-link-icon">
                             <i class="fa-fw fa-solid fa-list-ol"></i>
                         </div>
@@ -65,11 +65,11 @@
                     </a>
                 <?php endif; ?>
 
+                <br>
 
-
-                <?php if (has_permission('Keuangan')) : ?>
+                <!-- <?php if (has_permission('Keuangan')) : ?>
                     <small class="mt-4 ms-3 text-secondary">Laporan</small>
-                <?php endif; ?>
+                <?php endif; ?> -->
 
                 <?php if (has_permission('Keuangan')) : ?>
                     <a class="nav-link py-2" href="<?= base_url() ?>/laporan">
