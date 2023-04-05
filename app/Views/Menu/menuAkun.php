@@ -13,7 +13,7 @@
             <a class="text-decoration-none" href="<?= base_url() ?>/kategori">
                 <div class="card mb-3 shadow" style="border: 1px solid #1762A5;">
                     <h5 class="card-header" style="background-color: #1762A5; color: #fff;">Kategori Akun</h5>
-                    <div class="card-body text-dark">
+                    <div class="card-body text-secondary">
                         <i class="fa-3x fa-solid fa-money-check-dollar"></i>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
             <a class="text-decoration-none" href="<?= base_url() ?>/listakun">
                 <div class="card mb-3 shadow" style="border: 1px solid #1762A5;">
                     <h5 class="card-header" style="background-color: #1762A5; color: #fff;">Akun</h5>
-                    <div class="card-body text-dark">
+                    <div class="card-body text-secondary">
                         <i class="fa-3x fa-regular fa-credit-card"></i>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
             <a class="text-decoration-none" href="<?= base_url() ?>/jurnalumum">
                 <div class="card mb-3 shadow" style="border: 1px solid #1762A5;">
                     <h5 class="card-header" style="background-color: #1762A5; color: #fff;">Jurnal Umum</h5>
-                    <div class="card-body text-dark">
+                    <div class="card-body text-secondary">
                         <i class="fa-3x fa-regular fa-clipboard"></i>
                     </div>
                 </div>

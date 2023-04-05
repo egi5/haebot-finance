@@ -21,8 +21,8 @@
         <div class="col-sm-9">
             <select class="form-control" name="debit" id="debit">
                 <option value=""></option>
-                <option value="Plus">Plus</option>
-                <option value="Minus">Minus</option>
+                <option value="1">Plus</option>
+                <option value="-1">Minus</option>
             </select>
             <div class="invalid-feedback error_debit"></div>
         </div>
@@ -32,8 +32,8 @@
         <div class="col-sm-9">
             <select class="form-control" name="kredit" id="kredit">
                 <option value=""></option>
-                <option value="Plus">Plus</option>
-                <option value="Minus">Minus</option>
+                <option value="1">Plus</option>
+                <option value="-1">Minus</option>
             </select>
             <div class="invalid-feedback error_kredit"></div>
         </div>
@@ -91,7 +91,7 @@
                     }
                     if (err.error_kredit) {
                         $('.error_kredit').html(err.error_kredit);
-                        $('#debit').addClass('is-invalid');
+                        $('#kredit').addClass('is-invalid');
                     } else {
                         $('.error_kredit').html('');
                         $('#kredit').removeClass('is-invalid');
@@ -106,7 +106,7 @@
                         title: 'Berhasil',
                         text: response.success,
                     }).then((value) => {
-                        $('#tabel').DataTable().ajax.reload();
+                        location.href = "<?= base_url() ?>/kategori";
                         Toast.fire({
                             icon: 'success',
                             title: response.success

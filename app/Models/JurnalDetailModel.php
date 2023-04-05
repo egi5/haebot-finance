@@ -46,11 +46,11 @@ class JurnalDetailModel extends Model
     public function getDetailJurnal($idDetailJurnal)
     {
         $data =  $this->db->table($this->table)
-            ->select('transaksi_jurnal_detail.*, akun.nama as akun')
+            ->select('akun.nama as akun, akun.kode as kode, transaksi_jurnal_detail.deskripsi as deskripsi, transaksi_jurnal_detail.debit as debit, transaksi_jurnal_detail.kredit as kredit')
             ->join('akun', 'transaksi_jurnal_detail.id_akun = akun.id', 'left')
             ->where('transaksi_jurnal_detail.id_transaksi', $idDetailJurnal)
             ->get()
-            ->getRowArray();
+            ->getResultArray();
 
         return $data;
     }

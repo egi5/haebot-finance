@@ -1,6 +1,6 @@
 <form autocomplete="off" class="row g-3 mt-3" action="<?= site_url() ?>kategoriakun/<?= $kategori['id'] ?>" method="POST" id="form">
 
-    
+    <?= csrf_field() ?>
 
     <input type="hidden" name="_method" value="PUT">
 
@@ -25,10 +25,10 @@
         <div class="col-sm-9">
             <select class="form-control" name="debit" id="debit">
                 <option value=""></option>
-                    <option <?= $kategori['debit'] == "Plus" ? 'selected' : ''; ?> value="Plus">Plus</option>
-                    <option <?= $kategori['debit'] == "Minus" ? 'selected' : ''; ?> value="Minus">Minus</option>
+                <option <?= $kategori['debit'] == "1" ? 'selected' : ''; ?> value="1">Plus</option>
+                <option <?= $kategori['debit'] == "-1" ? 'selected' : ''; ?> value="-1">Minus</option>
             </select>
-            <div class="invalid-feedback"></div>
+            <div class="invalid-feedback error_debit"></div>
         </div>
     </div>
 
@@ -37,10 +37,10 @@
         <div class="col-sm-9">
             <select class="form-control" name="kredit" id="kredit">
                 <option value=""></option>
-                    <option <?= $kategori['kredit'] == "Plus" ? 'selected' : ''; ?> value="Plus">Plus</option>
-                    <option <?= $kategori['kredit'] == "Minus" ? 'selected' : ''; ?> value="Minus">Minus</option>
+                <option <?= $kategori['kredit'] == "1" ? 'selected' : ''; ?> value="1">Plus</option>
+                <option <?= $kategori['kredit'] == "-1" ? 'selected' : ''; ?> value="-1">Minus</option>
             </select>
-            <div class="invalid-feedback"></div>
+            <div class="invalid-feedback error_kredit"></div>
         </div>
     </div>
 
@@ -98,6 +98,14 @@
                         $('.error_debit').html('');
                         $('#debit').removeClass('is-invalid');
                         $('#debit').addClass('is-valid');
+                    }
+                    if (err.error_debit) {
+                        $('.error_kredit').html(err.error_kredit);
+                        $('#kredit').addClass('is-invalid');
+                    } else {
+                        $('.error_kredit').html('');
+                        $('#kredit').removeClass('is-invalid');
+                        $('#kredit').addClass('is-valid');
                     }
                     
                 }

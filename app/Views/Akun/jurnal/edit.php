@@ -16,7 +16,7 @@
 
     <hr class="mt-0 mb-4">
 
-    <div class="col-md-10 mt-4">
+    <div class="col-md-12 mt-4">
         <form autocomplete="off" class="row g-3 mt-3" action="<?= site_url() ?>jurnal/<?= $transaksi['id'] ?>" method="POST" id="form">
 
             <input type="hidden" name="_method" value="PUT">
@@ -25,14 +25,14 @@
                 <label for="nama" class="col-sm-3 col-form-label">Nomor Transaksi</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" id="nomor_transaksi" name="nomor_transaksi" value="<?= $transaksi['nomor_transaksi'] ?>" readonly="">
-                    <div class="invalid-feedback error_nomer"></div>
+                    <div class="invalid-feedback error_nomor"></div>
                 </div>
             </div>
                     
             <div class="row mb-3">
                 <label for="nama" class="col-sm-3 col-form-label">Tanggal</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="tanggal" name="tanggal" value="<?= $transaksi['tanggal'] ?>" readonly="">
+                    <input type="text" class="form-control" id="tanggal" name="tanggal" value="<?= $transaksi['tanggal'] ?>">
                     <div class="invalid-feedback error_tanggal"></div>
                 </div>
             </div>
@@ -78,14 +78,14 @@
                                             </select>
                                         </td>
                                         <td><input type="text" class="form-control" id="deskripsi" name="deskripsi[]" value="<?= $dt['deskripsi'] ?>"></td>
-                                        <td><input type="text" class="form-control debit" id="debit" name="debit[]" value="<?= $dt['debit'] ?>"></td>
-                                        <td><input type="text" class="form-control kredit" id="kredit" name="kredit[]" value="<?= $dt['kredit'] ?>"></td>
-                                        <!-- <td><button class='btn px-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-trash'></i></button></td> -->
+                                        <td><input type="number" class="form-control debit" id="debit" name="debit[]" value="<?= $dt['debit'] ?>"></td>
+                                        <td><input type="number" class="form-control kredit" id="kredit" name="kredit[]" value="<?= $dt['kredit'] ?>"></td>
+                                        <td><a type="button" href="<?= site_url() ?>hapusBaris/<?= $dt['id'] ?>/<?= $transaksi['id'] ?>" class='btn px-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-xmark'></i></a></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
-                        <!-- <button class="btn btn-secondary px-2" type="button" id="baris">Tambah Akun</i></button> -->
+                        <button class="btn btn-secondary px-2" type="button" id="baris">Tambah Akun</i></button>
                         <div>                
                         </div>
                     </div>
@@ -98,13 +98,13 @@
                             <div class="col col-md-4" style="text-align: right;">
                                 <span class="title-total" name="totalDebit" id="totalDebit">0</span>
                                 <input type="hidden" name="total_transaksi" id="total_transaksi">
+                                <div class="invalid-feedback error_total"></div>
                             </div>
                             <div class="col col-md-4" style="text-align: right;">
                                 <span class="title-total" name="totalKredit" id="totalKredit">0</span>
                                 <input type="hidden" name="total_kredit" id="total_kredit">
                             </div>
                         </div>
-                        <div class="invalid-feedback error_total"></div>
                     </div>
                 </div>
             </div>
@@ -130,13 +130,13 @@
             Baris += "<input type='text' name='deskripsi[]' class='form-control' placeholder='Deskripsi'>";
             Baris += "</td>";
             Baris += "<td>";
-            Baris += "<input type='text' name='debit[]' class='form-control debit' placeholder='Debit'>";
+            Baris += "<input type='text' name='debit[]' class='form-control debit' placeholder='Debit' required>";
             Baris += "</td>";
             Baris += "<td>";
-            Baris += "<input type='text' name='kredit[]' class='form-control kredit' placeholder='Kredit'>";
+            Baris += "<input type='text' name='kredit[]' class='form-control kredit' placeholder='Kredit' required>";
             Baris += "</td>";
-            // Baris += "<td><button class='btn px-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-trash'></i></button>";
-            // Baris += "</td>";
+            Baris += "<td><button class='btn px-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-xmark'></i></button>";
+            Baris += "</td>";
             Baris += "</tr>";
 
             $('#tabel tbody').append(Baris);
@@ -150,10 +150,18 @@
 
 
     $(document).ready(function() {
+        var op = <?= (!empty(session()->getFlashdata('pesan')) ? json_encode(session()->getFlashdata('pesan')) : '""'); ?>;
+        if (op != '') {
+            Toast.fire({
+                icon: 'success',
+                title: op
+            })
+        }
+
         $('#tanggal').datepicker({
             format: "yyyy-mm-dd"
         });
-
+        
         hitungDebit();
         hitungKredit();
         
@@ -164,6 +172,8 @@
         $('#tabel').on('input','.kredit', function(){
             hitungKredit();
         });   
+
+        
     })
 
 
@@ -177,28 +187,16 @@
     });
 
 
-    $(document).on('click','#HapusBaris', function(e){
-        e.preventDefault();
-        var Nomor = 1;
-        $(this).parent().parent().remove();
-        $('#table tbody tr').each(function(){
-            $(this).find('td:nth-child(1)').html(Nomor);
-        })
-
-        hitungDebit();
-        hitungKredit();
-    })
-
-
     function hitungDebit(){
         var totalDebit = 0;
         $('#tabel .debit').each(function(){
-            var getValueDebit = $(this).val();
+            var getValueDebit = parseFloat($(this).val());
             if ($.isNumeric(getValueDebit)) {
-                totalDebit += parseFloat(getValueDebit);
+                totalDebit += getValueDebit;
             }                  
         });
-        $("#totalDebit").html(totalDebit);
+        
+        $("#totalDebit").html('Rp. '+totalDebit);
         $("#total_transaksi").val(totalDebit);
     }
 
@@ -206,12 +204,12 @@
     function hitungKredit(){
         var totalKredit = 0;
         $('#tabel .kredit').each(function(){
-            var getValueKredit = $(this).val();
+            var getValueKredit = parseFloat($(this).val());
             if ($.isNumeric(getValueKredit)) {
-                totalKredit += parseFloat(getValueKredit);
+                totalKredit += getValueKredit;
             }                  
         });
-        $("#totalKredit").html(totalKredit);
+        $("#totalKredit").html('Rp. '+totalKredit);
         $("#total_kredit").val(totalKredit);
     }
 
@@ -227,66 +225,59 @@
         });
     }
 
-    // $('#form').submit(function(e) {
-    //     e.preventDefault();
-        
-    //     $.ajax({
-    //         type: "post",
-    //         url: $(this).attr('action'),
-    //         data: $(this).serialize(),
-    //         dataType: "json",
-    //         beforeSend: function() {
-    //             $('#tombolSimpan').html('Tunggu <i class="fa-solid fa-spin fa-spinner"></i>');
-    //             $('#tombolSimpan').prop('disabled', true);
-    //         },
-    //         complete: function() {
-    //             $('#tombolSimpan').html('Simpan <i class="fa-fw fa-solid fa-check"></i>');
-    //             $('#tombolSimpan').prop('disabled', false);
-    //         },
-    //         success: function(response) {
-    //             if (response.error) {
-    //                 let err = response.error;
 
-    //                 if (err.error_nama) {
-    //                     $('.error_nama').html(err.error_nama);
-    //                     $('#nama').addClass('is-invalid');
-    //                 } else {
-    //                     $('.error_nama').html('');
-    //                     $('#nama').removeClass('is-invalid');
-    //                     $('#nama').addClass('is-valid');
-    //                 }
-    //                 if (err.error_deskripsi) {
-    //                     $('.error_deskripsi').html(err.error_deskripsi);
-    //                     $('#deskripsi').addClass('is-invalid');
-    //                 } else {
-    //                     $('.error_deskripsi').html('');
-    //                     $('#deskripsi').removeClass('is-invalid');
-    //                     $('#deskripsi').addClass('is-valid');
-    //                 }
-    //                 if (err.error_debit) {
-    //                     $('.error_debit').html(err.error_debit);
-    //                     $('#debit').addClass('is-invalid');
-    //                 } else {
-    //                     $('.error_debit').html('');
-    //                     $('#debit').removeClass('is-invalid');
-    //                     $('#debit').addClass('is-valid');
-    //                 }
-                    
-    //             }
-    //             if (response.success) {
-    //                 $('#my-modal').modal('hide');
-    //                 Toast.fire({
-    //                     icon: 'success',
-    //                     title: response.success
-    //                 });
-    //                 location.href = "<?= base_url() ?>/kategori";
-    //             }
-    //         },
-    //         error: function(e) {
-    //             alert('Errorssssss \n' + e.responseText);
-    //         }
-    //     });
-    //     return false
-    // })
+    $('#form').submit(function(e) {
+        e.preventDefault();
+        var valueDebit  = $('#total_transaksi').val();
+        var valueKredit = $('#total_kredit').val();
+        if(valueDebit != valueKredit){
+            $('.error_total').html('Jumlah nilai debit dan kredit harus sama'); 
+            $('#total_transaksi').addClass('is-invalid');
+        } else {
+            $.ajax({
+                type: "post",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                dataType: "json",
+                beforeSend: function() {
+                    $('#tombolSimpan').html('Tunggu <i class="fa-solid fa-spin fa-spinner"></i>');
+                    $('#tombolSimpan').prop('disabled', true);
+                },
+                complete: function() {
+                    $('#tombolSimpan').html('Update <i class="fa-fw fa-solid fa-check"></i>');
+                    $('#tombolSimpan').prop('disabled', false);
+                },
+                success: function(response) {
+                    if (response.error) {
+                        let err = response.error;
+
+                        if (err.error_nomor) {
+                            $('.error_nomor').html(err.error_nomor);
+                            $('#nomor_transaksi').addClass('is-invalid');
+                        } else {
+                            $('.error_nomor').html('');
+                            $('#nomor_transaksi').removeClass('is-invalid');
+                            $('#nomor_transaksi').addClass('is-valid');
+                        }
+                        if (err.error_tanggal) {
+                            $('.error_tanggal').html(err.error_tanggal);
+                            $('#tanggal').addClass('is-invalid');
+                        } else {
+                            $('.error_tanggal').html('');
+                            $('#tanggal').removeClass('is-invalid');
+                            $('#tanggal').addClass('is-valid');
+                        }
+                    }
+                    if (response.success) {
+                        location.href = "<?= base_url() ?>/jurnal";
+                    }
+                },
+                error: function(e) {
+                    alert('Errorssssss \n' + e.responseText);
+                }
+            });
+            return false
+        }
+    })
 </script>
 <?= $this->endSection() ?>

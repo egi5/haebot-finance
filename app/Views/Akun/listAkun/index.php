@@ -31,7 +31,6 @@
                     <th class="text-center" width="15%">Kode</th>
                     <th class="text-center" width="25%">Nama</th>
                     <th class="text-center" width="20%">Kategori</th>
-                    <th class="text-center" width="17%">Saldo</th>
                     <th class="text-center" width="10%">Aksi</th>
                 </tr>
             </thead>
@@ -56,6 +55,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="isiForm">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="my-modalBuku" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="judulModalBuku"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="isiModalBuku">
 
             </div>
         </div>
@@ -101,9 +116,6 @@
                 },
                 {
                     data: 'kategori'
-                },
-                {
-                    data: 'saldo'
                 },
                 {
                     data: 'aksi',
@@ -157,7 +169,28 @@
                 if (res.data) {
                     $('#isiForm').html(res.data)
                     $('#my-modal').modal('toggle')
-                    $('#judulModal').html('Detail Kategori Akun')
+                    $('#judulModal').html('Detail Akun')
+                } else {
+                    console.log(res)
+                }
+            },
+            error: function(e) {
+                alert('Error \n' + e.responseText);
+            }
+        })
+    }
+
+
+    function showModalBukuBesar(id) {
+        $.ajax({
+            type: 'GET',
+            url: '<?= site_url() ?>akun/buku/' + id,
+            dataType: 'json',
+            success: function(res) {
+                if (res.data) {
+                    $('#isiModalBuku').html(res.data)
+                    $('#my-modalBuku').modal('toggle')
+                    $('#judulModalBuku').html('Buku Besar')
                 } else {
                     console.log(res)
                 }

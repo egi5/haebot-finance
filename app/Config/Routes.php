@@ -65,13 +65,20 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
 
     //Akun
     $routes->get('getdataakun', 'Akun::getDataAkun');
+    $routes->get('akun/buku/(:num)', 'Akun::buku/$1');
+    $routes->get('listBuku', 'Akun::getListBukuBesar');
     $routes->resource('akun');
 
 
     //Jurnal Umum
     $routes->get('getdatajurnal', 'Jurnal::getDataJurnal');
     $routes->resource('jurnal');
+    $routes->get('hapusBaris/(:num)/(:num)', 'Jurnal::hapusBaris/$1/$2');
     $routes->get('/Jurnal/akun', 'Jurnal::akun');
+
+
+    //Neraca
+    $routes->get('listNeraca', 'Neraca::getListNeraca');
 
 
     
