@@ -49,57 +49,52 @@
             </div>
         </div>
 
-        <div class="container">
+        <div class="container pe-2">
 
-            <div class="card p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped table-bordered" width="100%" id="tabel">
+                    <thead style="background-color: #F6DCA9; border: #566573;">
+                        <tr>
+                            <th class="text-center" width="25%">Akun</th>
+                            <th class="text-center" width="40%">Deskripsi</th>
+                            <th class="text-center" width="16%">Debit</th>
+                            <th class="text-center" width="16%">Kredit</th>
+                            <th class="text-center" width="3%"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel_list_transaksi">
 
-                <div class="card-header text-light" style="background-color: #3A98B9;">
-                    Jurnal Transaksi
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped table-bordered" width="100%" id="tabel">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" width="25%">Akun</th>
-                                    <th class="text-center" width="30%">Deskripsi</th>
-                                    <th class="text-center" width="25%">Debit</th>
-                                    <th class="text-center" width="25%">Kredit</th>
-                                    <th class="text-center" width="5%">
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabel_list_transaksi">
+                    </tbody>
+                </table>
 
-                            </tbody>
-                        </table>
+                <button class="btn btn-sm btn-outline-danger px-5 mb-3" type="button" id="baris">Tambah <i class="fa-fw fa-solid fa-plus"></i></button>
 
-                        <button class="btn btn-sm btn-outline-secondary px-2" type="button" id="baris">Tambah <i class="fa-fw fa-solid fa-plus"></i></button>
-                    </div>
-
-                    <hr>
-
-                    <div class="row mt-3 fw-bold fs-5">
-                        <div class="col-md-6">
-                            <span class="title-total">Total</span>
-                        </div>
-                        <div class="col-md-3 ps-5">
+                <table class="table table-striped" width="100%" style="border: #fff;">
+                    <tr>
+                        <td width="65%" colspan="2" class="ps-3 fw-bold fs-5">Total</td>
+                        <td width="16%" class="ps-3 fw-bold fs-5">
                             <span class="title-total" name="totalDebit" id="totalDebit">0</span>
                             <input type="hidden" name="total_transaksi" id="total_transaksi">
-                            <div class="invalid-feedback error_total"></div>
-                        </div>
-                        <div class="col-md-3 ps-5">
+                        </td>
+                        <td width="19%" class="ps-3 fw-bold fs-5" colspan="2">
                             <span class="title-total" name="totalKredit" id="totalKredit">0</span>
                             <input type="hidden" name="total_kredit" id="total_kredit">
-                        </div>
-                    </div>
-                </div>
-
+                        </td>
+                    </tr>
+                    <tr style="border: #fff;">
+                        <td colspan="2"></td>
+                        <td colspan="2">
+                            <input type="hidden" id="triger_error_total">
+                            <div class="invalid-feedback error_total"></div>
+                        </td>
+                    </tr>
+                </table>
             </div>
 
             <button id="tombolSimpan" class="btn px-5 btn-primary mt-4" type="submit">Simpan <i class="fa-fw fa-solid fa-check"></i></button>
 
         </div>
+
 
     </form>
 </main>
@@ -123,7 +118,7 @@
         Baris += "<td>";
         Baris += "<input type='number' name='kredit[]' class='form-control kredit' id='kredit' placeholder='Kredit' required>";
         Baris += "</td>";
-        Baris += "<td><button class='btn px-2 py-0 mt-2 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-xmark'></i></button>";
+        Baris += "<td><a class='btn px-2 py-0 mt-2 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-xmark'></i></a>";
         Baris += "</td>";
         Baris += "</tr>";
 
@@ -220,8 +215,8 @@
         var valueDebit = $('#total_transaksi').val();
         var valueKredit = $('#total_kredit').val();
         if (valueDebit != valueKredit) {
-            $('.error_total').html('Jumlah nilai debit dan kredit harus sama');
-            $('#total_transaksi').addClass('is-invalid');
+            $('.error_total').html('<h4> Jumlah nilai debit dan kredit harus sama. </h4>');
+            $('#triger_error_total').addClass('is-invalid');
         } else {
             $.ajax({
                 type: "post",

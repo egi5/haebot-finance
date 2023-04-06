@@ -11,12 +11,12 @@
 
 <div class="table-responsive">
     <table class="table table-hover table-bordered" width="100%" id="tabel">
-        <thead style="background-color: #ebebeb;" class="text-center">
+        <thead style="background-color: #F6DCA9;" class="text-center border-secondary">
             <tr>
                 <th width="20%">Akun</th>
-                <th width="17%">Deskripsi</th>
-                <th width="20%">Debit</th>
-                <th width="20%">Kredit</th>
+                <th width="50%">Deskripsi</th>
+                <th width="15%">Debit</th>
+                <th width="15%">Kredit</th>
             </tr>
         </thead>
         <tbody>

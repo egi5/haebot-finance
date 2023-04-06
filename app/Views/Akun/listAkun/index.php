@@ -32,11 +32,11 @@
         <table class="table table-hover table-striped table-bordered" width="100%" id="tabel">
             <thead>
                 <tr>
-                    <th class="text-center" width="5%">No</th>
-                    <th class="text-center" width="15%">Kode</th>
-                    <th class="text-center" width="25%">Nama</th>
+                    <th class="text-center" width="3%">No</th>
+                    <th class="text-center" width="10%">Kode</th>
+                    <th class="text-center" width="52%">Nama</th>
                     <th class="text-center" width="20%">Kategori</th>
-                    <th class="text-center" width="10%">Aksi</th>
+                    <th class="text-center" width="15%">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -110,16 +110,20 @@
             order: [],
             columns: [{
                     data: 'no',
-                    orderable: false
+                    orderable: false,
+                    className: 'text-center'
                 },
                 {
-                    data: 'kode'
+                    data: 'kode',
+                    className: 'ps-4'
                 },
                 {
-                    data: 'nama'
+                    data: 'nama',
+                    className: 'ps-3'
                 },
                 {
-                    data: 'kategori'
+                    data: 'kategori',
+                    className: 'ps-3'
                 },
                 {
                     data: 'aksi',

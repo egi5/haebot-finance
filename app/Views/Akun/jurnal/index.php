@@ -27,11 +27,11 @@
         <table class="table table-hover table-striped table-bordered" width="100%" id="tabel">
             <thead>
                 <tr>
-                    <th class="text-center" width="5%">No</th>
-                    <th class="text-center" width="13%">Nomor</th>
-                    <th class="text-center" width="21%">Referensi</th>
+                    <th class="text-center" width="3%">No</th>
+                    <th class="text-center" width="20%">Nomor</th>
+                    <th class="text-center" width="27%">Referensi</th>
                     <th class="text-center" width="15%">Tanggal</th>
-                    <th class="text-center" width="15%">Jumlah</th>
+                    <th class="text-center" width="20%">Jumlah</th>
                     <th class="text-center" width="15%">Aksi</th>
                 </tr>
             </thead>
@@ -49,7 +49,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="my-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" style="max-width: 90%">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="judulModal">Tambah Pemesanan</h1>
@@ -89,22 +89,27 @@
             order: [],
             columns: [{
                     data: 'no',
-                    orderable: false
+                    orderable: false,
+                    className: 'text-center'
                 },
                 {
-                    data: 'nomor_transaksi'
+                    data: 'nomor_transaksi',
+                    className: 'ps-3'
                 },
                 {
-                    data: 'referensi'
+                    data: 'referensi',
+                    className: 'ps-3'
                 },
                 {
-                    data: 'tanggal'
+                    data: 'tanggal',
+                    className: 'ps-3'
                 },
                 {
                     data: 'total_transaksi',
                     render: function(data, type, row) {
                         return 'Rp ' + data.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-                    }
+                    },
+                    className: 'text-end pe-4 py-2'
                 },
                 {
                     data: 'aksi',

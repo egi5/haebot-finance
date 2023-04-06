@@ -2,6 +2,14 @@
 
 <?= $this->section('content') ?>
 
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
+
 <main class="p-md-3 p-2">
     <div class="d-flex mb-0">
         <div class="me-auto mb-1">
@@ -16,136 +24,133 @@
 
     <hr class="mt-0 mb-4">
 
-    <div class="col-md-12 mt-4">
-        <form autocomplete="off" class="row g-3 mt-3" action="<?= site_url() ?>jurnal/<?= $transaksi['id'] ?>" method="POST" id="form">
+    <form autocomplete="off" class="row g-3 mt-3" action="<?= site_url() ?>jurnal/<?= $transaksi['id'] ?>" method="POST" id="form">
 
-            <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="_method" value="PUT">
 
-            <div class="row mb-3">
-                <label for="nama" class="col-sm-3 col-form-label">Nomor Transaksi</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="nomor_transaksi" name="nomor_transaksi" value="<?= $transaksi['nomor_transaksi'] ?>" readonly="">
-                    <div class="invalid-feedback error_nomor"></div>
-                </div>
+        <div class="row mb-3">
+            <label for="nama" class="col-sm-2 col-form-label">Nomor Transaksi</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="nomor_transaksi" name="nomor_transaksi" value="<?= $transaksi['nomor_transaksi'] ?>" readonly="">
+                <div class="invalid-feedback error_nomor"></div>
             </div>
-                    
-            <div class="row mb-3">
-                <label for="nama" class="col-sm-3 col-form-label">Tanggal</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="tanggal" name="tanggal" value="<?= $transaksi['tanggal'] ?>">
-                    <div class="invalid-feedback error_tanggal"></div>
-                </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="nama" class="col-sm-2 col-form-label">Tanggal</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="tanggal" name="tanggal" value="<?= $transaksi['tanggal'] ?>">
+                <div class="invalid-feedback error_tanggal"></div>
             </div>
+        </div>
 
-            <div class="row mb-3">
-                <label for="satuan" class="col-sm-3 col-form-label">Referensi</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="referensi" name="referensi" value="<?= $transaksi['referensi'] ?>">
-                    <div class="invalid-feedback error_referensi"></div>
-                </div>
+        <div class="row mb-3">
+            <label for="satuan" class="col-sm-2 col-form-label">Referensi</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="referensi" name="referensi" value="<?= $transaksi['referensi'] ?>">
+                <div class="invalid-feedback error_referensi"></div>
             </div>
+        </div>
 
-            <div class="card">
-                <div class="card-header text-light" style="background-color: #3A98B9;">
-                    Jurnal Transaksi
-                </div>
-                
-                <div class="card-body" style="background-color: #E6ECF0;">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped table-bordered" width="100%" id="tabel">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" width="25%">Akun</th>
-                                    <th class="text-center" width="30%">Deskripsi</th>
-                                    <th class="text-center" width="25%">Debit</th>
-                                    <th class="text-center" width="25%">Kredit</th>
-                                    <th class="text-center" width="5%">
-                                                
-                                    </th>
-                                </tr>
-                            </thead>
-                            
-                            <tbody id="tabel_list_transaksi">
-                                <?php $no = 1 ?>
-                                <?php foreach ($detail as $dt) : ?>
-                                    <input type="hidden" id="id_detail" name="id_detail[]" value="<?= $dt['id'] ?>">
-                                    <tr>
-                                        <td>
-                                            <select class="form-control" name="id_akun[]">
-                                                <?php foreach ($akun as $ak) : ?>
-                                                    <option <?= (old($dt['id_akun'], $dt['id_akun']) == $ak['id']) ? 'selected' : ''; ?> value="<?= $ak['id'] ?>-krisna-<?= $ak['nama'] ?>"><?= $ak['kode'] ?>-<?= $ak['nama'] ?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </td>
-                                        <td><input type="text" class="form-control" id="deskripsi" name="deskripsi[]" value="<?= $dt['deskripsi'] ?>"></td>
-                                        <td><input type="number" class="form-control debit" id="debit" name="debit[]" value="<?= $dt['debit'] ?>"></td>
-                                        <td><input type="number" class="form-control kredit" id="kredit" name="kredit[]" value="<?= $dt['kredit'] ?>"></td>
-                                        <td><a type="button" href="<?= site_url() ?>hapusBaris/<?= $dt['id'] ?>/<?= $transaksi['id'] ?>" class='btn px-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-xmark'></i></a></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                        <button class="btn btn-secondary px-2" type="button" id="baris">Tambah Akun</i></button>
-                        <div>                
-                        </div>
-                    </div>
+        <div class="container pe-2">
 
-                    <div class="col-md-10">
-                        <div class="row mt-3 summary">
-                            <div class="col col-md-4" style="text-align: right;">
-                                <span class="title-total">Total</span>
-                            </div>
-                            <div class="col col-md-4" style="text-align: right;">
-                                <span class="title-total" name="totalDebit" id="totalDebit">0</span>
-                                <input type="hidden" name="total_transaksi" id="total_transaksi">
-                                <div class="invalid-feedback error_total"></div>
-                            </div>
-                            <div class="col col-md-4" style="text-align: right;">
-                                <span class="title-total" name="totalKredit" id="totalKredit">0</span>
-                                <input type="hidden" name="total_kredit" id="total_kredit">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="table-responsive">
+                <table class="table table-hover table-striped table-bordered" width="100%" id="tabel">
+                    <thead style="background-color: #F6DCA9; border:#566573">
+                        <tr>
+                            <th class="text-center" width="25%">Akun</th>
+                            <th class="text-center" width="40%">Deskripsi</th>
+                            <th class="text-center" width="16%">Debit</th>
+                            <th class="text-center" width="16%">Kredit</th>
+                            <th class="text-center" width="3%"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabel_list_transaksi">
+                        <?php $no = 1 ?>
+                        <?php foreach ($detail as $dt) : ?>
+                            <input type="hidden" id="id_detail" name="id_detail[]" value="<?= $dt['id'] ?>">
+                            <tr>
+                                <td>
+                                    <select class="form-control" name="id_akun[]">
+                                        <?php foreach ($akun as $ak) : ?>
+                                            <option <?= (old($dt['id_akun'], $dt['id_akun']) == $ak['id']) ? 'selected' : ''; ?> value="<?= $ak['id'] ?>-krisna-<?= $ak['nama'] ?>"><?= $ak['kode'] ?>-<?= $ak['nama'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="form-control" id="deskripsi" name="deskripsi[]" value="<?= $dt['deskripsi'] ?>"></td>
+                                <td><input type="number" class="form-control debit" id="debit" name="debit[]" value="<?= $dt['debit'] ?>"></td>
+                                <td><input type="number" class="form-control kredit" id="kredit" name="kredit[]" value="<?= $dt['kredit'] ?>"></td>
+                                <td>
+                                    <a type="button" href="<?= site_url() ?>hapusBaris/<?= $dt['id'] ?>/<?= $transaksi['id'] ?>" class='btn px-2 mt-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-xmark'></i></a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+
+                <button class="btn btn-sm btn-outline-danger px-5 mb-3" type="button" id="baris">Tambah <i class="fa-fw fa-solid fa-plus"></i></button>
+
+                <table class="table table-striped" width="100%" style="border: #fff;">
+                    <tr>
+                        <td width="65%" colspan="2" class="ps-3 fw-bold fs-5">Total</td>
+                        <td width="16%" class="ps-3 fw-bold fs-5">
+                            <span class="title-total" name="totalDebit" id="totalDebit">0</span>
+                            <input type="hidden" name="total_transaksi" id="total_transaksi">
+                        </td>
+                        <td width="19%" class="ps-3 fw-bold fs-5" colspan="2">
+                            <span class="title-total" name="totalKredit" id="totalKredit">0</span>
+                            <input type="hidden" name="total_kredit" id="total_kredit">
+                        </td>
+                    </tr>
+                    <tr style="border: #fff;">
+                        <td colspan="2"></td>
+                        <td colspan="2">
+                            <input type="hidden" id="triger_error_total">
+                            <div class="invalid-feedback error_total"></div>
+                        </td>
+                    </tr>
+                </table>
+
             </div>
 
-            <div class="col-md-9 offset-3 mb-3">
-                <button id="tombolSimpan" class="btn px-5 btn-outline-primary" type="submit"><i class="fa-fw fa-solid fa-check"></i>Update</button>
-            </div>
-        </form>
-    </div>
+            <button id="tombolSimpan" class="btn px-5 btn-primary mt-4" type="submit">Simpan <i class="fa-fw fa-solid fa-check"></i></button>
+
+        </div>
+
+    </form>
 </main>
 
 <?= $this->include('MyLayout/js') ?>
 <?= $this->include('MyLayout/validation') ?>
 
 <script>
-    function Barisbaru(){
-        var Nomor  = $('#tabel tbody tr').length + 1;
-        var Baris  = "<tr>";           
-            Baris += "<td>";
-            Baris += "<select class='form-control' name='id_akun[]' id='id_akun"+Nomor+"' required></select>";
-            Baris += "</td>";
-            Baris += "<td>";
-            Baris += "<input type='text' name='deskripsi[]' class='form-control' placeholder='Deskripsi'>";
-            Baris += "</td>";
-            Baris += "<td>";
-            Baris += "<input type='text' name='debit[]' class='form-control debit' placeholder='Debit' required>";
-            Baris += "</td>";
-            Baris += "<td>";
-            Baris += "<input type='text' name='kredit[]' class='form-control kredit' placeholder='Kredit' required>";
-            Baris += "</td>";
-            Baris += "<td><button class='btn px-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-xmark'></i></button>";
-            Baris += "</td>";
-            Baris += "</tr>";
+    function Barisbaru() {
+        var Nomor = $('#tabel tbody tr').length + 1;
+        var Baris = "<tr>";
+        Baris += "<td>";
+        Baris += "<select class='form-control' name='id_akun[]' id='id_akun" + Nomor + "' required></select>";
+        Baris += "</td>";
+        Baris += "<td>";
+        Baris += "<input type='text' name='deskripsi[]' class='form-control' placeholder='Deskripsi'>";
+        Baris += "</td>";
+        Baris += "<td>";
+        Baris += "<input type='text' name='debit[]' class='form-control debit' placeholder='Debit' required>";
+        Baris += "</td>";
+        Baris += "<td>";
+        Baris += "<input type='text' name='kredit[]' class='form-control kredit' placeholder='Kredit' required>";
+        Baris += "</td>";
+        Baris += "<td><a class='btn px-2 mt-2 py-0 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-xmark'></i></a>";
+        Baris += "</td>";
+        Baris += "</tr>";
 
-            $('#tabel tbody').append(Baris);
+        $('#tabel tbody').append(Baris);
 
-            $('#tabel tbody tr').each(function(){
-                $(this).find('td:nth-child(2) input').focus();
-            });
+        // $('#tabel tbody tr').each(function() {
+        //     $(this).find('td:nth-child(2) input').focus();
+        // });
 
-            FormSelectAkun(Nomor);
+        FormSelectAkun(Nomor);
     }
 
 
@@ -161,78 +166,78 @@
         $('#tanggal').datepicker({
             format: "yyyy-mm-dd"
         });
-        
+
         hitungDebit();
         hitungKredit();
-        
-        $('#tabel').on('input','.debit', function(){
+
+        $('#tabel').on('input', '.debit', function() {
             hitungDebit();
         });
 
-        $('#tabel').on('input','.kredit', function(){
+        $('#tabel').on('input', '.kredit', function() {
             hitungKredit();
-        });   
+        });
 
-        
+
     })
 
 
-    $('#baris').click(function(e){
+    $('#baris').click(function(e) {
         e.preventDefault();
 
         var A;
-        for(A = 1; A <= 1; A++){
+        for (A = 1; A <= 1; A++) {
             Barisbaru();
-        };   
+        };
     });
 
 
-    function hitungDebit(){
+    function hitungDebit() {
         var totalDebit = 0;
-        $('#tabel .debit').each(function(){
+        $('#tabel .debit').each(function() {
             var getValueDebit = parseFloat($(this).val());
             if ($.isNumeric(getValueDebit)) {
                 totalDebit += getValueDebit;
-            }                  
+            }
         });
-        
-        $("#totalDebit").html('Rp. '+totalDebit);
+
+        $("#totalDebit").html('Rp. ' + totalDebit);
         $("#total_transaksi").val(totalDebit);
     }
 
 
-    function hitungKredit(){
+    function hitungKredit() {
         var totalKredit = 0;
-        $('#tabel .kredit').each(function(){
+        $('#tabel .kredit').each(function() {
             var getValueKredit = parseFloat($(this).val());
             if ($.isNumeric(getValueKredit)) {
                 totalKredit += getValueKredit;
-            }                  
+            }
         });
-        $("#totalKredit").html('Rp. '+totalKredit);
+        $("#totalKredit").html('Rp. ' + totalKredit);
         $("#total_kredit").val(totalKredit);
     }
 
 
-    function FormSelectAkun(Nomor){
+    function FormSelectAkun(Nomor) {
         var output = [];
         output.push('<option value ="">Pilih Akun</option>');
-        $.getJSON('/Jurnal/akun', function(data){
-            $.each(data, function(key, value){
-                output.push('<option value="'+ value.id+'">'+ value.kode +'-'+ value.nama +'</option>');
+        $.getJSON('/Jurnal/akun', function(data) {
+            $.each(data, function(key, value) {
+                output.push('<option value="' + value.id + '">' + value.kode + '-' + value.nama + '</option>');
             });
-            $('#id_akun'+ Nomor).html(output.join(''));
+            $('#id_akun' + Nomor).html(output.join(''));
         });
     }
 
 
     $('#form').submit(function(e) {
         e.preventDefault();
-        var valueDebit  = $('#total_transaksi').val();
+        var valueDebit = $('#total_transaksi').val();
         var valueKredit = $('#total_kredit').val();
-        if(valueDebit != valueKredit){
-            $('.error_total').html('Jumlah nilai debit dan kredit harus sama'); 
-            $('#total_transaksi').addClass('is-invalid');
+        if (valueDebit != valueKredit) {
+            $('.error_total').html('<h4> Jumlah nilai debit dan kredit harus sama. </h4>');
+            $('#triger_error_total').addClass('is-invalid');
         } else {
             $.ajax({
                 type: "post",

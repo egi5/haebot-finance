@@ -17,14 +17,14 @@
 
 <div class="table-responsive">
     <table class="table table-hover table-bordered" width="100%" id="tabelBuku">
-        <thead style="background-color: #ebebeb;">
+        <thead style="background-color: #C6ECB6;" class="border-secondary text-center">
             <tr>
-                <th width="15%">Tanggal</th>
-                <th width="15%">Nomor</th>
-                <th width="15%">Reference</th>
-                <th class="text-end pe-4 py-2" width="15%">Debit</th>
-                <th class="text-end pe-4 py-2" width="15%">Kredit</th>
-                <th class="text-end pe-4 py-2" width="15%">Saldo Berjalan</th>
+                <th width="10%">Tanggal</th>
+                <th width="20%">Nomor</th>
+                <th width="25%">Reference</th>
+                <th width="15%">Debit</th>
+                <th width="15%">Kredit</th>
+                <th width="15%">Saldo Berjalan</th>
             </tr>
         </thead>
         <tbody id="tabelBukuBesar">
