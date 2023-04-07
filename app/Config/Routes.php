@@ -48,14 +48,11 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
     $routes->get('/wilayah/kecamatan_by_kota', 'GetWilayah::KecamatanByKota');
     $routes->get('/wilayah/kelurahan_by_kecamatan', 'GetWilayah::KelurahanByKecamatan');
 
-    // Karyawan
-    $routes->get('karyawan/redirect/(:any)', 'Karyawan::redirect/$1', ['filter' => 'permission:SDM']);
-    $routes->resource('karyawan', ['filter' => 'permission:SDM']);
 
-
-    // Divisi
-    $routes->get('divisi/redirect/(:any)', 'Divisi::redirect/$1', ['filter' => 'permission:SDM']);
-    $routes->resource('divisi', ['filter' => 'permission:SDM']);
+    // Tagihan
+    $routes->get('tagihan', 'Tagihan::index');
+    $routes->get('getDataTagihan', 'Tagihan::getDataTagihan');
+    $routes->get('tagihan/(:num)', 'Tagihan::show/$1');
 
 
     //Kategori Akun
@@ -79,9 +76,6 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
 
     //Neraca
     $routes->get('listNeraca', 'Neraca::getListNeraca');
-
-
-    
 });
 
 /*
