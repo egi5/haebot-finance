@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\AkunModel;
+use App\Models\JurnalDetailModel;
+use App\Models\JurnalModel;
 use CodeIgniter\RESTful\ResourcePresenter;
 use App\Models\TagihanModel;
 use App\Models\TagihanPembayaranModel;
@@ -120,78 +122,181 @@ class Tagihan extends ResourcePresenter
 
     public function create()
     {
-        // $validasi = [
-        //     'nomor_transaksi' => [
-        //         'rules'  => 'is_unique[transaksi_jurnal.nomor_transaksi]',
-        //         'errors' => [
-        //             'is_unique' => 'Nomor sudah ada dalam database. Refresh dan ulangi'
-        //         ]
-        //     ],
-        //     'tanggal'  => [
-        //         'rules'  => 'required',
-        //         'errors' => [
-        //             'required'  => '{field} harus diisi.',
-        //         ]
-        //     ],
-        // ];
-
-        // if (!$this->validate($validasi)) {
-        //     $validation = \Config\Services::validation();
-
-        //     $error = [
-        //         'error_nomor'   => $validation->getError('nomor_transaksi'),
-        //         'error_tanggal' => $validation->getError('tanggal'),
-        //     ];
-
-        //     $json = [
-        //         'error' => $error
-        //     ];
-        // } else {
-        $modelTagihan           = new TagihanModel();
-        $modelRincianTagihan    = new TagihanRincianModel();
-        $modelTagihanPembayaran = new TagihanPembayaranModel();
-        $modelAkun              = new AkunModel();
-
-        $id_dariakun = $this->request->getPost('id_dariakun');
-
-        // Tagihan
-        $data_tagihan = [
-            'no_tagihan'        => $this->request->getPost('no_tagihan'),
-            'tanggal'           => $this->request->getPost('tanggal'),
-            'penerima'          => $this->request->getPost('penerima'),
-            'referensi'         => $this->request->getPost('referensi'),
-            'status'            => 'Lunas',
-            'jumlah'            => $this->request->getPost('total_tagihan')
+        $validasi = [
+            'no_tagihan' => [
+                'rules'  => 'required|is_unique[tagihan.no_tagihan]',
+                'errors' => [
+                    'required' => 'nomor tagihan belum diisi.',
+                    'is_unique' => 'Nomor tagihan sudah ada dalam database. Refresh dan ulangi'
+                ]
+            ],
+            'tanggal'  => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required'  => 'tanggal belum diisi.',
+                ]
+            ],
+            'penerima'  => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required'  => 'penerima belum diisi.',
+                ]
+            ],
         ];
-        // $modelTagihan->insert($data_tagihan);
 
-        // Pembayaran Tagihan
-        $data_pembayaran = [
-            // 'id_tagihan'        => $modelTagihan->insertID(),
-            'id_user'           => $this->request->getPost('id_user'),
-            'tanggal_bayar'     => $this->request->getPost('tanggal'),
-            'jumlah'            => $this->request->getPost('total_tagihan')
-        ];
-        // $modelTagihanPembayaran->insert($data_pembayaran);
+        if (!$this->validate($validasi)) {
+            $validation = \Config\Services::validation();
 
-        $id_transaksi = $this->modelJurnal->insertID();
-        $id_keakun      = $this->request->getPost('id_keakun');
-        $deskripsi    = $this->request->getPost('deskripsi');
+            $error = [
+                'error_nomor'   => $validation->getError('no_tagihan'),
+                'error_tanggal' => $validation->getError('tanggal'),
+                'error_penerima' => $validation->getError('penerima'),
+            ];
 
-        for ($i = 0; $i < count($id_keakun); $i++) {
-            $akun =
-                $data_rincian = [
-                    // 'id_tagihan'        => $modelTagihan->insertID(),
-                    'nama_rincian'     => $nama_rincian[$i],
-                    'jumlah'         => $jumlah[$i],
-                ];
-            // $modelRincianTagihan->insert($data_rincian);
+            $json = [
+                'error' => $error
+            ];
+        } else {
+            $modelTagihan           = new TagihanModel();
+            $modelRincianTagihan    = new TagihanRincianModel();
+            $modelTagihanPembayaran = new TagihanPembayaranModel();
+            $modelAkun              = new AkunModel();
+
+
+            // Tagihan
+            $data_tagihan = [
+                'no_tagihan'        => $this->request->getPost('no_tagihan'),
+                'tanggal'           => $this->request->getPost('tanggal'),
+                'penerima'          => $this->request->getPost('penerima'),
+                'referensi'         => $this->request->getPost('referensi'),
+                'status'            => 'Lunas',
+                'jumlah'            => $this->request->getPost('total_tagihan')
+            ];
+            $modelTagihan->insert($data_tagihan);
+            $id_tagihan = $modelTagihan->insertID();
+
+            // rincian tagihan
+            $id_keakun = $this->request->getPost('id_keakun');
+            $deskripsi = $this->request->getPost('deskripsi');
+            $jumlah_rincian_akun = $this->request->getPost('jumlah_rincian_akun');
+
+            for ($i = 0; $i < count($id_keakun); $i++) {
+                $akun = $modelAkun->find($id_keakun[$i]);
+                if ($id_keakun[$i] != 0) {
+                    $data_rincian = [
+                        'id_tagihan'           => $id_tagihan,
+                        'id_akun'              => $akun['id'],
+                        'nama_rincian'         => $akun['nama'],
+                        'deskripsi'            => $deskripsi[$i],
+                        'jumlah'               => $jumlah_rincian_akun[$i],
+                    ];
+                    $modelRincianTagihan->insert($data_rincian);
+                }
+            }
+
+
+
+
+
+            // -------------------------------------------------------- PEMBAYARAN TAGIHAN ------------------------------------------------------------------------
+
+            // Pembayaran Tagihan
+            $data_pembayaran = [
+                'id_tagihan'            => $id_tagihan,
+                'id_user'               => $this->request->getPost('id_user'),
+                'id_akun_pembayaran'    => $this->request->getPost('id_dariakun'),
+                'tanggal_bayar'         => $this->request->getPost('tanggal'),
+                'jumlah'                => $this->request->getPost('total_tagihan')
+            ];
+            $modelTagihanPembayaran->insert($data_pembayaran);
+
+
+
+
+
+            // ---------------------------------------------------------- JURNAL TRANSAKSI -------------------------------------------------------------------------
+
+            $modelTransaksiJurnal = new JurnalModel();
+            $modelTransaksiJurnalDetail = new JurnalDetailModel();
+
+            // input ke jurnal transaksi
+            $data_jurnal = [
+                'nomor_transaksi'   => nomor_jurnal_auto_tagihan(),
+                'referensi'         => $this->request->getVar('no_tagihan') . '-1',
+                'tanggal'           => $this->request->getVar('tanggal'),
+                'total_transaksi'   => $this->request->getVar('total_tagihan'),
+            ];
+            $modelTransaksiJurnal->save($data_jurnal);
+
+            // insert detail transaksi jurnal (tagihan)
+            for ($i = 0; $i < count($id_keakun); $i++) {
+                $akun = $modelAkun->find($id_keakun[$i]);
+                if ($id_keakun[$i] != 0) {
+                    $data_jurnal_detail = [
+                        'id_transaksi'      => $modelTransaksiJurnal->getInsertID(),
+                        'id_akun'           => $akun['id'],
+                        'deskripsi'         => $this->request->getVar('no_tagihan') . ' - ' . $akun['nama'],
+                        'debit'             => abs($this->isDebit($akun['id'], $jumlah_rincian_akun[$i])),
+                        'kredit'            => abs($this->isKredit($akun['id'], $jumlah_rincian_akun[$i])),
+                    ];
+                    $modelTransaksiJurnalDetail->save($data_jurnal_detail);
+                }
+            }
+            // pembayaran
+            $dariakun = $modelAkun->find($this->request->getPost('id_user'));
+            $data_jurnal_detail = [
+                'id_transaksi'      => $modelTransaksiJurnal->getInsertID(),
+                'id_akun'           => $dariakun['id'],
+                'deskripsi'         => $this->request->getVar('no_tagihan') . ' - ' . $dariakun['nama'],
+                'debit'             => abs($this->isDebit($dariakun['id'], $this->request->getVar('total_tagihan'))),
+                'kredit'            => abs($this->isKredit($dariakun['id'], $this->request->getVar('total_tagihan'))),
+            ];
+            $modelTransaksiJurnalDetail->save($data_jurnal_detail);
+
+
+            $json = [
+                'success' => 'Berhasil menambah tagihan'
+            ];
         }
+        echo json_encode($json);
+    }
 
-        // $json = [
-        //     'success' => 'Berhasil menambah data jurnal'
-        // ];
-        // }
-        // echo json_encode($json);
+
+    public function isDebit($id_akun, $value)
+    {
+        $modelAkun = new AkunModel();
+        $akun = $modelAkun->cekKategoriAkun($id_akun);
+        if ($akun['debit_is'] == 1) {
+            if ($value > 0) {
+                return $value;
+            } else {
+                return 0;
+            }
+        } else {
+            if ($value > 0) {
+                return 0;
+            } else {
+                return $value;
+            }
+        }
+    }
+
+    public function isKredit($id_akun, $value)
+    {
+        $modelAkun = new AkunModel();
+        $akun = $modelAkun->cekKategoriAkun($id_akun);
+        if ($akun['debit_is'] == 1) {
+            if ($value < 0) {
+                return $value;
+            } else {
+                return 0;
+            }
+        } else {
+            if ($value < 0) {
+                return 0;
+            } else {
+                return $value;
+            }
+        }
     }
 }

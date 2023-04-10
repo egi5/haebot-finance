@@ -26,7 +26,7 @@
 
     <form autocomplete="off" class="row g-3 mt-3" action="<?= site_url() ?>tagihan/create" method="POST" id="form">
 
-        <input type="text" id="id_user" name="id_user" value="<?= user()->id ?>">
+        <input type="hidden" id="id_user" name="id_user" value="<?= user()->id ?>">
 
         <div class="row mb-3">
             <label for="nama" class="col-sm-2 col-form-label">Nomor </label>
@@ -48,6 +48,7 @@
             <label for="satuan" class="col-sm-2 col-form-label">Penerima</label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" id="penerima" name="penerima">
+                <div class="invalid-feedback error_penerima"></div>
             </div>
         </div>
 
@@ -134,7 +135,7 @@
         Baris += "<td>";
         Baris += "<input type='number' name='jumlah_rincian_akun[]' class='form-control text-end jumlah_rincian_akun' id='jumlah_rincian_akun' value='0' required>";
         Baris += "</td>";
-        Baris += "<td class='text-center'><a class='btn px-2 py-0 mt-2 btn btn-sm btn-outline-danger' id='HapusBaris'><i class='fa-fw fa-solid fa-xmark'></i></a>";
+        Baris += "<td class='text-center'><a class='btn px-2 py-0 mt-2 btn btn-sm btn-outline-danger' id='HapusBaris' data-nomor='" + Nomor + "'><i class='fa-fw fa-solid fa-xmark'></i></a>";
         Baris += "</td>";
         Baris += "</tr>";
 
@@ -170,7 +171,9 @@
     $(document).on('click', '#HapusBaris', function(e) {
         e.preventDefault();
         $(this).parent().parent().hide();
-
+        var nomor = $(this).attr('data-nomor');
+        $('#id_keakun' + nomor).val('0');
+        $('#id_keakun' + nomor).attr('required', false);
         hitungTotal();
     })
 
@@ -209,62 +212,73 @@
     }
 
 
-    // $('#form').submit(function(e) {
-    //     e.preventDefault();
-    //     var valueDebit = $('#total_tagihan').val();
-    //     if (valueDebit != valueKredit) {
-    //         $('.error_total').html('<h4> Jumlah nilai debit dan kredit harus sama. </h4>');
-    //         $('#triger_error_total').addClass('is-invalid');
-    //     } else {
-    //         $.ajax({
-    //             type: "post",
-    //             url: $(this).attr('action'),
-    //             data: $(this).serialize(),
-    //             dataType: "json",
-    //             beforeSend: function() {
-    //                 $('#tombolSimpan').html('Tunggu <i class="fa-solid fa-spin fa-spinner"></i>');
-    //                 $('#tombolSimpan').prop('disabled', true);
-    //             },
-    //             complete: function() {
-    //                 $('#tombolSimpan').html('Simpan <i class="fa-fw fa-solid fa-check"></i>');
-    //                 $('#tombolSimpan').prop('disabled', false);
-    //             },
-    //             success: function(response) {
-    //                 if (response.error) {
-    //                     let err = response.error;
+    $('#form').submit(function(e) {
+        e.preventDefault();
+        var total_tagihan = $('#total_tagihan').val();
+        if (total_tagihan == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Halah..',
+                text: 'Total tagihan Rp. 0 lalu apa yamg mau ditagihkan?',
+            });
+        } else {
+            $.ajax({
+                type: "post",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                dataType: "json",
+                beforeSend: function() {
+                    $('#tombolSimpan').html('Tunggu <i class="fa-solid fa-spin fa-spinner"></i>');
+                    $('#tombolSimpan').prop('disabled', true);
+                },
+                complete: function() {
+                    $('#tombolSimpan').html('Simpan <i class="fa-fw fa-solid fa-check"></i>');
+                    $('#tombolSimpan').prop('disabled', false);
+                },
+                success: function(response) {
+                    if (response.error) {
+                        let err = response.error;
 
-    //                     if (err.error_nomor) {
-    //                         $('.error_nomor').html(err.error_nomor);
-    //                         $('#nomor_transaksi').addClass('is-invalid');
-    //                     } else {
-    //                         $('.error_nomor').html('');
-    //                         $('#nomor_transaksi').removeClass('is-invalid');
-    //                         $('#nomor_transaksi').addClass('is-valid');
-    //                     }
-    //                     if (err.error_tanggal) {
-    //                         $('.error_tanggal').html(err.error_tanggal);
-    //                         $('#tanggal').addClass('is-invalid');
-    //                     } else {
-    //                         $('.error_tanggal').html('');
-    //                         $('#tanggal').removeClass('is-invalid');
-    //                         $('#tanggal').addClass('is-valid');
-    //                     }
-    //                 }
-    //                 if (response.success) {
-    //                     Swal.fire({
-    //                         icon: 'success',
-    //                         title: 'Berhasil',
-    //                         text: response.success,
-    //                     });
-    //                     location.href = "<?= base_url() ?>/jurnal";
-    //                 }
-    //             },
-    //             error: function(e) {
-    //                 alert('Error \n' + e.responseText);
-    //             }
-    //         });
-    //     }
-    // })
+                        if (err.error_nomor) {
+                            $('.error_nomor').html(err.error_nomor);
+                            $('#no_tagihan').addClass('is-invalid');
+                        } else {
+                            $('.error_nomor').html('');
+                            $('#no_tagihan').removeClass('is-invalid');
+                            $('#no_tagihan').addClass('is-valid');
+                        }
+                        if (err.error_tanggal) {
+                            $('.error_tanggal').html(err.error_tanggal);
+                            $('#tanggal').addClass('is-invalid');
+                        } else {
+                            $('.error_tanggal').html('');
+                            $('#tanggal').removeClass('is-invalid');
+                            $('#tanggal').addClass('is-valid');
+                        }
+                        if (err.error_penerima) {
+                            $('.error_penerima').html(err.error_penerima);
+                            $('#penerima').addClass('is-invalid');
+                        } else {
+                            $('.error_penerima').html('');
+                            $('#penerima').removeClass('is-invalid');
+                            $('#penerima').addClass('is-valid');
+                        }
+                    }
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.success,
+                        });
+                        location.href = "<?= base_url() ?>/tagihan";
+                    }
+                },
+                error: function(e) {
+                    alert('Error \n' + e.responseText);
+                }
+            });
+        }
+    })
 </script>
 
 <?= $this->endSection() ?>

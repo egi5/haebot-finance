@@ -57,3 +57,21 @@ function tagihan_nomor_auto($tgl)
 
     return $nomorAuto;
 }
+
+function nomor_jurnal_auto_tagihan()
+{
+    $db = db_connect();
+
+    $quer = "SELECT max(right(nomor_transaksi, 5)) AS kode FROM transaksi_jurnal WHERE nomor_transaksi LIKE '%JRN/TGH%'";
+    $query = $db->query($quer)->getRowArray();
+
+    if ($query) {
+        $no = ((int)$query['kode']) + 1;
+        $kd = sprintf("%05s", $no);
+    } else {
+        $kd = "00001";
+    }
+    $nomor_auto = 'JRN/TGH' . $kd;
+
+    return $nomor_auto;
+}

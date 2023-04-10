@@ -15,7 +15,7 @@ class TagihanRincianModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'id_tagihan', 'nama_rincian', 'jumlah'
+        'id_tagihan', 'id_akun', 'nama_rincian', 'deskripsi', 'jumlah'
     ];
 
     // Dates

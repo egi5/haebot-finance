@@ -15,7 +15,7 @@ class TagihanModel extends Model
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'id_pembelian', 'no_tagihan', 'tanggal', 'asal', 'status', 'jumlah', 'sisa_tagihan',
+        'id_pembelian', 'no_tagihan', 'penerima', 'referensi', 'tanggal', 'asal', 'status', 'jumlah', 'sisa_tagihan',
     ];
 
     // Dates

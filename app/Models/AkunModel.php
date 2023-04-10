@@ -15,7 +15,7 @@ class AkunModel extends Model
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'kode','nama','id_kategori', 'saldo', 'created_at', 'updated_at', 'deleted_at'
+        'kode', 'nama', 'id_kategori', 'saldo', 'created_at', 'updated_at', 'deleted_at'
     ];
 
     // Dates
@@ -67,6 +67,16 @@ class AkunModel extends Model
         return $data;
     }
 
-}
 
-?>
+    public function cekKategoriAkun($idAkun)
+    {
+        $data =  $this->db->table($this->table)
+            ->select('akun_kategori.debit as debit_is')
+            ->join('akun_kategori', 'akun.id_kategori = akun_kategori.id', 'left')
+            ->where('akun.id', $idAkun)
+            ->get()
+            ->getRowArray();
+
+        return $data;
+    }
+}

@@ -15,7 +15,7 @@ class TagihanPembayaranModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'id_tagihan', 'id_user', 'tanggal_bayar', 'jumlah_bayar'
+        'id_tagihan', 'id_user', 'id_akun_pembayaran', 'tanggal_bayar', 'jumlah_bayar'
     ];
 
     // Dates
