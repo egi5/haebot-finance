@@ -53,6 +53,9 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
     $routes->get('tagihan', 'Tagihan::index');
     $routes->get('getDataTagihan', 'Tagihan::getDataTagihan');
     $routes->get('tagihan/(:num)', 'Tagihan::show/$1');
+    $routes->get('tambahTagihan', 'Tagihan::new');
+    $routes->get('/tagihan/keakun', 'Tagihan::keakun');
+    $routes->post('/tagihan/create', 'Tagihan::create');
 
 
     //Kategori Akun

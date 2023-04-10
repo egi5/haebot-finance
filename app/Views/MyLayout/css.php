@@ -25,4 +25,17 @@
     body.modal-open {
         overflow: hidden;
     }
+
+    .card-ku {
+        transition: 0.3s;
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        border: 1px solid #ABB2B9;
+    }
+
+    .card-ku:hover {
+        /* box-shadow: 10px 0px 16px 0 rgba(0, 0, 0, 0.2); */
+        box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2);
+    }
 </style>

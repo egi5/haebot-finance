@@ -10,7 +10,7 @@
             <h3 style="color: #566573;">Tagihan</h3>
         </div>
         <div class="mb-1">
-            <a class="btn btn-sm btn-outline-secondary" id="tombolTambah">
+            <a class="btn btn-sm btn-outline-secondary" href="tambahTagihan">
                 <i class="fa-fw fa-solid fa-plus"></i> Tambah Tagihan
             </a>
         </div>
@@ -18,7 +18,55 @@
 
     <hr class="mt-0 mb-4">
 
-    <div class="table-responsive">
+    <!-- <div class="row mt-3">
+        <div class="col-lg-3 mb-3">
+            <a style="text-decoration: none; color: #34495E;">
+                <div class=" card-ku py-2 px-3" style=" height: 73px; background-color: #fff;">
+                    <div class="d-flex justify-content-between">
+                        <div class="my-auto">
+                            <p style="font-size: 14px;" class="mb-1">Bulan ini</p>
+                            <h5 id="rupiah_bulan_ini">Rp. 5.000.000</h5>
+                        </div>
+                        <div class="text-right my-auto">
+                            <button class="btn px-3 rounded-pill btn-success">1</button>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 mb-3">
+            <a style="text-decoration: none; color: #34495E;">
+                <div class=" card-ku py-2 px-3" style=" height: 73px; background-color: #fff;">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p style="font-size: 14px;" class="mb-1">30 Hari lalu</p>
+                            <h5 id="rupiah_30_hari_lalu">Rp. 5.000.000</h5>
+                        </div>
+                        <div class="text-right my-auto">
+                            <button class="btn px-3 rounded-pill btn-primary">39</button>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 mb-3">
+            <a style="text-decoration: none; color: #34495E;">
+                <div class=" card-ku py-2 px-3" style=" height: 73px; background-color: #fff;">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p style="font-size: 14px;" class="mb-1">Belum dibayar</p>
+                            <h5 id="rupiah_belum_dibayar">Rp. 5.000.000</h5>
+                        </div>
+                        <div class="text-right my-auto">
+                            <button class="btn px-3 rounded-pill btn-danger">1</button>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div> -->
+
+    <div class="table-responsive mt-2">
         <table class="table table-hover table-striped table-bordered" width="100%" id="tabel">
             <thead>
                 <tr>
@@ -76,6 +124,7 @@
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
+
 
     $(document).ready(function() {
         $('#tabel').DataTable({
@@ -141,12 +190,6 @@
             })
         }
     });
-
-
-    $('#tombolTambah').click(function(e) {
-        e.preventDefault();
-        $('#my-modal').modal('toggle');
-    })
 
 
     function showModalDetail(id) {

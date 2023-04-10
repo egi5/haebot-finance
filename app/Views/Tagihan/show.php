@@ -2,6 +2,7 @@
     <div class="mt-1">
         <p class="mb-2"> Nomor <b> <?= $tagihan['no_tagihan'] ?> </b></p>
         <p class="mb-2"> Tanggal <b> <?= $tagihan['tanggal'] ?> </b></p>
+        <p class="mb-2"> Penerima <b> <?= $tagihan['penerima'] ?> </b></p>
     </div>
     <div class="mt-1 text-right me-4">
         Sisa Tagihan <h5> Rp. <?= number_format($tagihan['sisa_tagihan'], 0, ',', '.'); ?></h5>

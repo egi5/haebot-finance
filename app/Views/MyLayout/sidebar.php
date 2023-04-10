@@ -9,7 +9,7 @@
                 <?php endif; ?>
 
                 <?php if (has_permission('Dashboard')) : ?>
-                    <a class="nav-link py-2" href="<?= base_url() ?>dashboard">
+                    <a class="nav-link py-2" href="dashboard">
                         <div class="sb-nav-link-icon">
                             <i class="fa-fw fa-solid fa-gauge"></i>
                         </div>
@@ -24,7 +24,7 @@
                 <?php endif; ?> -->
 
                 <?php if (has_permission('Keuangan')) : ?>
-                    <a class="nav-link py-2" href="<?= base_url() ?>tagihan">
+                    <a class="nav-link py-2" href="tagihan">
                         <div class="sb-nav-link-icon">
                             <i class="fa-fw fa-regular fa-calendar-check"></i>
                         </div>
@@ -33,7 +33,7 @@
                 <?php endif; ?>
 
                 <?php if (has_permission('Keuangan')) : ?>
-                    <a class="nav-link py-2" href="<?= base_url() ?>jurnalumum">
+                    <a class="nav-link py-2" href="jurnalumum">
                         <div class="sb-nav-link-icon">
                             <i class="fa-fw fa-regular fa-regular fa-clipboard"></i>
                         </div>
@@ -48,7 +48,7 @@
                 <?php endif; ?> -->
 
                 <?php if (has_permission('Keuangan')) : ?>
-                    <a class="nav-link py-2" href="<?= base_url() ?>listakun">
+                    <a class="nav-link py-2" href="listakun">
                         <div class="sb-nav-link-icon">
                             <i class="fa-fw fa-solid fa-list-ol"></i>
                         </div>
@@ -57,7 +57,7 @@
                 <?php endif; ?>
 
                 <?php if (has_permission('Keuangan')) : ?>
-                    <a class="nav-link py-2" href="<?= base_url() ?>kas_bank">
+                    <a class="nav-link py-2" href="kas_bank">
                         <div class="sb-nav-link-icon">
                             <i class="fa-fw fa-regular fa-folder-open"></i>
                         </div>
@@ -72,7 +72,7 @@
                 <?php endif; ?> -->
 
                 <?php if (has_permission('Keuangan')) : ?>
-                    <a class="nav-link py-2" href="<?= base_url() ?>laporan">
+                    <a class="nav-link py-2" href="laporan">
                         <div class="sb-nav-link-icon">
                             <i class="fa-fw fa-solid fa-chart-simple"></i>
                         </div>

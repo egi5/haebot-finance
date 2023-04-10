@@ -24,10 +24,10 @@ function jurnal_nomor_auto($tgl)
 {
     $db    = db_connect();
 
-    $quer  = "SELECT max(right(nomor_transaksi, 2)) AS nomor FROM transaksi_jurnal WHERE tanggal = '$tgl'";
+    $quer  = "SELECT max(right(nomor_transaksi, 2)) AS nomor FROM transaksi_jurnal WHERE tanggal = '$tgl' AND nomor_transaksi LIKE '%MNL%'";
     $query = $db->query($quer)->getRowArray();
 
-    if($query) {
+    if ($query) {
         $nomor = ((int)$query['nomor']) + 1;
         $kode  = sprintf("%02s", $nomor);
     } else {
@@ -35,6 +35,25 @@ function jurnal_nomor_auto($tgl)
     }
     date_default_timezone_set('Asia/Jakarta');
     $nomorAuto = 'MNL' . date('dmy', strtotime($tgl)) . $kode;
+
+    return $nomorAuto;
+}
+
+function tagihan_nomor_auto($tgl)
+{
+    $db    = db_connect();
+
+    $quer  = "SELECT max(right(no_tagihan, 2)) AS nomor FROM tagihan WHERE tanggal = '$tgl' AND no_tagihan LIKE '%TGH%'";
+    $query = $db->query($quer)->getRowArray();
+
+    if ($query) {
+        $nomor = ((int)$query['nomor']) + 1;
+        $kode  = sprintf("%02s", $nomor);
+    } else {
+        $kode = "01";
+    }
+    date_default_timezone_set('Asia/Jakarta');
+    $nomorAuto = 'TGH' . date('dmy', strtotime($tgl)) . $kode;
 
     return $nomorAuto;
 }
