@@ -18,148 +18,21 @@
 
     <hr class="mt-0 mb-4">
 
+    <div class="row justify-content-end">
+    <div class="col-md-3">
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+            <input type="text" class="form-control text-center" id="tglAwalLaba" name="tglAwalLaba" onchange="loadTableLaba()" value="<?= $tglAwal ?>">
+            <span class="input-group-text"><i class="fa-solid fa-repeat"></i></span>
+            <input type="text" class="form-control text-center" id="tglAkhirLaba" name="tglAkhirLaba" onchange="loadTableLaba()" value="<?= $tglAkhir ?>">
+        </div>
+    </div>
+</div>
+
     <div class="table-responsive">
         <table class="table table-hover" width="100%" id="tabelLabaRugi">
-            <tbody>
-                <tr style="background-color: #e6e8fa;">
-                    <td>
-                        <div class="me-auto mb-1">
-                            <h3>Pendapatan</h3>
-                        </div>
-                    </td>
-
-                    <td class="text-end">
-                        <div class="me-2 mb-1">
-                            <h4><?= date('d/m/Y') ?></h4>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th width="21%">Penjualan</th>
-                    <th width="15%"></th>
-                </tr>
-
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-
-                <tr>
-                    <th width="21%">Penghasilan Lain</th>
-                    <th width="15%"></th>
-                </tr>
-
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-
-                <tr>
-                    <td class="fw-bold">Total Pendapatan</td>
-                    <td class="text-end">0</td>
-                </tr>
-
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-
-                <tr style="background-color: #e6e8fa;">
-                    <td>
-                        <div class="me-auto mb-1">
-                            <h3>Beban Pokok Penjualan</h3>
-                        </div>
-                    </td>
-
-                    <td class="text-end">
-                        <div class="me-2 mb-1">
-                            <h4><?= date('d/m/Y') ?></h4>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-
-                <tr>
-                    <td class="fw-bold">Total Beban Pokok Penjualan</td>
-                    <td class="text-end">0</td>
-                </tr>
-
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-
-                <tr style="background-color: #e6e8fa;">
-                    <td>
-                        <div class="me-auto mb-1">
-                            <h3>Laba Kotor</h3>
-                        </div>
-                    </td>
-
-                    <td class="text-end">
-                        <div class="me-2 mb-1">
-                            <h4>0</h4>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-
-                <tr style="background-color: #e6e8fa;">
-                    <td>
-                        <div class="me-auto mb-1">
-                            <h3>Biaya Operasional</h3>
-                        </div>
-                    </td>
-
-                    <td class="text-end">
-                        <div class="me-2 mb-1">
-                            <h4><?= date('d/m/Y') ?></h4>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <th width="21%">Biaya Operasional</th>
-                    <th width="15%"></th>
-                </tr>
-
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-
-                <tr>
-                    <th width="21%">Biaya Lain-lain</th>
-                    <th width="15%"></th>
-                </tr>
-
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-
-                <tr>
-                    <td class="fw-bold">Total Biaya Operasional</td>
-                    <td class="text-end">0</td>
-                </tr>
-
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-
-                <tr style="background-color: #e6e8fa;">
-                    <td>
-                        <div class="me-auto mb-1">
-                            <h3>Laba Bersih</h3>
-                        </div>
-                    </td>
-
-                    <td class="text-end">
-                        <div class="me-2 mb-1">
-                            <h4>0</h4>
-                        </div>
-                    </td>
-                </tr>
+            <tbody id="tabelListLabaRugi">
+                
             </tbody>
         </table>
     </div>
@@ -168,4 +41,37 @@
 </main>
 
 <?= $this->include('MyLayout/js') ?>
+<script>
+    $(document).ready(function() {
+        $('#tglAwalLaba').datepicker({
+            format: "yyyy-mm-dd"
+        });
+        $('#tglAkhirLaba').datepicker({
+            format: "yyyy-mm-dd"
+        });
+
+        loadTableLaba();
+    })
+
+
+    function loadTableLaba(){
+        var tglAwal  = $('#tglAwalLaba').val();
+        var tglAkhir = $('#tglAkhirLaba').val();
+        $.ajax({
+            type: 'GET',
+            url: '<?= site_url() ?>/listLabaRugi',
+            data: 'tglAwal=' + tglAwal +
+                  '&tglAkhir=' + tglAkhir,
+            dataType: "json",
+            success: function(response) {
+                if(response.data){
+                    $('#tabelListLabaRugi').html(response.data);
+                }
+            },
+            error: function(e) {
+                alert('Error \n' + e.responseText);
+            }
+        });
+    }
+</script>
 <?= $this->endSection() ?>

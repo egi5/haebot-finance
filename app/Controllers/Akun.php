@@ -299,12 +299,15 @@ class Akun extends ResourcePresenter
         $idAkun            = $this->request->getGet('idAkun');
         $tglAwal           = $this->request->getGet('tglAwal');
         $tglAkhir          = $this->request->getGet('tglAkhir');
+        $tglSet            = date('Y-01-01');
 
         $modelJurnal       = new JurnalModel();
         $bukuAkun          = $modelJurnal->getAkunBuku($idAkun, $tglAwal, $tglAkhir);
-
+        $saldoAwal         = $modelJurnal->getAkunBukuAwal($idAkun, $tglSet, $tglAwal);
+        
         $data = [
             'bukuAkun'  => $bukuAkun,
+            'saldoAwal' => $saldoAwal,
             'tglAwal'   => $tglAwal,
             'tglAkhir'  => $tglAkhir
         ];

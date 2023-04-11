@@ -80,6 +80,9 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
 
     //Neraca
     $routes->get('listNeraca', 'Neraca::getListNeraca');
+
+    //Laba Rugi
+    $routes->get('listLabaRugi', 'LabaRugi::getListLabaRugi');
 });
 
 /*

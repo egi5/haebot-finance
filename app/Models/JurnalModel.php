@@ -15,7 +15,7 @@ class JurnalModel extends Model
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'nomor_transaksi', 'referensi', 'tanggal', 'total_transaksi', 'created_at', 'updated_at', 'deleted_at'
+        'nomor_transaksi','referensi','tanggal','total_transaksi','created_at', 'updated_at', 'deleted_at'
     ];
 
     // Dates
@@ -47,7 +47,7 @@ class JurnalModel extends Model
     {
         $data =  $this->db->table($this->table)
             ->where('transaksi_jurnal.deleted_at', null)
-            ->where('nomer_transaksi', $idJurnal)
+            ->where('nomer_transaksi',$idJurnal)
             ->get()
             ->getRowArray();
 
@@ -58,35 +58,87 @@ class JurnalModel extends Model
     public function getAkunBuku($idAkun, $tglAwal, $tglAkhir)
     {
         $data = $this->db->table($this->table)
-            ->select('transaksi_jurnal.tanggal as tanggal , transaksi_jurnal.nomor_transaksi as nomor,transaksi_jurnal.referensi as referensi, transaksi_jurnal_detail.debit as debit, transaksi_jurnal_detail.kredit as kredit, akun_kategori.debit as ktdebit, akun_kategori.kredit as ktkredit')
+            ->select('transaksi_jurnal.tanggal as tanggal , transaksi_jurnal.nomor_transaksi as nomor, transaksi_jurnal.referensi as referensi, 
+            transaksi_jurnal_detail.debit as debit, transaksi_jurnal_detail.kredit as kredit, 
+            akun_kategori.debit as ktdebit, akun_kategori.kredit as ktkredit')
             ->join('transaksi_jurnal_detail', 'transaksi_jurnal.id = transaksi_jurnal_detail.id_transaksi', 'left')
             ->join('akun', 'transaksi_jurnal_detail.id_akun = akun.id', 'left')
-            ->join('akun_kategori', 'akun.id_kategori = akun_kategori.id')
-            ->orderby('transaksi_jurnal.id', 'ASC')
+            ->join('akun_kategori','akun.id_kategori = akun_kategori.id')
+            ->orderby('transaksi_jurnal.tanggal','ASN')
             ->where('transaksi_jurnal.deleted_at', null)
             ->where('transaksi_jurnal_detail.id_akun', $idAkun)
             ->where('transaksi_jurnal.tanggal>=', $tglAwal)
             ->where('transaksi_jurnal.tanggal <=', $tglAkhir)
             ->get()->getResultArray();
-
+        
         return $data;
     }
 
 
-    public function getNeraca($kategori)
+    public function getAkunBukuAwal($idAkun, $tglAwal, $tglAkhir)
     {
         $data = $this->db->table($this->table)
-            ->select('transaksi_jurnal.tanggal as tanggal , transaksi_jurnal.nomor_transaksi as nomor, transaksi_jurnal_detail.debit as debit, 
-            transaksi_jurnal_detail.kredit as kredit, akun_kategori.debit as ktdebit, akun_kategori.kredit as ktkredit, akun_kategori.nama as ktnama, 
-            akun.nama as nama, akun.kode as kode')
+            ->select('transaksi_jurnal.tanggal as tanggal , transaksi_jurnal.nomor_transaksi as nomor, transaksi_jurnal.referensi as referensi, 
+            transaksi_jurnal_detail.debit as debit, transaksi_jurnal_detail.kredit as kredit, 
+            akun_kategori.debit as ktdebit, akun_kategori.kredit as ktkredit')
             ->join('transaksi_jurnal_detail', 'transaksi_jurnal.id = transaksi_jurnal_detail.id_transaksi', 'left')
             ->join('akun', 'transaksi_jurnal_detail.id_akun = akun.id', 'left')
-            ->join('akun_kategori', 'akun.id_kategori = akun_kategori.id')
-            ->orderBy('akun.nama', 'ASC')
+            ->join('akun_kategori','akun.id_kategori = akun_kategori.id')
+            ->orderby('transaksi_jurnal.tanggal','ASN')
             ->where('transaksi_jurnal.deleted_at', null)
-            ->where('akun_kategori.nama', $kategori)
+            ->where('transaksi_jurnal_detail.id_akun', $idAkun)
+            ->where('transaksi_jurnal.tanggal >=', $tglAwal)
+            ->where('transaksi_jurnal.tanggal <', $tglAkhir)
             ->get()->getResultArray();
-
+        
         return $data;
     }
+
+
+    public function getNeraca($kategori, $tglAwal, $tglNeraca)
+    {
+        $data = $this->db->table($this->table)
+            ->select('akun_kategori.nama as ktnama, 
+            akun.kode as kode, akun.nama as nama, 
+            transaksi_jurnal.tanggal as tanggal')
+            ->join('transaksi_jurnal_detail', 'transaksi_jurnal.id = transaksi_jurnal_detail.id_transaksi', 'left')
+            ->join('akun', 'transaksi_jurnal_detail.id_akun = akun.id', 'left')
+            ->join('akun_kategori','akun.id_kategori = akun_kategori.id')
+            ->selectSum('transaksi_jurnal_detail.debit', 'debit')
+            ->selectSum('transaksi_jurnal_detail.kredit', 'kredit')
+            ->groupBy('akun.nama')
+            ->where('transaksi_jurnal.deleted_at', null)
+            ->where('akun_kategori.nama', $kategori)
+            ->where('transaksi_jurnal.tanggal>=', $tglAwal)
+            ->where('transaksi_jurnal.tanggal <=', $tglNeraca)
+            ->get()->getResultArray();
+        
+        return $data;
+    }
+
+
+    public function getSumPeriodeSebelum($kategori, $tglAkhir)
+    {
+        // $kategori = "Pendapatan, Pendapatan Lainnya, Harga Pokok Penjualan, Beban, Beban Lainnya";
+        $data = $this->db->table($this->table)
+            ->select('akun_kategori.nama as ktnama, 
+            akun.kode as kode, akun.nama as nama, 
+            transaksi_jurnal.tanggal as tanggal')
+            ->join('transaksi_jurnal_detail', 'transaksi_jurnal.id = transaksi_jurnal_detail.id_transaksi', 'left')
+            ->join('akun', 'transaksi_jurnal_detail.id_akun = akun.id', 'left')
+            ->join('akun_kategori','akun.id_kategori = akun_kategori.id')
+            ->selectSum('transaksi_jurnal_detail.debit', 'debit')
+            ->selectSum('transaksi_jurnal_detail.kredit', 'kredit')
+            ->groupBy('akun.nama')
+            ->where('transaksi_jurnal.deleted_at', null)
+            ->where('akun_kategori.nama', $kategori)
+            // ->where('transaksi_jurnal.tanggal >', $tglAwal)
+            ->where('transaksi_jurnal.tanggal <', $tglAkhir)
+            ->get()->getResultArray();
+        
+        return $data;
+    }
+
 }
+
+?>

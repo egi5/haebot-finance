@@ -19,9 +19,11 @@
     <hr class="mt-0 mb-4">
 
     <div class="row justify-content-end">
-        <div class="col-sm-2">
-            <input type="text" class="form-control" id="tglNeraca" name="tglNeraca" value="<?= date('Y-m-d') ?>">
-            <br>
+        <div class="col-md-2">
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                <input type="text" class="form-control text-center" id="tglNeraca" name="tglNeraca" onchange="loadTableNeraca()" value="<?= $tglNeraca ?>">
+            </div>
         </div>
     </div>
 
@@ -42,11 +44,11 @@
             format: "yyyy-mm-dd"
         });
 
-        loadNeraca();
+        loadTableNeraca();
     })
 
 
-    function loadNeraca(){
+    function loadTableNeraca(){
         var tglNeraca  = $('#tglNeraca').val();
         $.ajax({
             type: 'GET',
