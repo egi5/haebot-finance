@@ -54,8 +54,9 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
     $routes->get('getDataTagihan', 'Tagihan::getDataTagihan');
     $routes->get('tagihan/(:num)', 'Tagihan::show/$1');
     $routes->get('tambahTagihan', 'Tagihan::new');
-    $routes->get('/tagihan/keakun', 'Tagihan::keakun');
-    $routes->post('/tagihan/create', 'Tagihan::create');
+    $routes->get('tagihan/keakun', 'Tagihan::keakun');
+    $routes->post('tagihan/create', 'Tagihan::create');
+    $routes->get('tagihan/(:num)/bayar', 'Tagihan::bayarTagihan/$1');
 
 
     //Kategori Akun
@@ -74,7 +75,7 @@ $routes->group('', ['filter' => 'isLoggedIn'], function ($routes) {
     $routes->get('getdatajurnal', 'Jurnal::getDataJurnal');
     $routes->resource('jurnal');
     $routes->get('hapusBaris/(:num)/(:num)', 'Jurnal::hapusBaris/$1/$2');
-    $routes->get('/Jurnal/akun', 'Jurnal::akun');
+    $routes->get('Jurnal/akun', 'Jurnal::akun');
 
 
     //Neraca

@@ -13,7 +13,7 @@
 <main class="p-md-3 p-2">
     <div class="d-flex mb-0">
         <div class="me-auto mb-1">
-            <h3 style="color: #566573;">Tambah Tagihan</h3>
+            <h3 style="color: #566573;">Bayar Tagihan</h3>
         </div>
         <div class="me-2 mb-1">
             <a class="btn btn-sm btn-outline-dark" href="<?= site_url() ?>tagihan">
@@ -24,7 +24,7 @@
 
     <hr class="mt-0 mb-4">
 
-    <form autocomplete="off" class="row g-3 mt-3" action="<?= site_url() ?>tagihan/create" method="POST" id="form">
+    <form autocomplete="off" class="row g-3 mt-3" action="<?= site_url() ?>tagihan/bayar" method="POST" id="form">
 
         <input type="hidden" id="id_user" name="id_user" value="<?= user()->id ?>">
 
@@ -47,7 +47,7 @@
         <div class="row mb-3">
             <label for="satuan" class="col-sm-2 col-form-label">Penerima</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="penerima" name="penerima">
+                <input type="text" class="form-control" id="penerima" name="penerima" value="<?= $tagihan['penerima'] ?>">
                 <div class="invalid-feedback error_penerima"></div>
             </div>
         </div>
@@ -55,7 +55,7 @@
         <div class="row mb-3">
             <label for="satuan" class="col-sm-2 col-form-label">Referensi</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="referensi" name="referensi">
+                <input type="text" class="form-control" id="referensi" name="referensi" value="<?= $tagihan['referensi'] ?>">
             </div>
         </div>
 
@@ -76,14 +76,25 @@
                 <table class="table table-hover table-striped table-bordered" width="100%" id="tabel">
                     <thead style="background-color: #F6DCA9; border: #566573;">
                         <tr>
-                            <th class="text-center" width="30%">Akun</th>
-                            <th class="text-center" width="40%">Deskripsi</th>
+                            <th class="text-center" width="35%">Akun</th>
+                            <th class="text-center" width="45%">Deskripsi</th>
                             <th class="text-center" width="20%">Total</th>
-                            <th class="text-center" width="5%"></th>
                         </tr>
                     </thead>
                     <tbody id="list_rincian_tagihan">
-
+                        <tr>
+                            <td>
+                                <select class="form-select" name="id_keakun" id="id_keakun">
+                                    <option value="<?= $keAkun['id'] ?>"><?= $keAkun['nama_akun'] ?></option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" name="deskripsi" class="form-control" placeholder="Deskripsi" value="<?= $keAkun['deskripsi'] ?>">
+                            </td>
+                            <td>
+                                <input type="number" name="jumlah_rincian_akun" class="form-control text-end jumlah_rincian_akun" id="jumlah_rincian_akun" value="<?= ($keAkun['debit'] == 0) ? $keAkun['kredit'] : (-1 * $keAkun['debit']) ?>">
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -91,13 +102,12 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <button class="btn btn-sm btn-outline-danger px-5 mb-3" type="button" id="TambahBaris">Tambah <i class="fa-fw fa-solid fa-plus"></i></button>
                 </div>
                 <div class="col-md-6">
                     <table class="table table-borderless" width="100%">
                         <tr class="fs-4">
                             <td width="47%" class="text-end pe-5 pt-0">Total</td>
-                            <td width="53%" class="pt-0" id="text_total_tagihan">Rp. 0</td>
+                            <td width="53%" class="pt-0" id="text_total_tagihan">Rp. <?= number_format(($keAkun['debit'] == 0) ? $keAkun['kredit'] : (-1 * $keAkun['debit']), 0, ',', '.') ?></td>
                             <input type="hidden" name="total_tagihan" id="total_tagihan">
                         </tr>
                     </table>
@@ -123,84 +133,11 @@
 <?= $this->include('MyLayout/validation') ?>
 
 <script>
-    function Barisbaru() {
-        var Nomor = $('#tabel tbody tr').length + 1;
-        var Baris = "<tr>";
-        Baris += "<td>";
-        Baris += "<select class='form-select' name='id_keakun[]' id='id_keakun" + Nomor + "' required></select>";
-        Baris += "</td>";
-        Baris += "<td>";
-        Baris += "<input type='text' name='deskripsi[]' class='form-control' placeholder='Deskripsi'>";
-        Baris += "</td>";
-        Baris += "<td>";
-        Baris += "<input type='number' name='jumlah_rincian_akun[]' class='form-control text-end jumlah_rincian_akun' id='jumlah_rincian_akun' value='0' required>";
-        Baris += "</td>";
-        Baris += "<td class='text-center'><a class='btn px-2 py-0 mt-2 btn btn-sm btn-outline-danger' id='HapusBaris' data-nomor='" + Nomor + "'><i class='fa-fw fa-solid fa-xmark'></i></a>";
-        Baris += "</td>";
-        Baris += "</tr>";
-
-        $('#tabel tbody').append(Baris);
-
-        FormSelectAkun(Nomor);
-    }
-
-
     $(document).ready(function() {
         $('#tanggal').datepicker({
             format: "yyyy-mm-dd"
         });
-
-        $(this).parent().parent().remove();
-        var A;
-        for (A = 1; A <= 1; A++) {
-            Barisbaru();
-        };
-
-        $('#tabel').on('input', '#jumlah_rincian_akun', function() {
-            hitungTotal();
-        });
     })
-
-
-    $('#TambahBaris').click(function(e) {
-        e.preventDefault();
-        Barisbaru();
-    });
-
-
-    $(document).on('click', '#HapusBaris', function(e) {
-        e.preventDefault();
-        $(this).parent().parent().hide();
-        var nomor = $(this).attr('data-nomor');
-        $('#id_keakun' + nomor).val('0');
-        $('#id_keakun' + nomor).attr('required', false);
-        hitungTotal();
-    })
-
-
-    function hitungTotal() {
-        var text_total_tagihan = 0;
-        $('#tabel .jumlah_rincian_akun').each(function() {
-            var getValueJumlahRincian = parseInt($(this).val());
-            if ($.isNumeric(getValueJumlahRincian)) {
-                text_total_tagihan += getValueJumlahRincian;
-            }
-        });
-        $("#text_total_tagihan").html(formatRupiah(text_total_tagihan));
-        $("#total_tagihan").val(text_total_tagihan);
-    }
-
-
-    function FormSelectAkun(Nomor) {
-        var output = [];
-        output.push('<option value ="">Pilih Akun</option>');
-        $.getJSON('<?= site_url('tagihan/keakun') ?>', function(data) {
-            $.each(data, function(key, value) {
-                output.push('<option value="' + value.id + '">' + value.nama + ' (' + value.kode + ')' + '</option>');
-            });
-            $('#id_keakun' + Nomor).html(output.join(''));
-        });
-    }
 
 
     $('#form').submit(function(e) {

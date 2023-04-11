@@ -15,7 +15,7 @@ class JurnalDetailModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'id_transaksi','id_akun','deskripsi','debit','kredit'
+        'id_transaksi', 'id_akun', 'deskripsi', 'debit', 'kredit'
     ];
 
     // Dates
@@ -54,6 +54,19 @@ class JurnalDetailModel extends Model
 
         return $data;
     }
-}
 
-?>
+    public function getAkunHutangPembelianForTagihan($id_tagihan)
+    {
+        $data =  $this->db->table($this->table)
+            ->select('transaksi_jurnal_detail.*, akun.nama as nama_akun')
+            ->join('transaksi_jurnal', 'transaksi_jurnal_detail.id_transaksi = transaksi_jurnal.id', 'left')
+            ->join('tagihan', 'transaksi_jurnal.referensi = tagihan.no_tagihan', 'left')
+            ->join('akun', 'transaksi_jurnal_detail.id_akun = akun.id', 'left')
+            ->where('tagihan.id', $id_tagihan)
+            ->where('transaksi_jurnal_detail.id_akun', '7') //7 adalah akun hutang dagang
+            ->get()
+            ->getRowArray();
+
+        return $data;
+    }
+}

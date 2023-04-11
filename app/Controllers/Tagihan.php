@@ -17,7 +17,51 @@ class Tagihan extends ResourcePresenter
 
     public function index()
     {
-        return view('tagihan/index');
+        $modelTagihan = new TagihanModel();
+        $rupiah_last30 = $modelTagihan
+            ->select('sum(jumlah) as rupiah_last30')
+            ->where('deleted_at', null)
+            ->where('tanggal >=', date('Y-m-d', strtotime('-30 days')))
+            ->get()->getRowArray();
+        $jumlah_last30 = $modelTagihan
+            ->select('count(id) as jumlah_last30')
+            ->where('deleted_at', null)
+            ->where('tanggal >=', date('Y-m-d', strtotime('-30 days')))
+            ->get()->getRowArray();
+        $rupiah_bulan_ini = $modelTagihan
+            ->select('sum(jumlah) as rupiah_bulan_ini')
+            ->where('deleted_at', null)
+            ->where('MONTH(tanggal)', date('m'))
+            ->where('YEAR(tanggal)', date('Y'))
+            ->get()->getRowArray();
+        $jumlah_bulan_ini = $modelTagihan
+            ->select('count(id) as jumlah_bulan_ini')
+            ->where('deleted_at', null)
+            ->where('MONTH(tanggal)', date('m'))
+            ->where('YEAR(tanggal)', date('Y'))
+            ->get()->getRowArray();
+        $rupiah_belum_dibayar = $modelTagihan
+            ->select('sum(jumlah) as rupiah_belum_dibayar')
+            ->where('deleted_at', null)
+            ->where('status', 'Belum dibayar')
+            ->get()->getRowArray();
+        $jumlah_belum_dibayar = $modelTagihan
+            ->select('count(id) as jumlah_belum_dibayar')
+            ->where('deleted_at', null)
+            ->where('status', 'Belum dibayar')
+            ->get()->getRowArray();
+
+        $data = [
+            'rupiah_last30' => $rupiah_last30['rupiah_last30'],
+            'jumlah_last30' => $jumlah_last30['jumlah_last30'],
+            'rupiah_bulan_ini' => $rupiah_bulan_ini['rupiah_bulan_ini'],
+            'jumlah_bulan_ini' => $jumlah_bulan_ini['jumlah_bulan_ini'],
+            'rupiah_belum_dibayar' => $rupiah_belum_dibayar['rupiah_belum_dibayar'],
+            'jumlah_belum_dibayar' => $jumlah_belum_dibayar['jumlah_belum_dibayar'],
+        ];
+
+
+        return view('tagihan/index', $data);
     }
 
 
@@ -37,7 +81,7 @@ class Tagihan extends ResourcePresenter
                                 <a title="Detail Tagihan" class="px-2 py-0 btn btn-sm btn-outline-dark" onclick="showModalDetail(' . $row->id . ')">
                                     <i class="fa-fw fa-solid fa-magnifying-glass"></i>
                                 </a>
-                                <a title="Buat Pembayaran" class="px-2 py-0 btn btn-sm btn-outline-primary" href="' . site_url() . 'tagihan/' . $row->id . '/edit">
+                                <a title="Buat Pembayaran" class="px-2 py-0 btn btn-sm btn-outline-primary" href="' . site_url() . 'tagihan/' . $row->id . '/bayar">
                                     <i class="fa-fw fa-solid fa-pen"></i>
                                 </a>
                                 <form id="form_delete" method="POST" class="d-inline">
@@ -51,7 +95,7 @@ class Tagihan extends ResourcePresenter
                                 <a title="Detail Tagihan" class="px-2 py-0 btn btn-sm btn-outline-dark" onclick="showModalDetail(' . $row->id . ')">
                                     <i class="fa-fw fa-solid fa-magnifying-glass"></i>
                                 </a>
-                                <a title="Buat Pembayaran" class="px-2 py-0 btn btn-sm btn-outline-primary" href="' . site_url() . 'tagihan/' . $row->id . '/edit">
+                                <a title="Buat Pembayaran" class="px-2 py-0 btn btn-sm btn-outline-primary" href="' . site_url() . 'tagihan/' . $row->id . '/bayar">
                                     <i class="fa-fw fa-solid fa-pen"></i>
                                 </a>
                                 ';
@@ -63,6 +107,18 @@ class Tagihan extends ResourcePresenter
                             </a>';
                     }
                 }, 'last')
+                ->filter(function ($data, $request) {
+                    if ($request->last30day != '') {
+                        $data->where('tanggal >=', date('Y-m-d', strtotime('-30 days')));
+                    }
+                    if ($request->bulanini != '') {
+                        $data->where('MONTH(tanggal)', date('m'));
+                        $data->where('YEAR(tanggal)', date('Y'));
+                    }
+                    if ($request->belumDiBayar != '') {
+                        $data->where('status', 'Belum dibayar');
+                    }
+                })
                 ->toJson(true);
         } else {
             return "Tidak bisa load data.";
@@ -219,6 +275,7 @@ class Tagihan extends ResourcePresenter
             $modelTransaksiJurnal = new JurnalModel();
             $modelTransaksiJurnalDetail = new JurnalDetailModel();
 
+
             // input ke jurnal transaksi
             $data_jurnal = [
                 'nomor_transaksi'   => nomor_jurnal_auto_tagihan(),
@@ -228,31 +285,57 @@ class Tagihan extends ResourcePresenter
             ];
             $modelTransaksiJurnal->save($data_jurnal);
 
-            // insert detail transaksi jurnal (tagihan)
-            for ($i = 0; $i < count($id_keakun); $i++) {
-                $akun = $modelAkun->find($id_keakun[$i]);
-                if ($id_keakun[$i] != 0) {
-                    $data_jurnal_detail = [
-                        'id_transaksi'      => $modelTransaksiJurnal->getInsertID(),
-                        'id_akun'           => $akun['id'],
-                        'deskripsi'         => $this->request->getVar('no_tagihan') . ' - ' . $akun['nama'],
-                        'debit'             => abs($this->isDebit($akun['id'], $jumlah_rincian_akun[$i])),
-                        'kredit'            => abs($this->isKredit($akun['id'], $jumlah_rincian_akun[$i])),
-                    ];
-                    $modelTransaksiJurnalDetail->save($data_jurnal_detail);
-                }
-            }
-            // pembayaran
-            $dariakun = $modelAkun->find($this->request->getPost('id_user'));
-            $data_jurnal_detail = [
-                'id_transaksi'      => $modelTransaksiJurnal->getInsertID(),
-                'id_akun'           => $dariakun['id'],
-                'deskripsi'         => $this->request->getVar('no_tagihan') . ' - ' . $dariakun['nama'],
-                'debit'             => abs($this->isDebit($dariakun['id'], $this->request->getVar('total_tagihan'))),
-                'kredit'            => abs($this->isKredit($dariakun['id'], $this->request->getVar('total_tagihan'))),
-            ];
-            $modelTransaksiJurnalDetail->save($data_jurnal_detail);
 
+            // insert detail transaksi jurnal (tagihan)
+            if ($this->request->getVar('total_tagihan') > 0) {
+                for ($i = 0; $i < count($id_keakun); $i++) {
+                    $akun = $modelAkun->find($id_keakun[$i]);
+                    if ($id_keakun[$i] != 0) {
+                        $data_jurnal_detail = [
+                            'id_transaksi'      => $modelTransaksiJurnal->getInsertID(),
+                            'id_akun'           => $akun['id'],
+                            'deskripsi'         => $this->request->getVar('no_tagihan') . ' - ' . $akun['nama'],
+                            'debit'             => abs($jumlah_rincian_akun[$i]),
+                            'kredit'            => 0,
+                        ];
+                        $modelTransaksiJurnalDetail->save($data_jurnal_detail);
+                    }
+                }
+                // pembayaran
+                $dariakun = $modelAkun->find($this->request->getPost('id_user'));
+                $data_jurnal_detail = [
+                    'id_transaksi'      => $modelTransaksiJurnal->getInsertID(),
+                    'id_akun'           => $dariakun['id'],
+                    'deskripsi'         => $this->request->getVar('no_tagihan') . ' - ' . $dariakun['nama'],
+                    'debit'             => 0,
+                    'kredit'            => abs($this->request->getVar('total_tagihan')),
+                ];
+                $modelTransaksiJurnalDetail->save($data_jurnal_detail);
+            } else {
+                for ($i = 0; $i < count($id_keakun); $i++) {
+                    $akun = $modelAkun->find($id_keakun[$i]);
+                    if ($id_keakun[$i] != 0) {
+                        $data_jurnal_detail = [
+                            'id_transaksi'      => $modelTransaksiJurnal->getInsertID(),
+                            'id_akun'           => $akun['id'],
+                            'deskripsi'         => $this->request->getVar('no_tagihan') . ' - ' . $akun['nama'],
+                            'debit'             => 0,
+                            'kredit'            => abs($jumlah_rincian_akun[$i]),
+                        ];
+                        $modelTransaksiJurnalDetail->save($data_jurnal_detail);
+                    }
+                }
+                // pembayaran
+                $dariakun = $modelAkun->find($this->request->getPost('id_user'));
+                $data_jurnal_detail = [
+                    'id_transaksi'      => $modelTransaksiJurnal->getInsertID(),
+                    'id_akun'           => $dariakun['id'],
+                    'deskripsi'         => $this->request->getVar('no_tagihan') . ' - ' . $dariakun['nama'],
+                    'debit'             => abs($this->request->getVar('total_tagihan')),
+                    'kredit'            => 0,
+                ];
+                $modelTransaksiJurnalDetail->save($data_jurnal_detail);
+            }
 
             $json = [
                 'success' => 'Berhasil menambah tagihan'
@@ -262,41 +345,24 @@ class Tagihan extends ResourcePresenter
     }
 
 
-    public function isDebit($id_akun, $value)
+    public function bayarTagihan($id_tagihan)
     {
-        $modelAkun = new AkunModel();
-        $akun = $modelAkun->cekKategoriAkun($id_akun);
-        if ($akun['debit_is'] == 1) {
-            if ($value > 0) {
-                return $value;
-            } else {
-                return 0;
-            }
-        } else {
-            if ($value > 0) {
-                return 0;
-            } else {
-                return $value;
-            }
-        }
-    }
+        date_default_timezone_set('Asia/Jakarta');
+        $modelJurnalDetail  = new JurnalDetailModel();
+        $modelAkun          = new AkunModel();
+        $modelTagihan       = new TagihanModel();
 
-    public function isKredit($id_akun, $value)
-    {
-        $modelAkun = new AkunModel();
-        $akun = $modelAkun->cekKategoriAkun($id_akun);
-        if ($akun['debit_is'] == 1) {
-            if ($value < 0) {
-                return $value;
-            } else {
-                return 0;
-            }
-        } else {
-            if ($value < 0) {
-                return 0;
-            } else {
-                return $value;
-            }
-        }
+        $tagihan = $modelTagihan->find($id_tagihan);
+        $dariAkun = $modelAkun->where(['id_kategori' => 1])->findAll();
+        $jurnal_detail_hutang = $modelJurnalDetail->getAkunHutangPembelianForTagihan($id_tagihan);
+
+        $data = [
+            'tagihan'             => $tagihan,
+            'dariAkun'            => $dariAkun,
+            'nomor_tagihan_auto'  => tagihan_nomor_auto(date('Y-m-d')),
+            'keAkun'              => $jurnal_detail_hutang,
+        ];
+
+        return view('tagihan/bayar', $data);
     }
 }
